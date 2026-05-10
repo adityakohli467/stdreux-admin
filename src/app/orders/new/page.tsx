@@ -62,6 +62,7 @@ export interface OrderData {
   coupon_discount?: number
   order_comments?: string
   standing_order?: number // 0 = one-time order, 7 = weekly, 14 = bi-weekly, 30 = monthly
+  subscription_start_date?: string
 }
 
 export default function NewOrderPage() {
@@ -218,6 +219,7 @@ export default function NewOrderPage() {
         account_email: dataToUse.account_email || null,
         cost_center: dataToUse.cost_center || null,
         standing_order: dataToUse.standing_order || 0, // 0 = one-time order, >0 = subscription frequency in days
+        subscription_start_date: dataToUse.subscription_start_date || null,
         products: dataToUse.products.map(product => ({
           product_id: product.product_id,
           quantity: product.quantity,

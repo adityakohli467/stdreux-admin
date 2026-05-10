@@ -22,6 +22,7 @@ interface OptionValue {
   standard_price?: number
   wholesale_price?: number
   wholesale_price_premium?: number
+  subscriber_price?: number
 }
 
 interface Option {
@@ -43,7 +44,7 @@ export default function OptionsPage() {
   // Form state
   const [optionName, setOptionName] = useState("")
   const [optionType, setOptionType] = useState<string>("dropdown")
-  const [optionValues, setOptionValues] = useState<OptionValue[]>([{ name: "", sort_order: 1, standard_price: 0, wholesale_price: 0, wholesale_price_premium: 0 }])
+  const [optionValues, setOptionValues] = useState<OptionValue[]>([{ name: "", sort_order: 1, standard_price: 0, wholesale_price: 0, wholesale_price_premium: 0, subscriber_price: 0 }])
 
   // Pagination - REMOVED
   // const [currentPage, setCurrentPage] = useState(1)
@@ -129,8 +130,9 @@ export default function OptionsPage() {
       ...v,
       standard_price: v.standard_price || 0,
       wholesale_price: v.wholesale_price || 0,
-      wholesale_price_premium: v.wholesale_price_premium || 0
-    })) : [{ name: "", sort_order: 1, standard_price: 0, wholesale_price: 0, wholesale_price_premium: 0 }])
+      wholesale_price_premium: v.wholesale_price_premium || 0,
+      subscriber_price: v.subscriber_price || 0
+    })) : [{ name: "", sort_order: 1, standard_price: 0, wholesale_price: 0, wholesale_price_premium: 0, subscriber_price: 0 }])
     setShowEditModal(true)
   }
 
@@ -185,7 +187,8 @@ export default function OptionsPage() {
         name: v.name.trim(),
         standard_price: v.standard_price || 0,
         wholesale_price: v.wholesale_price || (v.standard_price || 0) * 0.9,
-        wholesale_price_premium: v.wholesale_price_premium || (v.standard_price || 0) * 0.8
+        wholesale_price_premium: v.wholesale_price_premium || (v.standard_price || 0) * 0.8,
+        subscriber_price: v.subscriber_price || null
       }))
     }
 
@@ -206,7 +209,7 @@ export default function OptionsPage() {
   }
 
   const addValueField = () => {
-    setOptionValues([...optionValues, { name: "", sort_order: optionValues.length + 1, standard_price: 0, wholesale_price: 0, wholesale_price_premium: 0 }])
+    setOptionValues([...optionValues, { name: "", sort_order: optionValues.length + 1, standard_price: 0, wholesale_price: 0, wholesale_price_premium: 0, subscriber_price: 0 }])
   }
 
   const removeValueField = (index: number) => {
@@ -227,7 +230,7 @@ export default function OptionsPage() {
   const resetForm = () => {
     setOptionName("")
     setOptionType("dropdown")
-    setOptionValues([{ name: "", sort_order: 1, standard_price: 0, wholesale_price: 0, wholesale_price_premium: 0 }])
+    setOptionValues([{ name: "", sort_order: 1, standard_price: 0, wholesale_price: 0, wholesale_price_premium: 0, subscriber_price: 0 }])
     setSelectedOption(null)
   }
 
@@ -584,6 +587,26 @@ export default function OptionsPage() {
                             const val = e.target.value
                             if (val === '' || /^\d*\.?\d*$/.test(val)) {
                               newValues[index].wholesale_price_premium = val === '' ? 0 : parseFloat(val) || 0
+                              setOptionValues(newValues)
+                            }
+                          }}
+                          className="h-8 text-sm border-gray-300 bg-white"
+                          style={{ fontFamily: 'Albert Sans' }}
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs text-gray-600">Subscriber Price</Label>
+                        <Input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          placeholder="0.00"
+                          value={value.subscriber_price === 0 ? '' : value.subscriber_price}
+                          onChange={(e) => {
+                            const newValues = [...optionValues]
+                            const val = e.target.value
+                            if (val === '' || /^\d*\.?\d*$/.test(val)) {
+                              newValues[index].subscriber_price = val === '' ? 0 : parseFloat(val) || 0
                               setOptionValues(newValues)
                             }
                           }}

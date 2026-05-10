@@ -33,6 +33,7 @@ interface Product {
   // Premium pricing fields
   product_price_premium?: number | string
   premium_price_discounted?: number | string
+  subscriber_rate?: number | string
   customer_type?: string
   is_wholesale?: boolean
   min_quantity?: number
@@ -54,6 +55,7 @@ interface Product {
     option_required: number
     // Premium option pricing
     wholesale_price_premium?: number | string
+    subscriber_price?: number | string
   }>
   subcategory?: {
     category_id: number
@@ -230,6 +232,11 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
     return data.customer_type === "Full Service Wholesale" || data.customer_type === "Wholesale Premium"
   }, [data.customer_type])
 
+  // Determine if customer is a Subscriber
+  const isSubscriber = useMemo(() => {
+    return data.customer_type === "Subscriber"
+  }, [data.customer_type])
+
   // Drag and drop sensors
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -377,6 +384,8 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
 
         if (isPremiumCustomer && option.wholesale_price_premium) {
           finalOptionDisplayPrice = parseFloat(option.wholesale_price_premium.toString())
+        } else if (isSubscriber && option.subscriber_price) {
+          finalOptionDisplayPrice = parseFloat(option.subscriber_price.toString())
         }
 
         return {
@@ -414,6 +423,8 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
         } else if (product.premium_price_discounted && parseFloat(product.premium_price_discounted.toString()) > 0) {
           displayPrice = parseFloat(product.premium_price_discounted.toString())
         }
+      } else if (isSubscriber && product.subscriber_rate && parseFloat(product.subscriber_rate.toString()) > 0) {
+        displayPrice = parseFloat(product.subscriber_rate.toString())
       }
 
       // Base price: customer-type price without additional discounts (for backend)
@@ -468,6 +479,8 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
         } else if (product.premium_price_discounted && parseFloat(product.premium_price_discounted.toString()) > 0) {
           displayPrice = parseFloat(product.premium_price_discounted.toString())
         }
+      } else if (isSubscriber && product.subscriber_rate && parseFloat(product.subscriber_rate.toString()) > 0) {
+        displayPrice = parseFloat(product.subscriber_rate.toString())
       }
 
       // Base price: customer-type price without additional discounts (for backend)
@@ -615,6 +628,8 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
       } else if (product.premium_price_discounted && parseFloat(product.premium_price_discounted.toString()) > 0) {
         price = parseFloat(product.premium_price_discounted.toString())
       }
+    } else if (isSubscriber && product.subscriber_rate && parseFloat(product.subscriber_rate.toString()) > 0) {
+      price = parseFloat(product.subscriber_rate.toString())
     }
 
     if (price === 0 && product.options && product.options.length > 0) {
@@ -770,6 +785,8 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
                                 } else if (product.premium_price_discounted && parseFloat(product.premium_price_discounted.toString()) > 0) {
                                   basePrice = parseFloat(product.premium_price_discounted.toString())
                                 }
+                              } else if (isSubscriber && product.subscriber_rate && parseFloat(product.subscriber_rate.toString()) > 0) {
+                                basePrice = parseFloat(product.subscriber_rate.toString())
                               }
 
                               // Calculate total from selected options
@@ -783,9 +800,11 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
                                     isAnyOptionSelected = true
                                     let optionPrice = parseFloat(option.option_price.toString())
 
-                                    // Override option price for Premium customer
+                                    // Override option price for Premium or Subscriber customer
                                     if (isPremiumCustomer && option.wholesale_price_premium) {
                                       optionPrice = parseFloat(option.wholesale_price_premium.toString())
+                                    } else if (isSubscriber && option.subscriber_price) {
+                                      optionPrice = parseFloat(option.subscriber_price.toString())
                                     }
 
                                     const quantity = optionQuantities[key] || 1
@@ -805,6 +824,8 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
                                 // Override first option preview price
                                 if (isPremiumCustomer && product.options[0].wholesale_price_premium) {
                                   firstOptionPrice = parseFloat(product.options[0].wholesale_price_premium.toString())
+                                } else if (isSubscriber && product.options[0].subscriber_price) {
+                                  firstOptionPrice = parseFloat(product.options[0].subscriber_price.toString())
                                 }
 
                                 return firstOptionPrice.toFixed(2)
@@ -814,7 +835,7 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
                           </span>
                         </td>
                         <td className="px-4 py-4">
-                          {(parseFloat(product.product_price.toString()) > 0 || (isPremiumCustomer && ((product.product_price_premium && parseFloat(product.product_price_premium.toString()) > 0) || (product.premium_price_discounted && parseFloat(product.premium_price_discounted.toString()) > 0)))) && (
+                          {(parseFloat(product.product_price.toString()) > 0 || (isPremiumCustomer && ((product.product_price_premium && parseFloat(product.product_price_premium.toString()) > 0) || (product.premium_price_discounted && parseFloat(product.premium_price_discounted.toString()) > 0))) || (isSubscriber && product.subscriber_rate && parseFloat(product.subscriber_rate.toString()) > 0)) && (
                             <div className="flex items-center gap-2 bg-gray-100 rounded-md w-fit">
                               <button
                                 onClick={() => handleQuantityChange(product.product_id, -1)}
@@ -871,6 +892,8 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
                                   // Override option price for Premium customer
                                   if (isPremiumCustomer && option.wholesale_price_premium) {
                                     price = parseFloat(option.wholesale_price_premium.toString())
+                                  } else if (isSubscriber && option.subscriber_price) {
+                                    price = parseFloat(option.subscriber_price.toString())
                                   }
                                   return (
                                     <div key={key} className="flex items-center justify-between">

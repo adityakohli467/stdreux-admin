@@ -68,6 +68,7 @@ interface Product {
   product_price_premium?: number;
   premium_discount_percentage?: number;
   premium_price_discounted?: number;
+  subscriber_rate?: number;
   customer_type_visibility?: "all" | "retailers" | "wholesalers";
   product_status: number;
   product_image_url?: string;
@@ -141,6 +142,7 @@ function ProductsPageInner() {
   const [productPricePremium, setProductPricePremium] = useState("");
   const [premiumDiscountPercentage, setPremiumDiscountPercentage] = useState("");
   const [premiumPriceDiscounted, setPremiumPriceDiscounted] = useState("");
+  const [subscriberRate, setSubscriberRate] = useState("");
   const [customerTypeVisibility, setCustomerTypeVisibility] = useState<
     "all" | "retailers" | "wholesalers"
   >("all");
@@ -414,6 +416,7 @@ function ProductsPageInner() {
     setProductPricePremium(product.product_price_premium?.toString() || "");
     setPremiumDiscountPercentage(product.premium_discount_percentage?.toString() || "");
     setPremiumPriceDiscounted(product.premium_price_discounted?.toString() || "");
+    setSubscriberRate(product.subscriber_rate?.toString() || "");
 
     const productCategoryIds =
       product.categories?.map((c) => c.category_id) || [];
@@ -583,6 +586,7 @@ function ProductsPageInner() {
       product_price_premium: productPricePremium ? parseFloat(productPricePremium) : null,
       premium_discount_percentage: parseFloat(premiumDiscountPercentage) || 0,
       premium_price_discounted: premiumPriceDiscounted ? parseFloat(premiumPriceDiscounted) : null,
+      subscriber_rate: subscriberRate ? parseFloat(subscriberRate) : null,
       customer_type_visibility: customerTypeVisibility,
       product_status: productStatus,
       user_id: user?.user_id || 1,
@@ -1000,6 +1004,7 @@ function ProductsPageInner() {
     setProductPricePremium("");
     setPremiumDiscountPercentage("");
     setPremiumPriceDiscounted("");
+    setSubscriberRate("");
     setCustomerTypeVisibility("all");
     setProductStatus(1);
     setSelectedCategories([]);
@@ -1743,6 +1748,36 @@ function ProductsPageInner() {
 
               <div className="col-span-2 border-b pb-2 mb-2"></div>
 
+              {/* Subscriber Pricing Section */}
+              <div className="col-span-2 border-t pt-4 mt-2 mb-2">
+                <h4 className="text-sm font-semibold text-gray-900 mb-4">Subscriber Pricing</h4>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-700">
+                  Subscriber Rate
+                  <span className="text-gray-400 text-xs font-normal ml-1">
+                    (Optional)
+                  </span>
+                </Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  placeholder="0.00"
+                  value={subscriberRate}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === "" || /^\d*\.?\d*$/.test(value)) {
+                      setSubscriberRate(value);
+                    }
+                  }}
+                  className="h-11 border-gray-300 bg-white"
+                />
+              </div>
+
+              <div className="col-span-2 border-b pb-2 mb-2"></div>
+
               <div className="space-y-2">
                 <Label className="text-sm font-medium text-gray-700">
                   Product Visibility
@@ -2280,7 +2315,8 @@ function ProductsPageInner() {
                                   <span className="text-xs text-gray-500">
                                     (Std: ${standardPrice.toFixed(2)},
                                     Ess: ${wholesalePrice.toFixed(2)},
-                                    Prem: ${((value as any).wholesale_price_premium || 0).toFixed(2)})
+                                    Prem: ${((value as any).wholesale_price_premium || 0).toFixed(2)},
+                                    Sub: ${((value as any).subscriber_price || 0).toFixed(2)})
                                   </span>
                                 )}
                               </label>

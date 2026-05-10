@@ -204,6 +204,7 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
   const [couponCode, setCouponCode] = useState(data.coupon_code || "")
   const [orderComments, setOrderComments] = useState(data.order_comments || "")
   const [standingOrder, setStandingOrder] = useState<number>(data.standing_order || 0)
+  const [subscriptionStartDate, setSubscriptionStartDate] = useState(data.subscription_start_date || "")
   const [showSendModal, setShowSendModal] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
@@ -385,6 +386,7 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
         coupon_discount: appliedCoupon?.coupon_discount,
         order_comments: orderComments,
         standing_order: standingOrder,
+        subscription_start_date: standingOrder !== 0 ? subscriptionStartDate || undefined : undefined,
         location_id: selectedLocation || (deliveryMethod === 'pickup' ? selectedPickupLocation : undefined),
       }
 
@@ -433,6 +435,7 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
         coupon_discount: appliedCoupon?.coupon_discount,
         order_comments: orderComments,
         standing_order: standingOrder,
+        subscription_start_date: standingOrder !== 0 ? subscriptionStartDate || undefined : undefined,
         location_id: selectedLocation || (deliveryMethod === 'pickup' ? selectedPickupLocation : undefined),
       }
 
@@ -547,6 +550,13 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
                   <option value={30}>Monthly</option>
                 </select>
               </div>
+
+              {standingOrder !== 0 && (
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700">Subscription Start Date</Label>
+                  <Input type="date" value={subscriptionStartDate} onChange={(e) => setSubscriptionStartDate(e.target.value)} className="h-11 border-gray-300" />
+                </div>
+              )}
 
               <ValidatedTextarea label="Notes" value={deliveryNotes} onChange={(val) => setDeliveryNotes(val)} className="md:col-span-2" rows={3} />
             </div>

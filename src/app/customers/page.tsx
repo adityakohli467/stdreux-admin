@@ -100,6 +100,7 @@ interface Department {
 const customerTypes = [
   "Retail",
   "Club Members",
+  "Subscriber",
   "Full Service Wholesale",
   "Partial Service Wholesale",
 ];
