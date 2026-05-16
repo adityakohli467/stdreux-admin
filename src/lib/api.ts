@@ -246,3 +246,11 @@ export const newsletterAPI = {
   reactivate: (id: number) => api.put(`/admin/newsletter/${id}/reactivate`),
   delete: (id: number) => api.delete(`/admin/newsletter/${id}`),
 }
+
+export const xeroAPI = {
+  getAuthUrl: () => api.get("/admin/xero/auth-url"),
+  callback: (url: string) => api.get("/admin/xero/callback", { params: { url } }),
+  getStatus: () => api.get("/admin/xero/status"),
+  disconnect: () => api.post("/admin/xero/disconnect"),
+  createInvoice: (orderId: number) => api.post(`/admin/xero/invoice/${orderId}`),
+}

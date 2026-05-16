@@ -12,6 +12,7 @@ import {
   FileText,
   Settings,
   UtensilsCrossed,
+  Link2,
 } from "lucide-react"
 
 const navigation = [
@@ -21,6 +22,7 @@ const navigation = [
   { name: "Customers", href: "/customers", icon: Users },
   { name: "Companies", href: "/companies", icon: Building2 },
   { name: "Quotes", href: "/quotes", icon: FileText },
+  { name: "Xero", href: "/admin/xero", icon: Link2 },
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ]
 

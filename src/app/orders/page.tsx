@@ -21,7 +21,7 @@ import { toast } from "sonner"
 import { format } from "date-fns"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
-import { invoicesAPI, ordersAPI } from "@/lib/api"
+import { invoicesAPI, ordersAPI, xeroAPI } from "@/lib/api"
 import { OrderDetailModal } from "@/components/OrderDetailModal"
 import { PaymentProcessingModal } from "@/components/PaymentProcessingModal"
 import { printTableData } from "@/lib/print-utils"
@@ -428,6 +428,20 @@ export default function OrdersPage() {
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || "Failed to download invoice")
+    }
+  })
+
+  // Sync to Xero mutation
+  const xeroSyncMutation = useMutation({
+    mutationFn: async (orderId: number) => {
+      const response = await xeroAPI.createInvoice(orderId)
+      return response.data
+    },
+    onSuccess: (data) => {
+      toast.success(data.message || "Invoice synced to Xero")
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || "Failed to sync to Xero")
     }
   })
 
@@ -1317,6 +1331,18 @@ export default function OrdersPage() {
                               >
                                 <FileText className="h-4 w-4 mr-2" />
                                 Download Invoice
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => xeroSyncMutation.mutate(order.order_id)}
+                                disabled={xeroSyncMutation.isPending || !(
+                                  (order.payment_status !== undefined && order.payment_status !== null
+                                    ? (String(order.payment_status) === "1" || Number(order.payment_status) === 1 || String(order.payment_status).toLowerCase() === "paid" || String(order.payment_status).toLowerCase() === "true")
+                                    : (order.order_status === 2))
+                                )}
+                                className="cursor-pointer"
+                              >
+                                <FileText className="h-4 w-4 mr-2" />
+                                Sync to Xero
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() => handleEmailOrder(order)}
