@@ -7,12 +7,8 @@ const API_URL =
 const nextConfig = {
   reactStrictMode: true,
   
-  // REQUIRED for ECS Docker
-//  output: 'standalone',
-  
-  // IMPORTANT: ALB path
-  // basePath: '/stdreux/admin',
-  // assetPrefix: '/stdreux/admin/',
+  // REQUIRED for Railway Docker deployment
+  output: 'standalone',
   
   images: {
     unoptimized: true, // recommended for ALB + ECS
