@@ -956,10 +956,10 @@ export default function DashboardPage() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-3">
               <CardTitle style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-lg sm:text-xl text-gray-900">
-                Today's Pending Orders
+                Pending Orders
               </CardTitle>
               <p style={{ fontFamily: 'Albert Sans' }} className="text-xs sm:text-sm text-gray-500">
-                All pending orders for today including subscriptions
+                All orders that are not yet completed
               </p>
             </div>
             <Button
@@ -967,8 +967,8 @@ export default function DashboardPage() {
               className="gap-2 text-xs sm:text-sm"
               size="sm"
               style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
-              onClick={() => handlePrint(todaysPendingOrders, "Today's Pending Orders")}
-              disabled={todaysPendingOrders.length === 0}
+              onClick={() => handlePrint(todayOrders, "Pending Orders")}
+              disabled={todayOrders.length === 0}
             >
               <Printer className="h-3 w-3 sm:h-4 sm:w-4" />
               Print
@@ -983,8 +983,7 @@ export default function DashboardPage() {
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Order ID</th>
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Customer Name</th>
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Customer Phone</th>
-                  {/* 
-                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Delivery Date/Time</th> */}
+                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Delivery Date</th>
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Order Status</th>
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Source</th>
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Actions</th>
@@ -1001,8 +1000,8 @@ export default function DashboardPage() {
                       ))}
                     </tr>
                   ))
-                ) : todaysPendingOrders && todaysPendingOrders.length > 0 ? (
-                  todaysPendingOrders.map((order, index) => (
+                ) : todayOrders && todayOrders.length > 0 ? (
+                  todayOrders.map((order, index) => (
                     <tr key={order.order_id} className={`border-b border-gray-100 hover:bg-gray-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
                       <td className="px-3 sm:px-6 py-3 sm:py-4">
                         <span style={{ fontFamily: 'Albert Sans' }} className="text-xs sm:text-sm font-medium text-blue-600">#{order.order_id}</span>
@@ -1024,16 +1023,13 @@ export default function DashboardPage() {
                           {order.customer?.telephone || 'N/A'}
                         </span>
                       </td>
-
-                      {/* <td className="px-3 sm:px-6 py-3 sm:py-4">
+                      <td className="px-3 sm:px-6 py-3 sm:py-4">
                         <span style={{ fontFamily: 'Albert Sans' }} className="text-xs sm:text-sm text-gray-900">
                           {order.delivery_date_time
-                            ? format(new Date(order.delivery_date_time), 'dd MMM, yyyy hh:mm a')
-                            : order.date_added
-                              ? format(new Date(order.date_added), 'dd MMM, yyyy')
-                              : 'N/A'}
+                            ? format(new Date(order.delivery_date_time), 'dd MMM, yyyy')
+                            : 'N/A'}
                         </span>
-                      </td> */}
+                      </td>
                       <td className="px-3 sm:px-6 py-3 sm:py-4">
                         {getStatusBadge(order)}
                       </td>
