@@ -18,6 +18,10 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED 1
 
+# Set API URL at build time for Next.js to embed
+ARG NEXT_PUBLIC_API_URL=https://stdreux-api-production.up.railway.app
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
 RUN npm run build
 
 # Production image
