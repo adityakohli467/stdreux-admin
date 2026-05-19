@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://ec2-13-55-72-162.ap-southeast-2.compute.amazonaws.com:9000"
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://stdreux-api-production.up.railway.app"
 
 const api = axios.create({
   baseURL: API_URL,
