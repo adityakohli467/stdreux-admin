@@ -13,6 +13,7 @@ import { Search, Plus, Edit, Trash2, Eye, EyeOff, Upload, X, Check } from "lucid
 import { toast } from "sonner"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
+import RichTextEditor from "@/components/RichTextEditor"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://ec2-13-55-72-162.ap-southeast-2.compute.amazonaws.com:9000"
 
@@ -490,13 +491,10 @@ export default function BlogsPage() {
 
             <div>
               <Label htmlFor="content">Content *</Label>
-              <Textarea
-                id="content"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="Blog content (HTML supported)"
-                rows={12}
-                className="font-mono text-sm"
+              <RichTextEditor
+                content={content}
+                onChange={(html) => setContent(html)}
+                placeholder="Write your blog content here..."
               />
             </div>
 
