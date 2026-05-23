@@ -9,6 +9,9 @@ const nextConfig = {
   
   // REQUIRED for Railway Docker deployment
   output: 'standalone',
+
+  // Prevent bundling issues with nodemailer in standalone mode
+  serverExternalPackages: ['nodemailer'],
   
   images: {
     unoptimized: true, // recommended for ALB + ECS
