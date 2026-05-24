@@ -64,6 +64,7 @@ interface Order {
   is_completed: number | string
   standing_order?: number
   order_made_from?: string
+  packaging_status?: number // 0=New Order, 1=Printed, 2=Packed, 3=Delivered
   customer: {
     firstname: string
     lastname: string
@@ -385,6 +386,150 @@ export default function DashboardPage() {
       toast.error(error.response?.data?.message || "Failed to print dispatch form")
     } finally {
       setPrintingOrderId(null)
+    }
+  }
+
+  const handleUpdatePackagingStatus = async (orderId: number, newStatus: number) => {
+    try {
+      await api.put(`/admin/orders/${orderId}/packaging-status`, { packaging_status: newStatus })
+      
+      // If it's the print action, also trigger the print
+      if (newStatus === 1) {
+        handlePrintOrder(orderId)
+      }
+
+      toast.success(
+        newStatus === 1 ? "Order marked as printed!" :
+        newStatus === 2 ? "Order marked as packed!" :
+        newStatus === 3 ? "Order marked as delivered!" : "Status updated!"
+      )
+      // Refresh dashboard data
+      fetchDashboardData()
+      queryClient.invalidateQueries({ queryKey: ['orders'] })
+    } catch (error: any) {
+      console.error("Failed to update packaging status:", error)
+      toast.error(error.response?.data?.message || "Failed to update packaging status")
+    }
+  }
+
+  const getPackagingStatusBadge = (order: Order) => {
+    const baseStyle = {
+      fontFamily: 'Albert Sans',
+      fontWeight: 600,
+      fontStyle: 'normal',
+      fontSize: '14px',
+      lineHeight: '20px',
+      letterSpacing: '0%',
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '4px',
+      paddingTop: '2px',
+      paddingBottom: '2px',
+      paddingLeft: '8px',
+      paddingRight: '8px',
+      borderRadius: '50px',
+      height: '24px',
+      whiteSpace: 'nowrap' as const,
+    }
+
+    const status = order.packaging_status || 0
+
+    switch (status) {
+      case 0:
+        return (
+          <span style={{ ...baseStyle, backgroundColor: '#eff6ff', color: '#2563eb' }}>
+            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+            New Order
+          </span>
+        )
+      case 1:
+        return (
+          <span style={{ ...baseStyle, backgroundColor: '#fff7ed', color: '#ea580c' }}>
+            <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+            Printed
+          </span>
+        )
+      case 2:
+        return (
+          <span style={{ ...baseStyle, backgroundColor: '#fefce8', color: '#ca8a04' }}>
+            <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>
+            Packed
+          </span>
+        )
+      case 3:
+        return (
+          <span style={{ ...baseStyle, backgroundColor: '#f0fdf4', color: '#15803d' }}>
+            <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+            Delivered
+          </span>
+        )
+      default:
+        return (
+          <span style={{ ...baseStyle, backgroundColor: '#f9fafb', color: '#374151' }}>
+            <div className="w-1.5 h-1.5 bg-gray-500 rounded-full"></div>
+            New Order
+          </span>
+        )
+    }
+  }
+
+  const getPackagingActionButton = (order: Order) => {
+    const status = order.packaging_status || 0
+
+    switch (status) {
+      case 0:
+        return (
+          <Button
+            size="sm"
+            onClick={() => handleUpdatePackagingStatus(order.order_id, 1)}
+            disabled={printingOrderId === order.order_id}
+            style={{ fontFamily: 'Albert Sans', fontWeight: 600, fontSize: '14px', lineHeight: '20px' }}
+            className="h-9 px-4 text-sm bg-[#0d6efd] hover:bg-[#0b5ed7] text-white whitespace-nowrap"
+          >
+            {printingOrderId === order.order_id ? (
+              <Loader2 className="h-4 w-4 animate-spin mr-2" />
+            ) : (
+              <Printer className="h-4 w-4 mr-2" />
+            )}
+            Print
+          </Button>
+        )
+      case 1:
+        return (
+          <Button
+            size="sm"
+            onClick={() => handleUpdatePackagingStatus(order.order_id, 2)}
+            style={{ fontFamily: 'Albert Sans', fontWeight: 600, fontSize: '14px', lineHeight: '20px' }}
+            className="h-9 px-4 text-sm bg-amber-500 hover:bg-amber-600 text-white whitespace-nowrap"
+          >
+            <Package className="h-4 w-4 mr-2" />
+            Pack
+          </Button>
+        )
+      case 2:
+        return (
+          <Button
+            size="sm"
+            onClick={() => handleUpdatePackagingStatus(order.order_id, 3)}
+            style={{ fontFamily: 'Albert Sans', fontWeight: 600, fontSize: '14px', lineHeight: '20px' }}
+            className="h-9 px-4 text-sm bg-green-600 hover:bg-green-700 text-white whitespace-nowrap"
+          >
+            <Truck className="h-4 w-4 mr-2" />
+            Deliver
+          </Button>
+        )
+      case 3:
+        return (
+          <span
+            style={{ fontFamily: 'Albert Sans', fontWeight: 600, fontSize: '14px' }}
+            className="text-green-600 flex items-center gap-1"
+          >
+            <CheckCircle className="h-4 w-4" />
+            Done
+          </span>
+        )
+      default:
+        return null
     }
   }
 
@@ -950,16 +1095,16 @@ export default function DashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Pending Orders Table */}
+      {/* Packaged Orders Table */}
       <Card className="bg-white border border-gray-200 shadow-sm">
         <CardHeader className="border-b border-gray-200 bg-white p-4 md:p-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-3">
               <CardTitle style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-lg sm:text-xl text-gray-900">
-                Pending Orders
+                Packaged
               </CardTitle>
               <p style={{ fontFamily: 'Albert Sans' }} className="text-xs sm:text-sm text-gray-500">
-                All orders that are not yet completed
+                Order packaging workflow
               </p>
             </div>
             <Button
@@ -967,11 +1112,11 @@ export default function DashboardPage() {
               className="gap-2 text-xs sm:text-sm"
               size="sm"
               style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
-              onClick={() => handlePrint(todayOrders, "Pending Orders")}
+              onClick={() => handlePrint(todayOrders, "Packaged Orders")}
               disabled={todayOrders.length === 0}
             >
               <Printer className="h-3 w-3 sm:h-4 sm:w-4" />
-              Print
+              Print All
             </Button>
           </div>
         </CardHeader>
@@ -984,8 +1129,7 @@ export default function DashboardPage() {
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Customer Name</th>
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Customer Phone</th>
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Delivery Date</th>
-                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Order Status</th>
-                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Source</th>
+                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Packaging Status</th>
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Actions</th>
                 </tr>
               </thead>
@@ -993,7 +1137,7 @@ export default function DashboardPage() {
                 {loading ? (
                   Array.from({ length: 3 }).map((_, idx) => (
                     <tr key={idx} className="border-b border-gray-100">
-                      {Array.from({ length: 7 }).map((_, colIdx) => (
+                      {Array.from({ length: 6 }).map((_, colIdx) => (
                         <td key={colIdx} className="px-3 sm:px-6 py-3 sm:py-4">
                           <div className="h-4 bg-gray-200 rounded animate-pulse" />
                         </td>
@@ -1031,18 +1175,7 @@ export default function DashboardPage() {
                         </span>
                       </td>
                       <td className="px-3 sm:px-6 py-3 sm:py-4">
-                        {getStatusBadge(order)}
-                      </td>
-                      <td className="px-3 sm:px-6 py-3 sm:py-4">
-                        {order.order_made_from === 'admin' ? (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200" style={{ fontFamily: 'Albert Sans' }}>
-                            Backend
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200" style={{ fontFamily: 'Albert Sans' }}>
-                            Frontend
-                          </span>
-                        )}
+                        {getPackagingStatusBadge(order)}
                       </td>
                       <td className="px-3 sm:px-6 py-3 sm:py-4">
                         <div className="flex items-center gap-2">
@@ -1058,49 +1191,17 @@ export default function DashboardPage() {
                             }}
                             className="h-9 px-4 text-sm border border-gray-300 text-gray-700 hover:bg-black hover:text-white whitespace-nowrap"
                           >
-                            View Order
+                            View
                           </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handlePrintOrder(order.order_id)}
-                            disabled={printingOrderId === order.order_id}
-                            style={{
-                              fontFamily: 'Albert Sans',
-                              fontWeight: 600,
-                              fontSize: '14px',
-                              lineHeight: '20px',
-                            }}
-                            className="h-9 px-4 text-sm border border-gray-300 text-gray-700 hover:bg-black hover:text-white whitespace-nowrap"
-                          >
-                            {printingOrderId === order.order_id ? (
-                              <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                              <Printer className="h-4 w-4 mr-2" />
-                            )}
-                            {printingOrderId === order.order_id ? "Printing..." : "Print"}
-                          </Button>
-                          <Button
-                            size="sm"
-                            onClick={() => handleMarkComplete(order.order_id)}
-                            style={{
-                              fontFamily: 'Albert Sans',
-                              fontWeight: 600,
-                              fontSize: '14px',
-                              lineHeight: '20px',
-                            }}
-                            className="h-9 px-4 text-sm bg-[#0d6efd] hover:bg-[#0b5ed7] text-white whitespace-nowrap"
-                          >
-                            Complete
-                          </Button>
+                          {getPackagingActionButton(order)}
                         </div>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={7} className="px-3 sm:px-6 py-12 text-center text-gray-500">
-                      <span style={{ fontFamily: 'Albert Sans' }}>No pending orders</span>
+                    <td colSpan={6} className="px-3 sm:px-6 py-12 text-center text-gray-500">
+                      <span style={{ fontFamily: 'Albert Sans' }}>No orders to package</span>
                     </td>
                   </tr>
                 )}
