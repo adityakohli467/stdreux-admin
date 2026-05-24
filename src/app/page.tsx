@@ -1,5 +1,13 @@
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 
 export default function RootPage() {
-  redirect('/dashboard')
+  const cookieStore = cookies()
+  const authCookie = cookieStore.get('caterly-auth')
+  
+  if (authCookie) {
+    redirect('/dashboard')
+  } else {
+    redirect('/login')
+  }
 }
