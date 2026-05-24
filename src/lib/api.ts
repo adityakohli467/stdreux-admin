@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://stdreux-api-production.up.railway.app"
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || "https://stdreux-api-production.up.railway.app").replace(/\/+$/, "")
 
 const api = axios.create({
   baseURL: API_URL,
