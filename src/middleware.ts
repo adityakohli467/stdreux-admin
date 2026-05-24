@@ -23,13 +23,14 @@ export function middleware(request: NextRequest) {
   // Get the auth token from cookies
   const authCookie = request.cookies.get('caterly-auth')
   
-  // If trying to access protected route without authentication cookie
-  // Let the page load so client-side can check localStorage
-  // The dashboard layout will handle redirect if no localStorage auth either
-  if (isProtectedRoute && !authCookie) {
-    // Allow the page to load - client-side layout will check localStorage
-    // and redirect to login if needed
-    return NextResponse.next()
+  // If trying to access any non-public route without authentication cookie, redirect to login
+  if (!isPublicRoute && !authCookie) {
+    const host = request.headers.get('x-forwarded-host')
+    const proto = request.headers.get('x-forwarded-proto') || 'https'
+    const loginUrl = host
+      ? new URL('/login', `${proto}://${host}`)
+      : new URL('/login', request.url)
+    return NextResponse.redirect(loginUrl)
   }
   
   // If trying to access login while already authenticated
