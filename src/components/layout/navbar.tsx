@@ -32,7 +32,6 @@ const allNavigation = [
     items: [
       { name: "Customers", href: "/customers" },
       { name: "Company", href: "/companies" },
-      { name: "Department", href: "/departments" },
       { name: "Customer's Feedbacks", href: "/feedbacks" },
       { name: "Coupons", href: "/coupons" },
     ]

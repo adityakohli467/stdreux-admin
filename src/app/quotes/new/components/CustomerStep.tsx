@@ -108,17 +108,15 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
     enabled: selectedCompany > 0
   })
 
-  // Fetch customers - include all customers if no company selected, or filter by company if selected
+  // Fetch customers - only when company is selected
   const { data: customersData, isLoading: loadingCustomers } = useQuery({
     queryKey: ['customers', selectedCompany],
     queryFn: async () => {
-      // If company is selected, filter by company_id
-      // If no company selected, fetch all customers (API will return all if company_id not provided)
       const params = selectedCompany > 0 ? { company_id: selectedCompany } : {}
       const response = await customersAPI.list(params)
       return response.data
     },
-    // Always enabled - fetch customers regardless of company selection
+    enabled: selectedCompany > 0,
   })
 
   // Fetch locations
@@ -392,7 +390,7 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
   // Reset department and customer when company changes manually (not during initial load)
   const handleCompanyChange = (companyId: number) => {
     setSelectedCompany(companyId)
-    if (!isInitialLoad && companyId > 0) {
+    if (!isInitialLoad) {
       setSelectedDepartment(0)
       setSelectedCustomer(0)
       setCustomerName("")
@@ -424,7 +422,12 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
   }
 
   const handleProceed = () => {
-    // Validation - Company and Department are now optional
+    // Validation - Company is required (customer depends on it)
+    if (!selectedCompany || selectedCompany === 0) {
+      toast.error("Please select a company")
+      return
+    }
+
     if (!selectedCustomer || selectedCustomer === 0) {
       toast.error("Please select a customer")
       return
@@ -507,43 +510,6 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
           </div>
         </div>
 
-        {/* Department */}
-        <div className="space-y-2">
-          <Label htmlFor="department" className="text-sm font-medium text-gray-700">
-            Department
-          </Label>
-          <div className="flex gap-2">
-            <select
-              id="department"
-              value={selectedDepartment}
-              onChange={(e) => setSelectedDepartment(Number(e.target.value))}
-              disabled={selectedCompany === 0 || loadingDepartments}
-              className="flex-1 h-11 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d6efd] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
-              style={{ fontFamily: 'Albert Sans' }}
-            >
-              <option value={0}>
-                {loadingDepartments ? "Loading..." : "Select"}
-              </option>
-              {departments.map((dept: Department) => (
-                <option key={dept.department_id} value={dept.department_id}>
-                  {dept.department_name}
-                </option>
-              ))}
-            </select>
-            <Button
-              type="button"
-              variant="outline"
-              disabled={selectedCompany === 0}
-              onClick={() => setShowAddDepartmentModal(true)}
-              className="gap-2 border-gray-300 text-[#0d6efd] hover:text-[#0b5ed7] disabled:opacity-50"
-              style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
-            >
-              <span className="text-lg">+</span>
-              Add New
-            </Button>
-          </div>
-        </div>
-
         {/* Customer Name */}
         <div className="space-y-2">
           <Label htmlFor="customer" className="text-sm font-medium text-gray-700">
@@ -554,12 +520,12 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
               id="customer"
               value={selectedCustomer}
               onChange={(e) => handleCustomerChange(Number(e.target.value))}
-              disabled={loadingCustomers}
+              disabled={selectedCompany === 0 || loadingCustomers}
               className="flex-1 h-11 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d6efd] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
               style={{ fontFamily: 'Albert Sans' }}
             >
               <option value={0}>
-                {loadingCustomers ? "Loading..." : "Enter"}
+                {selectedCompany === 0 ? "Select a company first" : loadingCustomers ? "Loading..." : "Enter"}
               </option>
               {customers.map((customer: Customer) => (
                 <option key={customer.customer_id} value={customer.customer_id}>
@@ -748,101 +714,6 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
                 style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
               >
                 {createCompanyMutation.isPending ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin mr-2 inline" />
-                    Saving...
-                  </>
-                ) : (
-                  'Add'
-                )}
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Add Department Modal */}
-      <Dialog open={showAddDepartmentModal} onOpenChange={(open) => {
-        if (!open) {
-          // Blur active element to prevent validation on blur
-          if (document.activeElement && document.activeElement instanceof HTMLElement) {
-            document.activeElement.blur()
-          }
-        }
-        setShowAddDepartmentModal(open)
-      }}>
-        <DialogContent className="max-w-md" style={{ fontFamily: 'Albert Sans' }}>
-          <DialogHeader>
-            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 mx-auto mb-4">
-              <Plus className="h-6 w-6 text-[#0d6efd]" />
-            </div>
-            <DialogTitle className="text-center text-xl font-semibold">
-              Add Department
-            </DialogTitle>
-          </DialogHeader>
-
-          <div className="space-y-4">
-            {/* Company Info (read-only) */}
-            <div className="space-y-2">
-              <Label className="text-sm font-medium text-gray-700">
-                Company
-              </Label>
-              <Input
-                value={companies.find((c: Company) => c.company_id === selectedCompany)?.company_name || "No company selected"}
-                disabled
-                className="h-11 border-gray-300 bg-gray-100"
-                style={{ fontFamily: 'Albert Sans' }}
-              />
-              {selectedCompany === 0 && (
-                <p className="text-xs text-red-500">Please select a company first</p>
-              )}
-            </div>
-
-            {/* Department Name */}
-            <ValidatedInput
-              label="Department Name"
-              placeholder="Enter department name"
-              value={departmentName}
-              validationRule={ValidationRules.department.department_name}
-              fieldName="Department Name"
-              onChange={(value) => setDepartmentName(value)}
-              className="h-11 border-gray-300"
-            />
-
-            {/* Comments */}
-            <ValidatedTextarea
-              label="Comments"
-              placeholder="Enter comments (optional)"
-              value={departmentComments}
-              validationRule={ValidationRules.department.department_comments}
-              fieldName="Comments"
-              onChange={(value) => setDepartmentComments(value)}
-              rows={3}
-              className="border-gray-300 resize-none"
-            />
-
-            {/* Action Buttons */}
-            <div className="flex gap-3 pt-4">
-              <Button
-                onClick={() => {
-                  setShowAddDepartmentModal(false)
-                  setDepartmentName("")
-                  setDepartmentComments("")
-                }}
-                variant="outline"
-                className="flex-1 border-gray-300"
-                disabled={createDepartmentMutation.isPending}
-                style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleSaveDepartment}
-                disabled={createDepartmentMutation.isPending || selectedCompany === 0}
-                className="flex-1 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white disabled:opacity-50"
-                style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
-              >
-                {createDepartmentMutation.isPending ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin mr-2 inline" />
                     Saving...
