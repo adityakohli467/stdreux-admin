@@ -2,7 +2,7 @@ import { create } from "zustand"
 import { persist } from "zustand/middleware"
 import axios from "axios"
 
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || "http://ec2-13-55-72-162.ap-southeast-2.compute.amazonaws.com:9000").replace(/\/+$/, "")
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://ec2-13-55-72-162.ap-southeast-2.compute.amazonaws.com:9000"
 
 interface User {
   user_id: number
