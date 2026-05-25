@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Search, ShoppingCart, Trash2, ChevronLeft, GripVertical } from "lucide-react"
+import { Search, ShoppingCart, Trash2, ChevronLeft, GripVertical, Pencil, Check, X } from "lucide-react"
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core"
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
@@ -74,6 +74,7 @@ interface CartProduct {
   category: string
   price: number // Display price (final price with discounts) - shown to user
   base_price?: number // Base customer-type price (for backend calculation) - optional, falls back to price
+  original_price?: number // Original price before override (for reference)
   quantity: number
   min_quantity?: number
   comment?: string
@@ -91,14 +92,18 @@ interface CartProduct {
 }
 
 // Sortable Item Component
-function SortableCartItem({ item, index, onRemove, onQuantityChange, onAddOnQuantityChange, onCommentChange }: {
+function SortableCartItem({ item, index, onRemove, onQuantityChange, onAddOnQuantityChange, onCommentChange, onPriceChange }: {
   item: CartProduct
   index: number
   onRemove: (index: number) => void
   onQuantityChange: (index: number, delta: number) => void
   onAddOnQuantityChange: (cartIndex: number, addonIndex: number, delta: number) => void
   onCommentChange: (index: number, comment: string) => void
+  onPriceChange: (index: number, newPrice: number) => void
 }) {
+  const [isEditingPrice, setIsEditingPrice] = useState(false)
+  const [priceInput, setPriceInput] = useState(item.price.toFixed(2))
+
   const {
     attributes,
     listeners,
@@ -113,6 +118,21 @@ function SortableCartItem({ item, index, onRemove, onQuantityChange, onAddOnQuan
     transition,
     opacity: isDragging ? 0.5 : 1,
   }
+
+  const handlePriceConfirm = () => {
+    const newPrice = parseFloat(priceInput)
+    if (!isNaN(newPrice) && newPrice >= 0) {
+      onPriceChange(index, newPrice)
+      setIsEditingPrice(false)
+    }
+  }
+
+  const handlePriceCancel = () => {
+    setPriceInput(item.price.toFixed(2))
+    setIsEditingPrice(false)
+  }
+
+  const isOverridden = item.original_price !== undefined && item.original_price !== item.price
 
   return (
     <div ref={setNodeRef} style={style} className="border-b border-gray-100 pb-4">
@@ -163,9 +183,52 @@ function SortableCartItem({ item, index, onRemove, onQuantityChange, onAddOnQuan
                 </button>
               </div>
             )}
-            <span className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
-              ${item.price.toFixed(2)}
-            </span>
+            <div className="flex items-center gap-1">
+              {isEditingPrice ? (
+                <div className="flex items-center gap-1">
+                  <span className="text-sm text-gray-500">$</span>
+                  <input
+                    type="text"
+                    value={priceInput}
+                    onChange={(e) => setPriceInput(e.target.value.replace(/[^0-9.]/g, ''))}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handlePriceConfirm()
+                      if (e.key === 'Escape') handlePriceCancel()
+                    }}
+                    className="w-20 text-sm font-medium text-gray-900 border border-blue-400 rounded px-1 py-0.5 outline-none focus:border-blue-600"
+                    style={{ fontFamily: 'Albert Sans' }}
+                    autoFocus
+                  />
+                  <button onClick={handlePriceConfirm} className="text-green-600 hover:text-green-800">
+                    <Check className="h-3.5 w-3.5" />
+                  </button>
+                  <button onClick={handlePriceCancel} className="text-red-500 hover:text-red-700">
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              ) : (
+                <>
+                  {isOverridden && (
+                    <span className="text-xs text-gray-400 line-through mr-1" style={{ fontFamily: 'Albert Sans' }}>
+                      ${item.original_price!.toFixed(2)}
+                    </span>
+                  )}
+                  <span className={`text-sm font-medium ${isOverridden ? 'text-orange-600' : 'text-gray-900'}`} style={{ fontFamily: 'Albert Sans' }}>
+                    ${item.price.toFixed(2)}
+                  </span>
+                  <button
+                    onClick={() => {
+                      setPriceInput(item.price.toFixed(2))
+                      setIsEditingPrice(true)
+                    }}
+                    className="text-gray-400 hover:text-blue-600 ml-1"
+                    title="Override price for this order"
+                  >
+                    <Pencil className="h-3 w-3" />
+                  </button>
+                </>
+              )}
+            </div>
           </div>
 
           {/* Product Comment */}
@@ -574,6 +637,19 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
   const handleCartCommentChange = (index: number, comment: string) => {
     const newCart = [...cart]
     newCart[index].comment = comment
+    setCart(newCart)
+    onUpdate({ products: newCart })
+  }
+
+  const handleCartPriceChange = (index: number, newPrice: number) => {
+    const newCart = [...cart]
+    // Store original price on first override
+    if (newCart[index].original_price === undefined) {
+      newCart[index].original_price = newCart[index].price
+    }
+    newCart[index].price = newPrice
+    // Clear base_price so the overridden price is used directly
+    newCart[index].base_price = undefined
     setCart(newCart)
     onUpdate({ products: newCart })
   }
@@ -988,6 +1064,7 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
                       onQuantityChange={handleCartItemQuantityChange}
                       onAddOnQuantityChange={handleCartAddOnQuantityChange}
                       onCommentChange={handleCartCommentChange}
+                      onPriceChange={handleCartPriceChange}
                     />
                   ))
                 )}
