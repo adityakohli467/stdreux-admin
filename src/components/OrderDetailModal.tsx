@@ -359,7 +359,7 @@ export function OrderDetailModal({
                                           style={{ fontFamily: "Albert Sans" }}
                                           className="text-xs text-gray-600 ml-2"
                                         >
-                                          {option.option_name}: {option.option_value} (Qty: {option.option_quantity})
+                                          {option.option_name}: {option.option_value} (Qty: {option.option_quantity}){option.option_price && option.option_price !== 0 ? ` [+$${Number(option.option_price).toFixed(2)}]` : ''}
                                         </div>
                                       ))}
                                     </div>

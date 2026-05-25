@@ -139,8 +139,12 @@ export default function EditOrderPage() {
                 return {
                   name: `${option.option_name}: ${option.option_value}`,
                   price: parseFloat(option.option_price || '0'),
+                  option_price: parseFloat(option.option_price || '0'),
                   quantity: optUnitQty, // Per-unit quantity
+                  option_name: option.option_name,
+                  option_value: option.option_value,
                   option_value_id: option.option_value_id,
+                  product_option_id: option.product_option_id,
                 }
               }) || []
             }
