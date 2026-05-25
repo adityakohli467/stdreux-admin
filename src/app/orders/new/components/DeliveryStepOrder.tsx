@@ -486,10 +486,6 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
                 <Label className="text-sm font-medium text-gray-700">Delivery Date</Label>
                 <Input type="date" value={deliveryDate} onChange={(e) => setDeliveryDate(e.target.value)} className="h-11 border-gray-300" />
               </div>
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-gray-700">Delivery Time</Label>
-                <Input type="time" value={deliveryTime} onChange={(e) => setDeliveryTime(e.target.value)} className="h-11 border-gray-300" />
-              </div>
               
               {/* <ValidatedInput label="Contact Name" value={deliveryContactName} onChange={(val) => setDeliveryContactName(val)} className="h-11 border-gray-300" />
               <ValidatedInput label="Contact Number" value={deliveryContactNumber} onChange={(val) => setDeliveryContactNumber(val)} className="h-11 border-gray-300" /> */}
