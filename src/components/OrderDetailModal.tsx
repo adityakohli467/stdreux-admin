@@ -357,9 +357,10 @@ export function OrderDetailModal({
                                         <div
                                           key={optIdx}
                                           style={{ fontFamily: "Albert Sans" }}
-                                          className="text-xs text-gray-600 ml-2"
+                                          className="text-sm text-gray-700 ml-2 flex items-center justify-between"
                                         >
-                                          {option.option_name}: {option.option_value} (Qty: {option.option_quantity}){option.option_price && option.option_price !== 0 ? ` [+$${Number(option.option_price).toFixed(2)}]` : ''}
+                                          <span>{option.option_name}: {option.option_value}</span>
+                                          <span className="font-semibold text-gray-900 text-sm">x{option.option_quantity}</span>
                                         </div>
                                       ))}
                                     </div>
@@ -379,7 +380,7 @@ export function OrderDetailModal({
                                   style={{ fontFamily: "Albert Sans" }}
                                   className="text-sm text-gray-900"
                                 >
-                                  {product.quantity}
+                                  {product.options && product.options.length > 0 ? '-' : product.quantity}
                                 </span>
                               </td>
                             </tr>

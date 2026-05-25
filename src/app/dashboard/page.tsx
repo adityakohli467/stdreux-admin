@@ -349,8 +349,7 @@ export default function DashboardPage() {
   }
 
   const handleViewOrder = (orderId: number) => {
-    setSelectedOrderId(orderId)
-    setIsOrderModalOpen(true)
+    window.location.href = `/orders/${orderId}`
   }
 
   const handleOrderModalClose = () => {
@@ -1176,7 +1175,7 @@ export default function DashboardPage() {
                   todayOrders.map((order, index) => (
                     <tr key={order.order_id} className={`border-b border-gray-100 hover:bg-gray-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
                       <td className="px-3 sm:px-6 py-3 sm:py-4">
-                        <span style={{ fontFamily: 'Albert Sans' }} className="text-xs sm:text-sm font-medium text-blue-600">#{order.order_id}</span>
+                        <Link href={`/orders/${order.order_id}`} style={{ fontFamily: 'Albert Sans' }} className="text-xs sm:text-sm font-medium text-blue-600 hover:underline cursor-pointer">#{order.order_id}</Link>
                       </td>
                       <td className="px-3 sm:px-6 py-3 sm:py-4">
                         <div className="flex items-center gap-2">
