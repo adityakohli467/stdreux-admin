@@ -349,7 +349,8 @@ export default function DashboardPage() {
   }
 
   const handleViewOrder = (orderId: number) => {
-    window.location.href = `/orders/${orderId}`
+    setSelectedOrderId(orderId)
+    setIsOrderModalOpen(true)
   }
 
   const handleOrderModalClose = () => {
