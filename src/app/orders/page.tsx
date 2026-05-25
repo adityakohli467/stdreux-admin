@@ -104,7 +104,6 @@ export default function OrdersPage() {
   const [selectedStatus, setSelectedStatus] = useState<number | null>(null)
   const [dateFrom, setDateFrom] = useState<Date | null>(null)
   const [dateTo, setDateTo] = useState<Date | null>(null)
-  const [amountFilter, setAmountFilter] = useState("")
 
   // UI state
   const [selectedOrders, setSelectedOrders] = useState<number[]>([])
@@ -171,18 +170,13 @@ export default function OrdersPage() {
     if (searchQuery) params.search = searchQuery
     if (dateFrom) params.from_date = format(dateFrom, 'yyyy-MM-dd')
     if (dateTo) params.to_date = format(dateTo, 'yyyy-MM-dd 23:59:59')
-    if (amountFilter) {
-      const parts = amountFilter.split('.')
-      if (parts[0]) params.min_amount = parts[0]
-      if (parts[1]) params.max_amount = parts[1]
-    }
 
     return new URLSearchParams(params).toString()
   }
 
   // Fetch orders
   const { data: ordersData, isLoading } = useQuery({
-    queryKey: ['orders', selectedTab, selectedLocation, selectedStatus, searchQuery, dateFrom, dateTo, amountFilter],
+    queryKey: ['orders', selectedTab, selectedLocation, selectedStatus, searchQuery, dateFrom, dateTo],
     queryFn: async () => {
       const queryString = buildQueryParams()
 
@@ -377,7 +371,6 @@ export default function OrdersPage() {
     setSelectedStatus(null)
     setDateFrom(null)
     setDateTo(null)
-    setAmountFilter("")
   }
 
   const handlePrint = () => {
@@ -865,53 +858,7 @@ export default function OrdersPage() {
             </Button>
           </div>
 
-          <div
-            className="flex items-center justify-between border border-gray-200 bg-white rounded-full w-full md:w-[312px]"
-            style={{
-              height: '54px',
-              paddingTop: '8px',
-              paddingRight: '12px',
-              paddingBottom: '8px',
-              paddingLeft: '12px',
-              borderRadius: '100px',
-              borderWidth: '1px',
-              opacity: 1
-            }}
-          >
-            <div className="flex items-center gap-2 flex-1">
-              <DollarSign className="h-5 w-5 text-gray-500" />
-              <input
-                type="text"
-                value={amountFilter}
-                onChange={(e) => {
-                  const value = e.target.value.replace(/[^0-9.]/g, '')
-                  setAmountFilter(value)
-                }}
-                placeholder="56.00"
-                className="outline-none text-sm flex-1 bg-transparent text-gray-700"
-                style={{ fontFamily: 'Albert Sans' }}
-              />
-            </div>
-            <Button
-              onClick={() => {
-                queryClient.invalidateQueries({ queryKey: ['orders'] })
-              }}
-              className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white whitespace-nowrap rounded-full hover:text-white"
-              style={{
-                fontFamily: 'Albert Sans',
-                fontWeight: 600,
-                height: 'auto',
-                paddingTop: '6px',
-                paddingRight: '16px',
-                paddingBottom: '6px',
-                paddingLeft: '16px',
-                borderRadius: '100px',
-                borderWidth: '0px'
-              }}
-            >
-              Submit
-            </Button>
-          </div>
+
         </div>
 
         <Button
