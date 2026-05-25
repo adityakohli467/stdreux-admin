@@ -357,10 +357,9 @@ export function OrderDetailModal({
                                         <div
                                           key={optIdx}
                                           style={{ fontFamily: "Albert Sans" }}
-                                          className="text-sm text-gray-700 ml-2 flex items-center justify-between"
+                                          className="text-sm text-gray-700 ml-2"
                                         >
                                           <span>{option.option_name}: {option.option_value}</span>
-                                          <span className="font-semibold text-gray-900 text-sm">x{option.option_quantity}</span>
                                         </div>
                                       ))}
                                     </div>
@@ -375,13 +374,23 @@ export function OrderDetailModal({
                                   )}
                                 </div>
                               </td>
-                              <td className="px-4 py-4 text-center">
-                                <span
-                                  style={{ fontFamily: "Albert Sans" }}
-                                  className="text-sm text-gray-900"
-                                >
-                                  {product.options && product.options.length > 0 ? '-' : product.quantity}
-                                </span>
+                              <td className="px-4 py-4 text-center align-top">
+                                {product.options && product.options.length > 0 ? (
+                                  <div>
+                                    <span style={{ fontFamily: "Albert Sans" }} className="text-sm text-gray-400">-</span>
+                                    <div className="mt-2 space-y-1">
+                                      {product.options.map((option, optIdx) => (
+                                        <p key={optIdx} style={{ fontFamily: "Albert Sans" }} className="text-sm font-semibold text-gray-900">
+                                          x{option.option_quantity}
+                                        </p>
+                                      ))}
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <span style={{ fontFamily: "Albert Sans" }} className="text-sm text-gray-900">
+                                    {product.quantity}
+                                  </span>
+                                )}
                               </td>
                             </tr>
                           ))
