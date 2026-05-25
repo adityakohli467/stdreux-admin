@@ -82,6 +82,7 @@ interface CartProduct {
     name: string
     price: number // Display price
     base_price?: number // Base price for backend - optional
+    original_price?: number // Original option price before override
     quantity: number
     product_option_id?: number
     option_value_id?: number
@@ -92,7 +93,7 @@ interface CartProduct {
 }
 
 // Sortable Item Component
-function SortableCartItem({ item, index, onRemove, onQuantityChange, onAddOnQuantityChange, onCommentChange, onPriceChange }: {
+function SortableCartItem({ item, index, onRemove, onQuantityChange, onAddOnQuantityChange, onCommentChange, onPriceChange, onAddonPriceChange }: {
   item: CartProduct
   index: number
   onRemove: (index: number) => void
@@ -100,9 +101,14 @@ function SortableCartItem({ item, index, onRemove, onQuantityChange, onAddOnQuan
   onAddOnQuantityChange: (cartIndex: number, addonIndex: number, delta: number) => void
   onCommentChange: (index: number, comment: string) => void
   onPriceChange: (index: number, newPrice: number) => void
+  onAddonPriceChange: (cartIndex: number, addonIndex: number, newPrice: number) => void
 }) {
   const [isEditingPrice, setIsEditingPrice] = useState(false)
   const [priceInput, setPriceInput] = useState(item.price.toFixed(2))
+  const [editingAddonIndex, setEditingAddonIndex] = useState<number | null>(null)
+  const [addonPriceInput, setAddonPriceInput] = useState("")
+
+  const hasOptions = item.add_ons.length > 0
 
   const {
     attributes,
@@ -132,6 +138,20 @@ function SortableCartItem({ item, index, onRemove, onQuantityChange, onAddOnQuan
     setIsEditingPrice(false)
   }
 
+  const handleAddonPriceConfirm = (addonIndex: number) => {
+    const newPrice = parseFloat(addonPriceInput)
+    if (!isNaN(newPrice) && newPrice >= 0) {
+      onAddonPriceChange(index, addonIndex, newPrice)
+      setEditingAddonIndex(null)
+      setAddonPriceInput("")
+    }
+  }
+
+  const handleAddonPriceCancel = () => {
+    setEditingAddonIndex(null)
+    setAddonPriceInput("")
+  }
+
   const isOverridden = item.original_price !== undefined && item.original_price !== item.price
 
   return (
@@ -150,7 +170,7 @@ function SortableCartItem({ item, index, onRemove, onQuantityChange, onAddOnQuan
               <p className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
                 {item.name}
               </p>
-              {item.add_ons.length > 0 && (
+              {hasOptions && (
                 <p className="text-xs text-gray-600 mt-1" style={{ fontFamily: 'Albert Sans' }}>
                   Add ons: {item.add_ons.map(a => a.name).join(", ")}
                 </p>
@@ -183,52 +203,61 @@ function SortableCartItem({ item, index, onRemove, onQuantityChange, onAddOnQuan
                 </button>
               </div>
             )}
-            <div className="flex items-center gap-1">
-              {isEditingPrice ? (
-                <div className="flex items-center gap-1">
-                  <span className="text-sm text-gray-500">$</span>
-                  <input
-                    type="text"
-                    value={priceInput}
-                    onChange={(e) => setPriceInput(e.target.value.replace(/[^0-9.]/g, ''))}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') handlePriceConfirm()
-                      if (e.key === 'Escape') handlePriceCancel()
-                    }}
-                    className="w-20 text-sm font-medium text-gray-900 border border-blue-400 rounded px-1 py-0.5 outline-none focus:border-blue-600"
-                    style={{ fontFamily: 'Albert Sans' }}
-                    autoFocus
-                  />
-                  <button onClick={handlePriceConfirm} className="text-green-600 hover:text-green-800">
-                    <Check className="h-3.5 w-3.5" />
-                  </button>
-                  <button onClick={handlePriceCancel} className="text-red-500 hover:text-red-700">
-                    <X className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-              ) : (
-                <>
-                  {isOverridden && (
-                    <span className="text-xs text-gray-400 line-through mr-1" style={{ fontFamily: 'Albert Sans' }}>
-                      ${item.original_price!.toFixed(2)}
+            {/* Show price with edit icon only if NO options */}
+            {!hasOptions && (
+              <div className="flex items-center gap-1">
+                {isEditingPrice ? (
+                  <div className="flex items-center gap-1">
+                    <span className="text-sm text-gray-500">$</span>
+                    <input
+                      type="text"
+                      value={priceInput}
+                      onChange={(e) => setPriceInput(e.target.value.replace(/[^0-9.]/g, ''))}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') handlePriceConfirm()
+                        if (e.key === 'Escape') handlePriceCancel()
+                      }}
+                      className="w-20 text-sm font-medium text-gray-900 border border-blue-400 rounded px-1 py-0.5 outline-none focus:border-blue-600"
+                      style={{ fontFamily: 'Albert Sans' }}
+                      autoFocus
+                    />
+                    <button onClick={handlePriceConfirm} className="text-green-600 hover:text-green-800">
+                      <Check className="h-3.5 w-3.5" />
+                    </button>
+                    <button onClick={handlePriceCancel} className="text-red-500 hover:text-red-700">
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    {isOverridden && (
+                      <span className="text-xs text-gray-400 line-through mr-1" style={{ fontFamily: 'Albert Sans' }}>
+                        ${item.original_price!.toFixed(2)}
+                      </span>
+                    )}
+                    <span className={`text-sm font-medium ${isOverridden ? 'text-orange-600' : 'text-gray-900'}`} style={{ fontFamily: 'Albert Sans' }}>
+                      ${item.price.toFixed(2)}
                     </span>
-                  )}
-                  <span className={`text-sm font-medium ${isOverridden ? 'text-orange-600' : 'text-gray-900'}`} style={{ fontFamily: 'Albert Sans' }}>
-                    ${item.price.toFixed(2)}
-                  </span>
-                  <button
-                    onClick={() => {
-                      setPriceInput(item.price.toFixed(2))
-                      setIsEditingPrice(true)
-                    }}
-                    className="text-gray-400 hover:text-blue-600 ml-1"
-                    title="Override price for this order"
-                  >
-                    <Pencil className="h-3 w-3" />
-                  </button>
-                </>
-              )}
-            </div>
+                    <button
+                      onClick={() => {
+                        setPriceInput(item.price.toFixed(2))
+                        setIsEditingPrice(true)
+                      }}
+                      className="text-gray-400 hover:text-blue-600 ml-1"
+                      title="Override price for this order"
+                    >
+                      <Pencil className="h-3 w-3" />
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
+            {/* Show plain price (no edit) if product has options */}
+            {hasOptions && (
+              <span className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
+                ${item.price.toFixed(2)}
+              </span>
+            )}
           </div>
 
           {/* Product Comment */}
@@ -243,37 +272,83 @@ function SortableCartItem({ item, index, onRemove, onQuantityChange, onAddOnQuan
             />
           </div>
 
-          {item.add_ons.map((addon, addonIndex) => (
-            <div key={addonIndex} className="flex items-center justify-between mt-2 ml-4">
-              <p className="text-xs text-gray-600" style={{ fontFamily: 'Albert Sans' }}>
-                {addon.name}
-              </p>
-              <div className="flex items-center gap-2">
-                {addon.price > 0 && (
-                  <div className="flex items-center gap-1 bg-gray-100 rounded-md">
-                    <button
-                      onClick={() => onAddOnQuantityChange(index, addonIndex, -1)}
-                      className="px-1.5 py-0.5 text-xs text-gray-600 hover:text-gray-900"
-                    >
-                      -
-                    </button>
-                    <span className="text-xs font-medium" style={{ fontFamily: 'Albert Sans' }}>
-                      {addon.quantity}
-                    </span>
-                    <button
-                      onClick={() => onAddOnQuantityChange(index, addonIndex, 1)}
-                      className="px-1.5 py-0.5 text-xs text-gray-600 hover:text-gray-900"
-                    >
-                      +
-                    </button>
-                  </div>
-                )}
-                <span className="text-xs text-gray-700" style={{ fontFamily: 'Albert Sans' }}>
-                  +${addon.price.toFixed(2)}
-                </span>
+          {item.add_ons.map((addon, addonIndex) => {
+            const addonOverridden = addon.original_price !== undefined && addon.original_price !== addon.price
+            const isEditingThisAddon = editingAddonIndex === addonIndex
+
+            return (
+              <div key={addonIndex} className="flex items-center justify-between mt-2 ml-4">
+                <p className="text-xs text-gray-600" style={{ fontFamily: 'Albert Sans' }}>
+                  {addon.name}
+                </p>
+                <div className="flex items-center gap-2">
+                  {addon.price > 0 && (
+                    <div className="flex items-center gap-1 bg-gray-100 rounded-md">
+                      <button
+                        onClick={() => onAddOnQuantityChange(index, addonIndex, -1)}
+                        className="px-1.5 py-0.5 text-xs text-gray-600 hover:text-gray-900"
+                      >
+                        -
+                      </button>
+                      <span className="text-xs font-medium" style={{ fontFamily: 'Albert Sans' }}>
+                        {addon.quantity}
+                      </span>
+                      <button
+                        onClick={() => onAddOnQuantityChange(index, addonIndex, 1)}
+                        className="px-1.5 py-0.5 text-xs text-gray-600 hover:text-gray-900"
+                      >
+                        +
+                      </button>
+                    </div>
+                  )}
+                  {isEditingThisAddon ? (
+                    <div className="flex items-center gap-1">
+                      <span className="text-xs text-gray-500">$</span>
+                      <input
+                        type="text"
+                        value={addonPriceInput}
+                        onChange={(e) => setAddonPriceInput(e.target.value.replace(/[^0-9.]/g, ''))}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') handleAddonPriceConfirm(addonIndex)
+                          if (e.key === 'Escape') handleAddonPriceCancel()
+                        }}
+                        className="w-16 text-xs font-medium text-gray-900 border border-blue-400 rounded px-1 py-0.5 outline-none focus:border-blue-600"
+                        style={{ fontFamily: 'Albert Sans' }}
+                        autoFocus
+                      />
+                      <button onClick={() => handleAddonPriceConfirm(addonIndex)} className="text-green-600 hover:text-green-800">
+                        <Check className="h-3 w-3" />
+                      </button>
+                      <button onClick={handleAddonPriceCancel} className="text-red-500 hover:text-red-700">
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1">
+                      {addonOverridden && (
+                        <span className="text-xs text-gray-400 line-through" style={{ fontFamily: 'Albert Sans' }}>
+                          +${addon.original_price!.toFixed(2)}
+                        </span>
+                      )}
+                      <span className={`text-xs ${addonOverridden ? 'text-orange-600 font-medium' : 'text-gray-700'}`} style={{ fontFamily: 'Albert Sans' }}>
+                        +${addon.price.toFixed(2)}
+                      </span>
+                      <button
+                        onClick={() => {
+                          setAddonPriceInput(addon.price.toFixed(2))
+                          setEditingAddonIndex(addonIndex)
+                        }}
+                        className="text-gray-400 hover:text-blue-600"
+                        title="Override option price for this order"
+                      >
+                        <Pencil className="h-2.5 w-2.5" />
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </div>
@@ -650,6 +725,21 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
     newCart[index].price = newPrice
     // Clear base_price so the overridden price is used directly
     newCart[index].base_price = undefined
+    setCart(newCart)
+    onUpdate({ products: newCart })
+  }
+
+  const handleAddonPriceChange = (cartIndex: number, addonIndex: number, newPrice: number) => {
+    const newCart = [...cart]
+    const addon = newCart[cartIndex].add_ons[addonIndex]
+    // Store original price on first override
+    if (addon.original_price === undefined) {
+      addon.original_price = addon.price
+    }
+    addon.price = newPrice
+    addon.option_price = newPrice
+    // Clear base_price so the overridden price is used directly
+    addon.base_price = undefined
     setCart(newCart)
     onUpdate({ products: newCart })
   }
@@ -1065,6 +1155,7 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
                       onAddOnQuantityChange={handleCartAddOnQuantityChange}
                       onCommentChange={handleCartCommentChange}
                       onPriceChange={handleCartPriceChange}
+                      onAddonPriceChange={handleAddonPriceChange}
                     />
                   ))
                 )}
