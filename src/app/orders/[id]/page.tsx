@@ -42,6 +42,7 @@ interface OrderDetails {
   customer_order_name?: string
   customer_order_email?: string
   customer_order_telephone?: string
+  date_added?: string
   delivery_date_time?: string
   delivery_time?: string
   pickup_delivery_notes?: string
@@ -459,6 +460,24 @@ export default function OrderDetailPage() {
         </div>
       </div>
 
+      {/* Order Date & Delivery Date */}
+      <div className="flex flex-wrap gap-6 mb-6">
+        <div>
+          <span className="text-xs font-medium text-gray-500" style={{ fontFamily: 'Albert Sans' }}>Order Date</span>
+          <p className="text-sm font-medium text-gray-900 mt-1" style={{ fontFamily: 'Albert Sans' }}>
+            {order.date_added ? format(new Date(order.date_added), 'dd MMM, yyyy') : 'N/A'}
+          </p>
+        </div>
+        {order.delivery_date_time && (
+          <div>
+            <span className="text-xs font-medium text-gray-500" style={{ fontFamily: 'Albert Sans' }}>Delivery Date</span>
+            <p className="text-sm font-medium text-gray-900 mt-1" style={{ fontFamily: 'Albert Sans' }}>
+              {format(new Date(order.delivery_date_time.endsWith('Z') ? order.delivery_date_time.slice(0, -1) : order.delivery_date_time), 'dd MMM, yyyy')}
+            </p>
+          </div>
+        )}
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left: Products Table */}
         <div className="lg:col-span-2">
@@ -473,9 +492,6 @@ export default function OrderDetailPage() {
                     </th>
                     <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                       Product Name
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
-                      Product Description
                     </th>
                     <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                       Quantity
@@ -492,6 +508,7 @@ export default function OrderDetailPage() {
                   {products && products.length > 0 ? (
                     products.map((product: OrderProduct, index: number) => {
                       const totalWithOptions = parseFloat(product.total?.toString() || '0')
+                      const hasOptions = product.options && product.options.length > 0
 
                       return (
                         <tr key={product.order_product_id} className="border-b border-gray-100">
@@ -510,12 +527,12 @@ export default function OrderDetailPage() {
                                   Note: {product.product_comment}
                                 </p>
                               )}
-                              {product.options && product.options.length > 0 && (
+                              {hasOptions && (
                                 <div className="mt-2 space-y-1">
                                   <p className="text-xs text-gray-600 font-medium" style={{ fontFamily: 'Albert Sans' }}>
                                     Options:
                                   </p>
-                                  {product.options.map((option, optionIndex) => (
+                                  {product.options!.map((option, optionIndex) => (
                                     <div key={optionIndex} className="text-xs text-gray-600 ml-2" style={{ fontFamily: 'Albert Sans' }}>
                                       {option.option_name}: {option.option_value} {option.option_quantity > 1 ? `(x${option.option_quantity})` : ''}
                                     </div>
@@ -524,19 +541,14 @@ export default function OrderDetailPage() {
                               )}
                             </div>
                           </td>
-                          <td className="px-4 py-4 align-top">
-                            <p className="text-sm text-gray-700" style={{ fontFamily: 'Albert Sans' }}>
-                              {product.product_description || '-'}
-                            </p>
-                          </td>
                           <td className="px-4 py-4 align-top text-center">
                             <div>
                               <p className="text-sm text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
                                 {product.quantity}
                               </p>
-                              {product.options && product.options.length > 0 && (
+                              {hasOptions && (
                                 <div className="mt-2 space-y-1">
-                                  {product.options.map((option, optionIndex) => (
+                                  {product.options!.map((option, optionIndex) => (
                                     <p key={optionIndex} className="text-xs text-gray-700" style={{ fontFamily: 'Albert Sans' }}>
                                       {option.option_quantity}
                                     </p>
@@ -547,16 +559,20 @@ export default function OrderDetailPage() {
                           </td>
                           <td className="px-4 py-4 align-top text-right">
                             <div>
-                              <p className="text-sm text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
-                                ${Number(product.price).toFixed(2)}
-                              </p>
-                              {product.options && product.options.length > 0 && (
-                                <div className="mt-2 space-y-1">
-                                  {product.options.map((option, optionIndex) => (
-                                    <p key={optionIndex} className="text-xs text-gray-700" style={{ fontFamily: 'Albert Sans' }}>
-                                      ${Number(option.option_price).toFixed(2)}
-                                    </p>
-                                  ))}
+                              {!hasOptions && (
+                                <p className="text-sm text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
+                                  ${Number(product.price).toFixed(2)}
+                                </p>
+                              )}
+                              {hasOptions && (
+                                <div className={hasOptions ? '' : 'mt-2'}>
+                                  <div className="space-y-1">
+                                    {product.options!.map((option, optionIndex) => (
+                                      <p key={optionIndex} className="text-xs text-gray-700" style={{ fontFamily: 'Albert Sans' }}>
+                                        ${Number(option.option_price).toFixed(2)}
+                                      </p>
+                                    ))}
+                                  </div>
                                 </div>
                               )}
                             </div>
@@ -566,9 +582,9 @@ export default function OrderDetailPage() {
                               <p className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
                                 ${totalWithOptions.toFixed(2)}
                               </p>
-                              {product.options && product.options.length > 0 && (
+                              {hasOptions && (
                                 <div className="mt-2 space-y-1">
-                                  {product.options.map((option, optionIndex) => (
+                                  {product.options!.map((option, optionIndex) => (
                                     <p key={optionIndex} className="text-xs text-gray-700" style={{ fontFamily: 'Albert Sans' }}>
                                       ${(Number(option.option_quantity) * Number(option.option_price)).toFixed(2)}
                                     </p>
@@ -582,7 +598,7 @@ export default function OrderDetailPage() {
                     })
                   ) : (
                     <tr>
-                      <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
+                      <td colSpan={4} className="px-4 py-8 text-center text-gray-500">
                         <span style={{ fontFamily: 'Albert Sans' }}>No products in this order</span>
                       </td>
                     </tr>
@@ -590,7 +606,7 @@ export default function OrderDetailPage() {
 
                   {/* Totals */}
                   <tr className="border-b border-gray-100">
-                    <td colSpan={5} className="px-4 py-3 text-right">
+                    <td colSpan={4} className="px-4 py-3 text-right">
                       <span className="text-sm font-medium text-gray-700" style={{ fontFamily: 'Albert Sans' }}>
                         Sub Total
                       </span>
@@ -604,7 +620,7 @@ export default function OrderDetailPage() {
 
                   {wholesaleDiscount > 0 && (
                     <tr className="border-b border-gray-100">
-                      <td colSpan={5} className="px-4 py-3 text-right">
+                      <td colSpan={4} className="px-4 py-3 text-right">
                         <span className="text-sm font-medium text-green-600" style={{ fontFamily: 'Albert Sans' }}>
                           Wholesale Discount
                         </span>
@@ -619,7 +635,7 @@ export default function OrderDetailPage() {
 
                   {(couponDiscount > 0 || (order.coupon_id && couponDiscount === 0)) && (
                     <tr className="border-b border-gray-100">
-                      <td colSpan={5} className="px-4 py-3 text-right">
+                      <td colSpan={4} className="px-4 py-3 text-right">
                         <div className="flex flex-col items-end">
                           <span className="text-sm font-medium text-green-600" style={{ fontFamily: 'Albert Sans' }}>
                             Coupon Discount
@@ -645,7 +661,7 @@ export default function OrderDetailPage() {
                   )}
 
                   <tr className="border-b border-gray-100">
-                    <td colSpan={5} className="px-4 py-3 text-right">
+                    <td colSpan={4} className="px-4 py-3 text-right">
                       <span className="text-sm font-medium text-gray-700" style={{ fontFamily: 'Albert Sans' }}>
                         Delivery Fee
                       </span>
@@ -658,7 +674,7 @@ export default function OrderDetailPage() {
                   </tr>
 
                   <tr className="border-b border-gray-100">
-                    <td colSpan={5} className="px-4 py-3 text-right">
+                    <td colSpan={4} className="px-4 py-3 text-right">
                       <span className="text-base font-semibold text-[#0d6efd]" style={{ fontFamily: 'Albert Sans' }}>
                         Total
                       </span>
@@ -672,7 +688,7 @@ export default function OrderDetailPage() {
 
                   {ancillaryGst > 0 && (
                     <tr className="border-b border-gray-200">
-                      <td colSpan={5} className="px-4 py-3 text-right">
+                      <td colSpan={4} className="px-4 py-3 text-right">
                         <span className="text-sm text-gray-600" style={{ fontFamily: 'Albert Sans' }}>
                           GST
                         </span>
@@ -793,14 +809,14 @@ export default function OrderDetailPage() {
             </h3>
 
             <div className="space-y-4">
-              {/* {order.delivery_date_time && (
+              {order.delivery_date_time && (
                 <>
                   <div>
                     <p className="text-xs font-medium text-gray-500 mb-1" style={{ fontFamily: 'Albert Sans' }}>
                       Delivery Date
                     </p>
                     <p className="text-sm text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
-                      {format(new Date(order.delivery_date_time), 'dd/MM/yyyy')}
+                      {format(new Date(order.delivery_date_time.endsWith('Z') ? order.delivery_date_time.slice(0, -1) : order.delivery_date_time), 'dd/MM/yyyy')}
                     </p>
                   </div>
                   <div>
@@ -808,11 +824,11 @@ export default function OrderDetailPage() {
                       Delivery Time
                     </p>
                     <p className="text-sm text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
-                      {order.delivery_time || format(new Date(order.delivery_date_time), 'HH:mm')}
+                      {order.delivery_time || format(new Date(order.delivery_date_time.endsWith('Z') ? order.delivery_date_time.slice(0, -1) : order.delivery_date_time), 'HH:mm')}
                     </p>
                   </div>
                 </>
-              )} */}
+              )}
 
               {order.delivery_address && (
                 <div>

@@ -50,6 +50,7 @@ interface Order {
   delivery_date: string | null
   delivery_time: string | null
   delivery_date_time?: string | null
+  date_added?: string | null
   order_total: number
   gst?: number
   order_status: number
@@ -60,6 +61,7 @@ interface Order {
   source?: string
   is_completed?: number | string
   order_made_from?: string | null
+  packaging_status?: number // 0=New Order, 1=Printed, 2=Packed, 3=Delivered
 }
 
 interface Location {
@@ -119,6 +121,9 @@ export default function OrdersPage() {
   const [sortField, setSortField] = useState<string | null>(null)
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc")
   const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false)
+  const [showEmailModal, setShowEmailModal] = useState(false)
+  const [emailOrderId, setEmailOrderId] = useState<number | null>(null)
+  const [emailAddress, setEmailAddress] = useState("")
 
   // Fetch locations
   const { data: locationsData } = useQuery({
@@ -491,12 +496,20 @@ export default function OrdersPage() {
   }
 
   const handleEmailOrder = async (order: Order) => {
-    console.log("Email order:", order.order_id)
+    setEmailOrderId(order.order_id)
+    setEmailAddress(order.email || "")
+    setShowEmailModal(true)
+  }
+
+  const handleSendEmailConfirm = async () => {
+    if (!emailOrderId) return
     try {
-      await emailMutation.mutateAsync({ orderId: order.order_id })
+      await emailMutation.mutateAsync({ orderId: emailOrderId })
+      setShowEmailModal(false)
+      setEmailOrderId(null)
+      setEmailAddress("")
     } catch (error) {
       console.error("Email error:", error)
-      // Error handled by mutation
     }
   }
 
@@ -577,6 +590,33 @@ export default function OrdersPage() {
         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-200">
           <span className="w-2 h-2 bg-green-700 rounded-full"></span>
           Completed
+        </span>
+      )
+    }
+
+    // Show packaging status if applicable
+    const packagingStatus = order.packaging_status || 0
+    if (packagingStatus === 1) {
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-orange-50 text-orange-700 border border-orange-200">
+          <span className="w-2 h-2 bg-orange-700 rounded-full"></span>
+          Printed
+        </span>
+      )
+    }
+    if (packagingStatus === 2) {
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-50 text-yellow-700 border border-yellow-200">
+          <span className="w-2 h-2 bg-yellow-700 rounded-full"></span>
+          Packed
+        </span>
+      )
+    }
+    if (packagingStatus === 3) {
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-200">
+          <span className="w-2 h-2 bg-green-700 rounded-full"></span>
+          Delivered
         </span>
       )
     }
@@ -1013,10 +1053,10 @@ export default function OrdersPage() {
                 <th
                   className="px-4 py-3 text-left cursor-pointer hover:bg-gray-100"
                   onClick={() => {
-                    if (sortField === 'department') {
+                    if (sortField === 'date_added') {
                       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
                     } else {
-                      setSortField('department')
+                      setSortField('date_added')
                       setSortDirection('asc')
                     }
                   }}
@@ -1030,7 +1070,7 @@ export default function OrdersPage() {
                   }}
                 >
                   <div className="flex items-center gap-2">
-                    Department
+                    Order Date
                     <ArrowUpDown className="h-3 w-3 text-gray-400" />
                   </div>
                 </th>
@@ -1203,7 +1243,7 @@ export default function OrdersPage() {
                           lineHeight: '20px',
                           letterSpacing: '0%'
                         }}>
-                          {order.department || 'N/A'}
+                          {order.date_added ? format(new Date(order.date_added), 'dd MMM, yyyy') : 'N/A'}
                         </span>
                       </td>
 
@@ -1525,6 +1565,55 @@ export default function OrdersPage() {
               style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
             >
               Upload
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Send Email Confirmation Modal */}
+      <Dialog open={showEmailModal} onOpenChange={setShowEmailModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+              Send Email to Customer
+            </DialogTitle>
+            <DialogDescription style={{ fontFamily: 'Albert Sans' }}>
+              Confirm the email address to send order confirmation for Order #{emailOrderId}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-2" style={{ fontFamily: 'Albert Sans' }}>
+                Customer Email
+              </label>
+              <Input
+                type="email"
+                value={emailAddress}
+                onChange={(e) => setEmailAddress(e.target.value)}
+                placeholder="customer@email.com"
+                style={{ fontFamily: 'Albert Sans' }}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setShowEmailModal(false)
+                setEmailOrderId(null)
+                setEmailAddress("")
+              }}
+              style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSendEmailConfirm}
+              disabled={emailMutation.isPending || !emailAddress}
+              className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white"
+              style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
+            >
+              {emailMutation.isPending ? "Sending..." : "Send"}
             </Button>
           </DialogFooter>
         </DialogContent>

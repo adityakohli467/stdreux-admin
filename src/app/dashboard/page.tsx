@@ -27,6 +27,7 @@ import {
   XCircle,
   Loader2,
   UserPlus,
+  Undo2,
 } from "lucide-react"
 import Link from "next/link"
 import { format } from "date-fns"
@@ -181,7 +182,10 @@ export default function DashboardPage() {
 
       setStats(newStats)
       setRecentOrders(response.data.recentOrders || [])
-      setTodayOrders(response.data.todayOrders || [])
+      // Sort by order date (oldest first)
+      const orders = response.data.todayOrders || []
+      orders.sort((a: Order, b: Order) => new Date(a.date_added).getTime() - new Date(b.date_added).getTime())
+      setTodayOrders(orders)
 
       setNext7DaysOrders(response.data.next7DaysOrders || [])
     } catch (error: any) {
@@ -398,6 +402,11 @@ export default function DashboardPage() {
         handlePrintOrder(orderId)
       }
 
+      // If delivered, remove from dashboard view immediately
+      if (newStatus === 3) {
+        setTodayOrders((prev: Order[]) => prev.filter((o: Order) => o.order_id !== orderId))
+      }
+
       toast.success(
         newStatus === 1 ? "Order marked as printed!" :
         newStatus === 2 ? "Order marked as packed!" :
@@ -409,6 +418,24 @@ export default function DashboardPage() {
     } catch (error: any) {
       console.error("Failed to update packaging status:", error)
       toast.error(error.response?.data?.message || "Failed to update packaging status")
+    }
+  }
+
+  const handleRevertPackagingStatus = async (order: Order) => {
+    const currentStatus = order.packaging_status || 0
+    if (currentStatus === 0) {
+      toast.info("Order is already at the initial status")
+      return
+    }
+    const previousStatus = currentStatus - 1
+    try {
+      await api.put(`/admin/orders/${order.order_id}/packaging-status`, { packaging_status: previousStatus })
+      toast.success("Order reverted to previous status!")
+      fetchDashboardData()
+      queryClient.invalidateQueries({ queryKey: ['orders'] })
+    } catch (error: any) {
+      console.error("Failed to revert packaging status:", error)
+      toast.error(error.response?.data?.message || "Failed to revert packaging status")
     }
   }
 
@@ -1128,6 +1155,7 @@ export default function DashboardPage() {
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Order ID</th>
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Customer Name</th>
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Customer Phone</th>
+                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Order Date</th>
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Delivery Date</th>
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Packaging Status</th>
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Actions</th>
@@ -1137,7 +1165,7 @@ export default function DashboardPage() {
                 {loading ? (
                   Array.from({ length: 3 }).map((_, idx) => (
                     <tr key={idx} className="border-b border-gray-100">
-                      {Array.from({ length: 6 }).map((_, colIdx) => (
+                      {Array.from({ length: 7 }).map((_, colIdx) => (
                         <td key={colIdx} className="px-3 sm:px-6 py-3 sm:py-4">
                           <div className="h-4 bg-gray-200 rounded animate-pulse" />
                         </td>
@@ -1169,6 +1197,13 @@ export default function DashboardPage() {
                       </td>
                       <td className="px-3 sm:px-6 py-3 sm:py-4">
                         <span style={{ fontFamily: 'Albert Sans' }} className="text-xs sm:text-sm text-gray-900">
+                          {order.date_added
+                            ? format(new Date(order.date_added), 'dd MMM, yyyy')
+                            : 'N/A'}
+                        </span>
+                      </td>
+                      <td className="px-3 sm:px-6 py-3 sm:py-4">
+                        <span style={{ fontFamily: 'Albert Sans' }} className="text-xs sm:text-sm text-gray-900">
                           {order.delivery_date_time
                             ? format(new Date(order.delivery_date_time), 'dd MMM, yyyy')
                             : 'N/A'}
@@ -1194,13 +1229,25 @@ export default function DashboardPage() {
                             View
                           </Button>
                           {getPackagingActionButton(order)}
+                          {(order.packaging_status || 0) > 0 && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleRevertPackagingStatus(order)}
+                              title="Revert to previous status"
+                              style={{ fontFamily: 'Albert Sans', fontWeight: 600, fontSize: '14px', lineHeight: '20px' }}
+                              className="h-9 px-2 text-sm border border-gray-300 text-gray-700 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-300"
+                            >
+                              <Undo2 className="h-4 w-4" />
+                            </Button>
+                          )}
                         </div>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={6} className="px-3 sm:px-6 py-12 text-center text-gray-500">
+                    <td colSpan={7} className="px-3 sm:px-6 py-12 text-center text-gray-500">
                       <span style={{ fontFamily: 'Albert Sans' }}>No orders to package</span>
                     </td>
                   </tr>
