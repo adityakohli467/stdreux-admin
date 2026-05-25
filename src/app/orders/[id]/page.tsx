@@ -529,13 +529,10 @@ export default function OrderDetailPage() {
                               )}
                               {hasOptions && (
                                 <div className="mt-2 space-y-1">
-                                  <p className="text-xs text-gray-600 font-medium" style={{ fontFamily: 'Albert Sans' }}>
-                                    Options:
-                                  </p>
                                   {product.options!.map((option, optionIndex) => (
-                                    <div key={optionIndex} className="text-xs text-gray-600 ml-2" style={{ fontFamily: 'Albert Sans' }}>
-                                      {option.option_name}: {option.option_value} {option.option_quantity > 1 ? `(x${option.option_quantity})` : ''}
-                                    </div>
+                                    <p key={optionIndex} className="text-sm text-gray-700 ml-2" style={{ fontFamily: 'Albert Sans' }}>
+                                      {option.option_name}: {option.option_value}
+                                    </p>
                                   ))}
                                 </div>
                               )}
@@ -543,53 +540,55 @@ export default function OrderDetailPage() {
                           </td>
                           <td className="px-4 py-4 align-top text-center">
                             <div>
-                              <p className="text-sm text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
-                                {product.quantity}
-                              </p>
-                              {hasOptions && (
-                                <div className="mt-2 space-y-1">
+                              {hasOptions ? (
+                                <div className="space-y-1">
+                                  <p className="text-sm text-gray-400" style={{ fontFamily: 'Albert Sans' }}>-</p>
                                   {product.options!.map((option, optionIndex) => (
-                                    <p key={optionIndex} className="text-xs text-gray-700" style={{ fontFamily: 'Albert Sans' }}>
+                                    <p key={optionIndex} className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
                                       {option.option_quantity}
                                     </p>
                                   ))}
                                 </div>
+                              ) : (
+                                <p className="text-sm text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
+                                  {product.quantity}
+                                </p>
                               )}
                             </div>
                           </td>
                           <td className="px-4 py-4 align-top text-right">
                             <div>
-                              {!hasOptions && (
+                              {hasOptions ? (
+                                <div className="space-y-1">
+                                  <p className="text-sm text-gray-400" style={{ fontFamily: 'Albert Sans' }}>-</p>
+                                  {product.options!.map((option, optionIndex) => (
+                                    <p key={optionIndex} className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
+                                      ${Number(option.option_price).toFixed(2)}
+                                    </p>
+                                  ))}
+                                </div>
+                              ) : (
                                 <p className="text-sm text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
                                   ${Number(product.price).toFixed(2)}
                                 </p>
                               )}
-                              {hasOptions && (
-                                <div className={hasOptions ? '' : 'mt-2'}>
-                                  <div className="space-y-1">
-                                    {product.options!.map((option, optionIndex) => (
-                                      <p key={optionIndex} className="text-xs text-gray-700" style={{ fontFamily: 'Albert Sans' }}>
-                                        ${Number(option.option_price).toFixed(2)}
-                                      </p>
-                                    ))}
-                                  </div>
-                                </div>
-                              )}
                             </div>
                           </td>
                           <td className="px-4 py-4 align-top text-right">
                             <div>
-                              <p className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
-                                ${totalWithOptions.toFixed(2)}
-                              </p>
-                              {hasOptions && (
-                                <div className="mt-2 space-y-1">
+                              {hasOptions ? (
+                                <div className="space-y-1">
+                                  <p className="text-sm font-medium text-gray-400" style={{ fontFamily: 'Albert Sans' }}>-</p>
                                   {product.options!.map((option, optionIndex) => (
-                                    <p key={optionIndex} className="text-xs text-gray-700" style={{ fontFamily: 'Albert Sans' }}>
+                                    <p key={optionIndex} className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
                                       ${(Number(option.option_quantity) * Number(option.option_price)).toFixed(2)}
                                     </p>
                                   ))}
                                 </div>
+                              ) : (
+                                <p className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
+                                  ${totalWithOptions.toFixed(2)}
+                                </p>
                               )}
                             </div>
                           </td>
