@@ -55,6 +55,7 @@ const allNavigation = [
       { name: "Reports", href: "/admin/reports" },
       { name: "Contact Enquiries", href: "/contact-inquiries" },
       { name: "Newsletter Subscriptions", href: "/admin/newsletter" },
+      { name: "Xero Integration", href: "/admin/xero" },
       // { name: "Wholesale Enquiries", href: "/wholesale-enquiries" },
       // { name: "API History", href: "/history" },
     ]
