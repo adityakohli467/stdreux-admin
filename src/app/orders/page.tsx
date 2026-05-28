@@ -1321,11 +1321,7 @@ export default function OrdersPage() {
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() => xeroSyncMutation.mutate(order.order_id)}
-                                disabled={xeroSyncMutation.isPending || !(
-                                  (order.payment_status !== undefined && order.payment_status !== null
-                                    ? (String(order.payment_status) === "1" || Number(order.payment_status) === 1 || String(order.payment_status).toLowerCase() === "paid" || String(order.payment_status).toLowerCase() === "true")
-                                    : (order.order_status === 2))
-                                )}
+                                disabled={xeroSyncMutation.isPending}
                                 className="cursor-pointer"
                               >
                                 <FileText className="h-4 w-4 mr-2" />
