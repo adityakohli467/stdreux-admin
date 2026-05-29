@@ -540,56 +540,23 @@ export default function OrderDetailPage() {
                           </td>
                           <td className="px-4 py-4 align-top text-center">
                             <div>
-                              {hasOptions ? (
-                                <div className="space-y-1">
-                                  <p className="text-sm text-gray-400" style={{ fontFamily: 'Albert Sans' }}>-</p>
-                                  {product.options!.map((option, optionIndex) => (
-                                    <p key={optionIndex} className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
-                                      {option.option_quantity}
-                                    </p>
-                                  ))}
-                                </div>
-                              ) : (
-                                <p className="text-sm text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
-                                  {product.quantity}
-                                </p>
-                              )}
+                              <p className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
+                                {product.quantity}
+                              </p>
                             </div>
                           </td>
                           <td className="px-4 py-4 align-top text-right">
                             <div>
-                              {hasOptions ? (
-                                <div className="space-y-1">
-                                  <p className="text-sm text-gray-400" style={{ fontFamily: 'Albert Sans' }}>-</p>
-                                  {product.options!.map((option, optionIndex) => (
-                                    <p key={optionIndex} className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
-                                      ${Number(option.option_price).toFixed(2)}
-                                    </p>
-                                  ))}
-                                </div>
-                              ) : (
-                                <p className="text-sm text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
-                                  ${Number(product.price).toFixed(2)}
-                                </p>
-                              )}
+                              <p className="text-sm text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
+                                ${(Number(product.price) > 0 ? Number(product.price) : (product.quantity > 0 ? totalWithOptions / product.quantity : 0)).toFixed(2)}
+                              </p>
                             </div>
                           </td>
                           <td className="px-4 py-4 align-top text-right">
                             <div>
-                              {hasOptions ? (
-                                <div className="space-y-1">
-                                  <p className="text-sm font-medium text-gray-400" style={{ fontFamily: 'Albert Sans' }}>-</p>
-                                  {product.options!.map((option, optionIndex) => (
-                                    <p key={optionIndex} className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
-                                      ${(Number(option.option_quantity) * Number(option.option_price)).toFixed(2)}
-                                    </p>
-                                  ))}
-                                </div>
-                              ) : (
-                                <p className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
-                                  ${totalWithOptions.toFixed(2)}
-                                </p>
-                              )}
+                              <p className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
+                                ${totalWithOptions.toFixed(2)}
+                              </p>
                             </div>
                           </td>
                         </tr>

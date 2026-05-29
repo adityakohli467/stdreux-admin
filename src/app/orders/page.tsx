@@ -432,7 +432,7 @@ export default function OrdersPage() {
   // Sync to Xero mutation
   const xeroSyncMutation = useMutation({
     mutationFn: async (orderId: number) => {
-      const response = await xeroAPI.createInvoice(orderId)
+      const response = await xeroAPI.createInvoice(orderId, true)
       return response.data
     },
     onSuccess: (data) => {

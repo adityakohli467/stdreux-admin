@@ -252,5 +252,5 @@ export const xeroAPI = {
   callback: (url: string) => api.get("/admin/xero/callback", { params: { url } }),
   getStatus: () => api.get("/admin/xero/status"),
   disconnect: () => api.post("/admin/xero/disconnect"),
-  createInvoice: (orderId: number) => api.post(`/admin/xero/invoice/${orderId}`),
+  createInvoice: (orderId: number, force?: boolean) => api.post(`/admin/xero/invoice/${orderId}${force ? '?force=true' : ''}`),
 }
