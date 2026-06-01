@@ -761,7 +761,7 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
       const itemTotal = Number(item.price || 0) * Number(item.quantity || 0)
       const addOnsTotal = (item.add_ons || []).reduce((addonSum, addon) => {
         return addonSum + (Number(addon.price || 0) * Number(addon.quantity || 0))
-      }, 0)
+      }, 0) * Number(item.quantity || 1) // Options are per-unit, multiply by product qty
       return sum + itemTotal + addOnsTotal
     }, 0)
   }
@@ -1198,7 +1198,7 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
                           const addonPrice = Number(addOn.price || 0)
                           const addonQty = Number(addOn.quantity || 0)
                           return addOnSum + (addonPrice * addonQty)
-                        }, 0)
+                        }, 0) * itemQty // Options are per-unit, multiply by product qty
                         return sum + itemTotal + addOnsTotal
                       }
                       return sum;

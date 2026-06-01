@@ -296,7 +296,7 @@ export default function EditOrderPage() {
           comment: product.comment || null,
           add_ons: (product.add_ons || []).map(addon => ({
             ...addon,
-            option_quantity: addon.quantity || (addon as any).option_quantity || 1,
+            option_quantity: (addon.quantity || (addon as any).option_quantity || 1) * product.quantity, // Total qty = per-unit * product qty
           }))
         }))
       }

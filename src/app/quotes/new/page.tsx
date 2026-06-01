@@ -120,7 +120,7 @@ export default function NewQuotePage() {
         add_ons: product.add_ons?.map(addon => ({
           ...addon,
           price: (addon as any).base_price || addon.price, // Use base_price if available
-          option_quantity: addon.quantity || 1, // Map frontend 'quantity' to backend 'option_quantity'
+          option_quantity: (addon.quantity || 1) * product.quantity, // Total qty = per-unit * product qty
         })) || []
       })) || []
 
@@ -128,7 +128,7 @@ export default function NewQuotePage() {
       const productsList = dataToUse.products || [];
       const subtotal = productsList.reduce((sum, item) => {
         const itemTotal = item.price * item.quantity;
-        const addOnsTotal = item.add_ons?.reduce((addOnSum, addOn) => addOnSum + (addOn.price * addOn.quantity), 0) || 0;
+        const addOnsTotal = (item.add_ons?.reduce((addOnSum, addOn) => addOnSum + (addOn.price * addOn.quantity), 0) || 0) * item.quantity; // Options are per-unit
         return sum + itemTotal + addOnsTotal;
       }, 0);
 
@@ -150,7 +150,7 @@ export default function NewQuotePage() {
         if (cat === 'ANCILLARIES' || cat === 'PACKAGING') {
           const itemTotal = Number(item.price || 0) * Number(item.quantity || 0);
           const addOnsTotal = (item.add_ons || []).reduce((addOnSum, addOn) => 
-            addOnSum + (Number(addOn.price || 0) * Number(addOn.quantity || 0)), 0);
+            addOnSum + (Number(addOn.price || 0) * Number(addOn.quantity || 0)), 0) * Number(item.quantity || 1); // Options are per-unit
           return sum + itemTotal + addOnsTotal;
         }
         return sum;

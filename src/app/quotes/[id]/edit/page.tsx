@@ -127,24 +127,31 @@ export default function EditQuotePage() {
           }
           
           // Map quote data to QuoteData structure
-          const mappedProducts = quote.products?.map((product: any) => ({
-            product_id: product.product_id,
-            name: product.product_name,
-            category: 'N/A',
-            price: parseFloat(product.price || 0),
-            quantity: product.quantity,
-            comment: product.product_comment || product.comment || '',
-            add_ons: product.options?.map((option: any) => ({
-              name: `${option.option_name}: ${option.option_value}`,
-              price: parseFloat(option.option_price || 0),
-              option_price: parseFloat(option.option_price || 0), // backend reads this field
-              quantity: option.option_quantity || 1,
-              option_quantity: option.option_quantity || 1,       // backend reads this field
-              option_value_id: option.option_value_id,
-              option_name: option.option_name,
-              option_value: option.option_value,
-            })) || []
-          })) || []
+          const mappedProducts = quote.products?.map((product: any) => {
+            const productQty = parseFloat(product.quantity || '0') || 1
+            return {
+              product_id: product.product_id,
+              name: product.product_name,
+              category: 'N/A',
+              price: parseFloat(product.price || 0),
+              quantity: productQty,
+              comment: product.product_comment || product.comment || '',
+              add_ons: product.options?.map((option: any) => {
+                const optTotalQty = parseFloat(option.option_quantity || '0') || 1
+                const optUnitQty = productQty > 0 ? optTotalQty / productQty : 1
+                return {
+                  name: `${option.option_name}: ${option.option_value}`,
+                  price: parseFloat(option.option_price || 0),
+                  option_price: parseFloat(option.option_price || 0),
+                  quantity: optUnitQty, // Per-unit quantity for UI display
+                  option_value_id: option.option_value_id,
+                  option_name: option.option_name,
+                  option_value: option.option_value,
+                  product_option_id: option.product_option_id,
+                }
+              }) || []
+            }
+          }) || []
 
           // Parse delivery_date_time string directly (format: "YYYY-MM-DD HH:MM:SS")
           // The DeliveryStep component will parse this correctly
@@ -321,8 +328,21 @@ export default function EditQuotePage() {
         coupon_type: quoteData.coupon_type,
         coupon_discount: quoteData.coupon_discount
       })
+
+      // Transform products to multiply per-unit option qty back to total for API
+      const payload = {
+        ...quoteData,
+        products: quoteData.products?.map(product => ({
+          ...product,
+          add_ons: (product.add_ons || []).map(addon => ({
+            ...addon,
+            option_quantity: (addon.quantity || 1) * product.quantity, // Total qty = per-unit * product qty
+            option_price: (addon as any).option_price || addon.price,
+          }))
+        }))
+      }
       
-      const response = await api.put(`/admin/quotes/${quoteId}`, quoteData)
+      const response = await api.put(`/admin/quotes/${quoteId}`, payload)
       
       if (response.data) {
         // Invalidate quotes query cache to refresh the list
