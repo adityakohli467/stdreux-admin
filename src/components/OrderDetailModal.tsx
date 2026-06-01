@@ -367,7 +367,59 @@ export function OrderDetailModal({
                       </thead>
                       <tbody>
                         {order.order_products && order.order_products.length > 0 ? (
-                          order.order_products.map((product, index) => (
+                          order.order_products.map((product, index) => {
+                            const hasOptions = product.options && product.options.length > 0;
+                            if (hasOptions) {
+                              // Show each option as its own row
+                              return product.options!.map((option, optIdx) => (
+                                <tr
+                                  key={`${product.order_product_id}-opt-${optIdx}`}
+                                  className="border-b border-gray-100"
+                                >
+                                  <td className="px-4 py-4">
+                                    <span
+                                      style={{ fontFamily: "Albert Sans" }}
+                                      className="text-sm text-gray-700"
+                                    >
+                                      {optIdx === 0 ? index + 1 : ''}
+                                    </span>
+                                  </td>
+                                  <td className="px-4 py-4">
+                                    <div>
+                                      {optIdx === 0 && (
+                                        <p
+                                          style={{ fontFamily: "Albert Sans" }}
+                                          className="text-sm font-medium text-gray-900"
+                                        >
+                                          {product.product_name}
+                                        </p>
+                                      )}
+                                      <p
+                                        style={{ fontFamily: "Albert Sans" }}
+                                        className="text-sm text-gray-700 ml-2"
+                                      >
+                                        {option.option_name}: {option.option_value}
+                                      </p>
+                                      {optIdx === 0 && product.product_comment && (
+                                        <p
+                                          style={{ fontFamily: "Albert Sans" }}
+                                          className="text-xs text-gray-500 mt-1 italic"
+                                        >
+                                          Note: {product.product_comment}
+                                        </p>
+                                      )}
+                                    </div>
+                                  </td>
+                                  <td className="px-4 py-4 text-center align-top">
+                                    <span style={{ fontFamily: "Albert Sans" }} className="text-sm font-semibold text-gray-900">
+                                      {option.option_quantity}
+                                    </span>
+                                  </td>
+                                </tr>
+                              ));
+                            }
+                            // No options - show product row normally
+                            return (
                             <tr
                               key={product.order_product_id}
                               className="border-b border-gray-100"
@@ -388,25 +440,6 @@ export function OrderDetailModal({
                                   >
                                     {product.product_name}
                                   </p>
-                                  {product.options && product.options.length > 0 && (
-                                    <div className="mt-2 space-y-1">
-                                      <p
-                                        style={{ fontFamily: "Albert Sans" }}
-                                        className="text-xs text-gray-600 font-medium"
-                                      >
-                                        Options:
-                                      </p>
-                                      {product.options.map((option, optIdx) => (
-                                        <div
-                                          key={optIdx}
-                                          style={{ fontFamily: "Albert Sans" }}
-                                          className="text-sm text-gray-700 ml-2"
-                                        >
-                                          <span>{option.option_name}: {option.option_value}</span>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  )}
                                   {product.product_comment && (
                                     <p
                                       style={{ fontFamily: "Albert Sans" }}
@@ -423,7 +456,8 @@ export function OrderDetailModal({
                                 </span>
                               </td>
                             </tr>
-                          ))
+                            );
+                          })
                         ) : (
                           <tr>
                             <td
