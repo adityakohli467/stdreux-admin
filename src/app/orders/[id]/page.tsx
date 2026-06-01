@@ -532,6 +532,7 @@ export default function OrderDetailPage() {
                                   {product.options!.map((option, optionIndex) => (
                                     <p key={optionIndex} className="text-sm text-gray-700 ml-2" style={{ fontFamily: 'Albert Sans' }}>
                                       {option.option_name}: {option.option_value}
+                                      {option.option_quantity > 1 && ` (×${option.option_quantity})`}
                                     </p>
                                   ))}
                                 </div>

@@ -125,6 +125,7 @@ export default function EditOrderPage() {
           const mappedProducts = order.order_products?.map((product: any) => {
             const productQty = parseFloat(product.quantity || '0') || 1
             const basePrice = parseFloat(product.price || '0')
+            const isVariant = basePrice === 0 && product.options && product.options.length > 0
 
             return {
               product_id: product.product_id,
@@ -135,12 +136,14 @@ export default function EditOrderPage() {
               comment: product.product_comment || product.comment || '',
               add_ons: product.options?.map((option: any) => {
                 const optTotalQty = parseFloat(option.option_quantity || '0')
-                const optUnitQty = productQty > 0 ? optTotalQty / productQty : 1
+                // Variant: option_qty IS the total (don't divide)
+                // Addon: option_qty = per_unit * product_qty (divide to get per-unit)
+                const optUnitQty = isVariant ? optTotalQty : (productQty > 0 ? optTotalQty / productQty : 1)
                 return {
                   name: `${option.option_name}: ${option.option_value}`,
                   price: parseFloat(option.option_price || '0'),
                   option_price: parseFloat(option.option_price || '0'),
-                  quantity: optUnitQty, // Per-unit quantity
+                  quantity: optUnitQty,
                   option_name: option.option_name,
                   option_value: option.option_value,
                   option_value_id: option.option_value_id,
@@ -289,16 +292,23 @@ export default function EditOrderPage() {
         cost_center: dataToUse.cost_center || null,
         delivery_contact: dataToUse.delivery_contact || null,
         delivery_details: dataToUse.delivery_details || null,
-        products: dataToUse.products.map(product => ({
-          product_id: product.product_id,
-          quantity: product.quantity,
-          price: product.price,
-          comment: product.comment || null,
-          add_ons: (product.add_ons || []).map(addon => ({
-            ...addon,
-            option_quantity: (addon.quantity || (addon as any).option_quantity || 1) * product.quantity, // Total qty = per-unit * product qty
-          }))
-        }))
+        products: dataToUse.products.map(product => {
+          const isVariant = Number(product.price || 0) === 0 && (product.add_ons || []).length > 0
+          return {
+            product_id: product.product_id,
+            quantity: isVariant
+              ? (product.add_ons || []).reduce((sum, a) => sum + (a.quantity || (a as any).option_quantity || 1), 0)
+              : product.quantity,
+            price: product.price,
+            comment: product.comment || null,
+            add_ons: (product.add_ons || []).map(addon => ({
+              ...addon,
+              option_quantity: isVariant
+                ? (addon.quantity || (addon as any).option_quantity || 1) // Variant: use as-is
+                : (addon.quantity || (addon as any).option_quantity || 1) * product.quantity, // Addon: multiply
+            }))
+          }
+        })
       }
 
       console.log("Updating order:", orderPayload)
