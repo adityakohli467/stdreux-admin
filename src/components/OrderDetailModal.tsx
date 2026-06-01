@@ -259,7 +259,7 @@ export function OrderDetailModal({
               {order.company_settings && (
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px", paddingBottom: "12px", borderBottom: "1px solid #e5e7eb" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                    <img src="/assets/logo.png" alt="Logo" style={{ height: "40px", width: "auto", objectFit: "contain" }} />
+                    <img src="/assets/group171.svg" alt="Logo" style={{ height: "40px", width: "auto", objectFit: "contain" }} />
                     <div>
                       <p style={{ fontFamily: "Albert Sans", fontSize: "16px", fontWeight: 700, margin: 0 }}>
                         {order.company_settings.company_name}
