@@ -114,24 +114,15 @@ export default function NewQuotePage() {
 
       // Transform products to use base_price for backend calculation
       // Backend will apply additional customer-specific discounts
-      const transformedProducts = dataToUse.products?.map(product => {
-        const productPrice = Number((product as any).base_price || product.price || 0)
-        const isVariant = productPrice === 0 && (product.add_ons || []).length > 0
-        return {
-          ...product,
-          quantity: isVariant
-            ? (product.add_ons || []).reduce((sum, a) => sum + (a.quantity || 1), 0)
-            : product.quantity,
-          price: (product as any).base_price || product.price, // Use base_price if available, otherwise use price
-          add_ons: product.add_ons?.map(addon => ({
-            ...addon,
-            price: (addon as any).base_price || addon.price, // Use base_price if available
-            option_quantity: isVariant
-              ? (addon.quantity || 1) // Variant: option qty IS the total
-              : (addon.quantity || 1) * product.quantity, // Addon: per-unit * product qty
-          })) || []
-        }
-      }) || []
+      const transformedProducts = dataToUse.products?.map(product => ({
+        ...product,
+        price: (product as any).base_price || product.price,
+        add_ons: product.add_ons?.map(addon => ({
+          ...addon,
+          price: (addon as any).base_price || addon.price,
+          option_quantity: addon.quantity || 1,
+        })) || []
+      })) || []
 
       // Calculate totals for payload
       const productsList = dataToUse.products || [];

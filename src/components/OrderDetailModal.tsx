@@ -62,6 +62,13 @@ interface OrderDetails {
   delivery_details?: string;
   delivery_contact?: string;
   packaging_comment?: string;
+  company_settings?: {
+    company_name?: string;
+    company_abn?: string;
+    company_address?: string;
+    company_phone?: string;
+    company_email?: string;
+  };
 }
 
 interface OrderDetailModalProps {
@@ -248,6 +255,42 @@ export function OrderDetailModal({
           <div className="space-y-6">
             {/* Printable Content */}
             <div ref={printRef}>
+              {/* Company Header */}
+              {order.company_settings && (
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px", paddingBottom: "12px", borderBottom: "1px solid #e5e7eb" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <img src="/assets/logo.png" alt="Logo" style={{ height: "40px", width: "auto", objectFit: "contain" }} />
+                    <div>
+                      <p style={{ fontFamily: "Albert Sans", fontSize: "16px", fontWeight: 700, margin: 0 }}>
+                        {order.company_settings.company_name}
+                      </p>
+                      {order.company_settings.company_abn && (
+                        <p style={{ fontFamily: "Albert Sans", fontSize: "12px", color: "#555", margin: "2px 0 0 0" }}>
+                          ABN: {order.company_settings.company_abn.replace(/^ABN:\s*/i, '')}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    {order.company_settings.company_address && (
+                      <p style={{ fontFamily: "Albert Sans", fontSize: "12px", color: "#555", margin: "0 0 2px 0" }}>
+                        {order.company_settings.company_address}
+                      </p>
+                    )}
+                    {order.company_settings.company_phone && (
+                      <p style={{ fontFamily: "Albert Sans", fontSize: "12px", color: "#555", margin: "0 0 2px 0" }}>
+                        Ph: {order.company_settings.company_phone}
+                      </p>
+                    )}
+                    {order.company_settings.company_email && (
+                      <p style={{ fontFamily: "Albert Sans", fontSize: "12px", color: "#555", margin: 0 }}>
+                        {order.company_settings.company_email}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
               <div className="slip-header" style={{ textAlign: "center", marginBottom: "16px", borderBottom: "2px solid #333", paddingBottom: "10px" }}>
                 <h1 style={{ fontFamily: "Albert Sans", fontWeight: 700, fontSize: "22px" }}>Packaging Slip</h1>
                 <p style={{ fontFamily: "Albert Sans", fontSize: "14px", color: "#555", marginTop: "4px" }}>Order #{order.order_id}</p>

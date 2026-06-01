@@ -220,31 +220,22 @@ export default function NewOrderPage() {
         cost_center: dataToUse.cost_center || null,
         standing_order: dataToUse.standing_order || 0, // 0 = one-time order, >0 = subscription frequency in days
         subscription_start_date: dataToUse.subscription_start_date || null,
-        products: dataToUse.products.map(product => {
-          const productPrice = Number((product as any).base_price || product.price || 0)
-          const isVariant = productPrice === 0 && (product.add_ons || []).length > 0
-          return {
-            product_id: product.product_id,
-            quantity: isVariant
-              ? (product.add_ons || []).reduce((sum, a) => sum + (a.quantity || 1), 0)
-              : product.quantity,
-            price: (product as any).base_price || product.price, // Use base_price if available for backend discount calculation
-            comment: product.comment || null,
-            add_ons: (product.add_ons || []).map(addon => ({
-              ...addon,
-              price: (addon as any).base_price || addon.price, // Use base_price if available
-              // Explicitly map option fields to ensure they are sent to backend
-              option_name: addon.option_name,
-              option_value: addon.option_value,
-              option_price: addon.option_price,
-              option_quantity: isVariant
-                ? (addon.quantity || 1) // Variant: option qty IS the total
-                : (addon.quantity || 1) * product.quantity, // Addon: per-unit * product qty
-              product_option_id: addon.product_option_id,
-              option_value_id: addon.option_value_id
-            }))
-          }
-        })
+        products: dataToUse.products.map(product => ({
+          product_id: product.product_id,
+          quantity: product.quantity,
+          price: (product as any).base_price || product.price,
+          comment: product.comment || null,
+          add_ons: (product.add_ons || []).map(addon => ({
+            ...addon,
+            price: (addon as any).base_price || addon.price,
+            option_name: addon.option_name,
+            option_value: addon.option_value,
+            option_price: addon.option_price,
+            option_quantity: addon.quantity || 1,
+            product_option_id: addon.product_option_id,
+            option_value_id: addon.option_value_id
+          }))
+        }))
       }
 
       console.log("Saving order:", orderPayload)

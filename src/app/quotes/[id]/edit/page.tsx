@@ -130,7 +130,6 @@ export default function EditQuotePage() {
           const mappedProducts = quote.products?.map((product: any) => {
             const productQty = parseFloat(product.quantity || '0') || 1
             const basePrice = parseFloat(product.price || 0)
-            const isVariant = basePrice === 0 && product.options && product.options.length > 0
             return {
               product_id: product.product_id,
               name: product.product_name,
@@ -139,15 +138,11 @@ export default function EditQuotePage() {
               quantity: productQty,
               comment: product.product_comment || product.comment || '',
               add_ons: product.options?.map((option: any) => {
-                const optTotalQty = parseFloat(option.option_quantity || '0') || 1
-                // Variant: option_qty IS the total (don't divide)
-                // Addon: option_qty = per_unit * product_qty (divide to get per-unit)
-                const optUnitQty = isVariant ? optTotalQty : (productQty > 0 ? optTotalQty / productQty : 1)
                 return {
                   name: `${option.option_name}: ${option.option_value}`,
                   price: parseFloat(option.option_price || 0),
                   option_price: parseFloat(option.option_price || 0),
-                  quantity: optUnitQty,
+                  quantity: parseInt(option.option_quantity) || 1,
                   option_value_id: option.option_value_id,
                   option_name: option.option_name,
                   option_value: option.option_value,
@@ -333,25 +328,17 @@ export default function EditQuotePage() {
         coupon_discount: quoteData.coupon_discount
       })
 
-      // Transform products to multiply per-unit option qty back to total for API
+      // Transform products for API
       const payload = {
         ...quoteData,
-        products: quoteData.products?.map(product => {
-          const isVariant = Number(product.price || 0) === 0 && (product.add_ons || []).length > 0
-          return {
-            ...product,
-            quantity: isVariant
-              ? (product.add_ons || []).reduce((sum, a) => sum + (a.quantity || 1), 0)
-              : product.quantity,
-            add_ons: (product.add_ons || []).map(addon => ({
-              ...addon,
-              option_quantity: isVariant
-                ? (addon.quantity || 1) // Variant: use as-is
-                : (addon.quantity || 1) * product.quantity, // Addon: multiply
-              option_price: (addon as any).option_price || addon.price,
-            }))
-          }
-        })
+        products: quoteData.products?.map(product => ({
+          ...product,
+          add_ons: (product.add_ons || []).map(addon => ({
+            ...addon,
+            option_quantity: addon.quantity || 1,
+            option_price: (addon as any).option_price || addon.price,
+          }))
+        }))
       }
       
       const response = await api.put(`/admin/quotes/${quoteId}`, payload)

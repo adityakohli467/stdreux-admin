@@ -29,6 +29,7 @@ interface OrderProduct {
     option_value: string
     option_quantity: number
     option_price: number
+    option_total?: number
   }>
 }
 
@@ -510,6 +511,53 @@ export default function OrderDetailPage() {
                       const totalWithOptions = parseFloat(product.total?.toString() || '0')
                       const hasOptions = product.options && product.options.length > 0
 
+                      // If product has options: show each option as its own row with option qty/price/total
+                      if (hasOptions) {
+                        return product.options!.map((option, optionIndex) => {
+                          const optTotal = option.option_total || (option.option_price * option.option_quantity)
+                          return (
+                            <tr key={`${product.order_product_id}-opt-${optionIndex}`} className="border-b border-gray-100">
+                              <td className="px-4 py-4 align-top">
+                                <span className="text-sm text-gray-700" style={{ fontFamily: 'Albert Sans' }}>
+                                  {optionIndex === 0 ? index + 1 : ''}
+                                </span>
+                              </td>
+                              <td className="px-4 py-4 align-top">
+                                <div>
+                                  <p className="text-sm font-medium text-gray-900 mb-1" style={{ fontFamily: 'Albert Sans' }}>
+                                    {optionIndex === 0 ? product.product_name : ''}
+                                  </p>
+                                  <p className="text-sm text-gray-700 ml-2" style={{ fontFamily: 'Albert Sans' }}>
+                                    {option.option_name}: {option.option_value}
+                                  </p>
+                                  {optionIndex === 0 && product.product_comment && (
+                                    <p className="text-xs text-gray-600 italic mt-1" style={{ fontFamily: 'Albert Sans' }}>
+                                      Note: {product.product_comment}
+                                    </p>
+                                  )}
+                                </div>
+                              </td>
+                              <td className="px-4 py-4 align-top text-center">
+                                <p className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
+                                  {option.option_quantity}
+                                </p>
+                              </td>
+                              <td className="px-4 py-4 align-top text-right">
+                                <p className="text-sm text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
+                                  ${Number(option.option_price).toFixed(2)}
+                                </p>
+                              </td>
+                              <td className="px-4 py-4 align-top text-right">
+                                <p className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
+                                  ${optTotal.toFixed(2)}
+                                </p>
+                              </td>
+                            </tr>
+                          )
+                        })
+                      }
+
+                      // Product without options: show product qty/price/total
                       return (
                         <tr key={product.order_product_id} className="border-b border-gray-100">
                           <td className="px-4 py-4 align-top">
@@ -527,38 +575,22 @@ export default function OrderDetailPage() {
                                   Note: {product.product_comment}
                                 </p>
                               )}
-                              {hasOptions && (
-                                <div className="mt-2 space-y-1">
-                                  {product.options!.map((option, optionIndex) => (
-                                    <p key={optionIndex} className="text-sm text-gray-700 ml-2" style={{ fontFamily: 'Albert Sans' }}>
-                                      {option.option_name}: {option.option_value}
-                                      {option.option_quantity > 1 && ` (×${option.option_quantity})`}
-                                    </p>
-                                  ))}
-                                </div>
-                              )}
                             </div>
                           </td>
                           <td className="px-4 py-4 align-top text-center">
-                            <div>
-                              <p className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
-                                {product.quantity}
-                              </p>
-                            </div>
+                            <p className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
+                              {product.quantity}
+                            </p>
                           </td>
                           <td className="px-4 py-4 align-top text-right">
-                            <div>
-                              <p className="text-sm text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
-                                ${(Number(product.price) > 0 ? Number(product.price) : (product.quantity > 0 ? totalWithOptions / product.quantity : 0)).toFixed(2)}
-                              </p>
-                            </div>
+                            <p className="text-sm text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
+                              ${Number(product.price).toFixed(2)}
+                            </p>
                           </td>
                           <td className="px-4 py-4 align-top text-right">
-                            <div>
-                              <p className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
-                                ${totalWithOptions.toFixed(2)}
-                              </p>
-                            </div>
+                            <p className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
+                              ${totalWithOptions.toFixed(2)}
+                            </p>
                           </td>
                         </tr>
                       )
