@@ -437,6 +437,7 @@ export default function OrdersPage() {
     },
     onSuccess: (data) => {
       toast.success(data.message || "Invoice synced to Xero")
+      queryClient.invalidateQueries({ queryKey: ["orders"] })
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || "Failed to sync to Xero")
@@ -1109,6 +1110,19 @@ export default function OrdersPage() {
                     letterSpacing: '0%'
                   }}
                 >
+                  Xero
+                </th>
+                <th
+                  className="px-4 py-3 text-left"
+                  style={{
+                    fontFamily: 'Albert Sans',
+                    fontWeight: 600,
+                    fontStyle: 'normal',
+                    fontSize: '14px',
+                    lineHeight: '20px',
+                    letterSpacing: '0%'
+                  }}
+                >
                   Actions
                 </th>
               </tr>
@@ -1258,6 +1272,17 @@ export default function OrdersPage() {
                           <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 whitespace-nowrap">
                             User Order
                           </Badge>
+                        )}
+                      </td>
+                      <td className="px-4 py-4">
+                        {order.xero_synced ? (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            Synced
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500">
+                            —
+                          </span>
                         )}
                       </td>
                       <td className="px-4 py-4">
