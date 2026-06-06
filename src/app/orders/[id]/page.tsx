@@ -818,14 +818,6 @@ export default function OrderDetailPage() {
                       {format(new Date(order.delivery_date_time.endsWith('Z') ? order.delivery_date_time.slice(0, -1) : order.delivery_date_time), 'dd/MM/yyyy')}
                     </p>
                   </div>
-                  <div>
-                    <p className="text-xs font-medium text-gray-500 mb-1" style={{ fontFamily: 'Albert Sans' }}>
-                      Delivery Time
-                    </p>
-                    <p className="text-sm text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
-                      {order.delivery_time || format(new Date(order.delivery_date_time.endsWith('Z') ? order.delivery_date_time.slice(0, -1) : order.delivery_date_time), 'HH:mm')}
-                    </p>
-                  </div>
                 </>
               )}
 
