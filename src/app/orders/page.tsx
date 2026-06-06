@@ -884,7 +884,7 @@ export default function OrdersPage() {
         </Button>
       </div>
 
-      {/* Location Tabs */}
+      {/* Location Tabs - Commented out
       <div className="flex gap-2 border-b border-gray-200 overflow-x-auto mb-6 no-scrollbar scrollbar-none" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         <button
           onClick={() => setSelectedLocation(null)}
@@ -912,6 +912,7 @@ export default function OrdersPage() {
           </button>
         ))}
       </div>
+      */}
 
       {/* Table */}
       <Card className="border border-gray-200 shadow-sm overflow-hidden">
