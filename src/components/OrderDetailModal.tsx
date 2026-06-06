@@ -477,6 +477,27 @@ export function OrderDetailModal({
                           </tr>
                         )}
                       </tbody>
+                      {order.order_products && order.order_products.length > 0 && (
+                        <tfoot>
+                          <tr className="bg-gray-50 border-t-2 border-gray-200">
+                            <td colSpan={2} className="px-4 py-3 text-right">
+                              <span style={{ fontFamily: "Albert Sans", fontWeight: 600 }} className="text-sm text-gray-700">
+                                Total Quantity
+                              </span>
+                            </td>
+                            <td className="px-4 py-3 text-center">
+                              <span style={{ fontFamily: "Albert Sans", fontWeight: 700 }} className="text-sm text-gray-900">
+                                {order.order_products.reduce((total, product) => {
+                                  if (product.options && product.options.length > 0) {
+                                    return total + product.options.reduce((optTotal, option) => optTotal + (parseInt(String(option.option_quantity)) || 0), 0);
+                                  }
+                                  return total + (parseInt(String(product.quantity)) || 0);
+                                }, 0)}
+                              </span>
+                            </td>
+                          </tr>
+                        </tfoot>
+                      )}
                     </table>
                   </div>
                 </CardContent>
