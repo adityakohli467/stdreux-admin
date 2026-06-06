@@ -888,7 +888,7 @@ function CustomersContent() {
                             letterSpacing: "0%",
                           }}
                         >
-                          {customer.company?.company_name || "-"}
+                          {customer.company_name || customer.company?.company_name || "-"}
                         </span>
                       </td>
                       {isWholesaleTypeSelected && (
@@ -903,7 +903,7 @@ function CustomersContent() {
                               letterSpacing: "0%",
                             }}
                           >
-                            {customer.department?.department_name || "-"}
+                            {customer.department_name || customer.department?.department_name || "-"}
                           </span>
                         </td>
                       )}
