@@ -170,10 +170,7 @@ export default function DashboardPage() {
         // usually filters by delivery date, while Today's Orders should be orders placed today.
       }
 
-      // Override revenue from the payments statistics module to include manual payments
-      if (paymentsStatsResponse.data?.statistics) {
-        newStats.totalRevenue = Number(paymentsStatsResponse.data.statistics.total_revenue || 0)
-      }
+      // Weekly revenue is now calculated directly by the backend based on delivery date (Mon-Sun)
 
       // Store previous stats for comparison (only on first load)
       if (!previousStats && stats) {
@@ -957,12 +954,12 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        {/* Total Revenue */}
+        {/* Weekly Revenue */}
         <Card className="bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
           <CardContent className="pt-4 md:pt-6 px-4 md:px-6">
             <div className="flex items-start justify-between mb-3 md:mb-4">
               <p style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-xs sm:text-sm text-gray-600">
-                Total Revenue
+                Weekly Revenue
               </p>
               {stats && stats.totalRevenue > 0 && (
                 <span style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-xs px-2 py-1 bg-green-50 text-green-600 rounded-full">
