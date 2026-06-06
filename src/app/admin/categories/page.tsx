@@ -23,6 +23,7 @@ interface Category {
   parent_category_id?: number | null
   parent_category_name?: string | null
   sort_order?: number
+  gst_free?: boolean
 }
 
 export default function CategoriesPage() {
@@ -43,6 +44,7 @@ export default function CategoriesPage() {
   // Form state
   const [categoryName, setCategoryName] = useState("")
   const [parentCategoryId, setParentCategoryId] = useState<number | null>(null)
+  const [gstFree, setGstFree] = useState(false)
 
   // Fetch all categories (source of truth for list and parent selection)
   const { data: allCategoriesData, isLoading } = useQuery({
@@ -194,6 +196,7 @@ export default function CategoriesPage() {
     setSelectedCategory(category)
     setCategoryName(category.category_name)
     setParentCategoryId(category.parent_category_id || null)
+    setGstFree(category.gst_free || false)
     setShowEditModal(true)
   }
 
@@ -227,6 +230,7 @@ export default function CategoriesPage() {
     const categoryData = {
       category_name: categoryName.trim(),
       parent_category_id: parentCategoryId || null,
+      gst_free: gstFree,
     }
 
     if (selectedCategory) {
@@ -248,6 +252,7 @@ export default function CategoriesPage() {
   const resetForm = () => {
     setCategoryName("")
     setParentCategoryId(null)
+    setGstFree(false)
     setIsSubcategory(false)
     setSelectedCategory(null)
     setErrors({}) // Clear all validation errors
@@ -633,6 +638,20 @@ export default function CategoriesPage() {
               </div>
             )}
 
+            <div className="flex items-center justify-between py-2">
+              <div>
+                <Label className="text-sm font-medium text-gray-700">GST Free</Label>
+                <p className="text-xs text-gray-500">Products in this category will be exempt from GST</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setGstFree(!gstFree)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${gstFree ? 'bg-[#0d6efd]' : 'bg-gray-300'}`}
+              >
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${gstFree ? 'translate-x-6' : 'translate-x-1'}`} />
+              </button>
+            </div>
+
             <div className="flex gap-3 pt-4">
               <Button
                 onClick={() => {
@@ -708,6 +727,20 @@ export default function CategoriesPage() {
                 ))}
               </select>
               <p className="text-xs text-gray-500">Select a parent category to make this a subcategory</p>
+            </div>
+
+            <div className="flex items-center justify-between py-2">
+              <div>
+                <Label className="text-sm font-medium text-gray-700">GST Free</Label>
+                <p className="text-xs text-gray-500">Products in this category will be exempt from GST</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setGstFree(!gstFree)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${gstFree ? 'bg-[#0d6efd]' : 'bg-gray-300'}`}
+              >
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${gstFree ? 'translate-x-6' : 'translate-x-1'}`} />
+              </button>
             </div>
 
             <div className="flex gap-3 pt-4">
