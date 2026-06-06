@@ -311,6 +311,12 @@ export function OrderDetailModal({
                   </p>
                 </div>
                 <div className="info-item">
+                  <label style={{ fontFamily: "Albert Sans", fontSize: "11px", color: "#666", textTransform: "uppercase", display: "block" }}>Email</label>
+                  <p style={{ fontFamily: "Albert Sans", fontSize: "14px", fontWeight: 500, marginTop: "2px" }}>
+                    {order.email || order.customer_order_email || "N/A"}
+                  </p>
+                </div>
+                <div className="info-item">
                   <label style={{ fontFamily: "Albert Sans", fontSize: "11px", color: "#666", textTransform: "uppercase", display: "block" }}>Order Date</label>
                   <p style={{ fontFamily: "Albert Sans", fontSize: "14px", fontWeight: 500, marginTop: "2px" }}>
                     {order.date_added ? format(new Date(order.date_added), "dd MMM, yyyy") : "N/A"}
