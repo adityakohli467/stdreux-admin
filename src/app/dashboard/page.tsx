@@ -106,6 +106,12 @@ export default function DashboardPage() {
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false)
   const { user } = useAuthStore()
 
+  // Tally state
+  const [tallySelectedOrders, setTallySelectedOrders] = useState<number[]>([])
+  const [showTallyModal, setShowTallyModal] = useState(false)
+  const [tallyData, setTallyData] = useState<{ name: string; quantity: number }[]>([])
+  const [loadingTally, setLoadingTally] = useState(false)
+
   // Pending approvals state
   const [pendingApprovals, setPendingApprovals] = useState<PendingApproval[]>([])
   const [loadingApprovals, setLoadingApprovals] = useState(false)
@@ -348,6 +354,79 @@ export default function DashboardPage() {
   const handleViewOrder = (orderId: number) => {
     setSelectedOrderId(orderId)
     setIsOrderModalOpen(true)
+  }
+
+  const handleTallyToggle = (orderId: number) => {
+    setTallySelectedOrders(prev =>
+      prev.includes(orderId) ? prev.filter(id => id !== orderId) : [...prev, orderId]
+    )
+  }
+
+  const handleTallySelectAll = () => {
+    if (tallySelectedOrders.length === todayOrders.length) {
+      setTallySelectedOrders([])
+    } else {
+      setTallySelectedOrders(todayOrders.map(o => o.order_id))
+    }
+  }
+
+  const handleTally = async () => {
+    if (tallySelectedOrders.length === 0) {
+      toast.error("Please select at least one order")
+      return
+    }
+    setLoadingTally(true)
+    try {
+      // Fetch order details for selected orders
+      const responses = await Promise.all(
+        tallySelectedOrders.map(id => api.get(`/admin/orders/${id}`))
+      )
+
+      // Aggregate product quantities
+      const productMap = new Map<string, number>()
+      for (const res of responses) {
+        const orderData = res.data?.order || res.data
+        const products = orderData?.order_products || orderData?.products || []
+        for (const product of products) {
+          const hasOptions = product.options && product.options.length > 0
+          if (hasOptions) {
+            for (const opt of product.options) {
+              const key = `${product.product_name} - ${opt.option_name}: ${opt.option_value}`
+              const qty = parseInt(opt.option_quantity) || 1
+              productMap.set(key, (productMap.get(key) || 0) + qty)
+            }
+          } else {
+            const key = product.product_name || 'Unknown Product'
+            const qty = parseInt(product.quantity) || 1
+            productMap.set(key, (productMap.get(key) || 0) + qty)
+          }
+        }
+      }
+
+      const tally = Array.from(productMap.entries())
+        .map(([name, quantity]) => ({ name, quantity }))
+        .sort((a, b) => a.name.localeCompare(b.name))
+
+      setTallyData(tally)
+      setShowTallyModal(true)
+    } catch (error) {
+      toast.error("Failed to fetch order details for tally")
+    } finally {
+      setLoadingTally(false)
+    }
+  }
+
+  const handlePrintTally = () => {
+    const printWindow = window.open('', '_blank')
+    if (!printWindow) return
+    const rows = tallyData.map(item =>
+      `<tr><td style="padding:8px 12px;border-bottom:1px solid #eee;font-size:14px;">${item.name}</td><td style="padding:8px 12px;border-bottom:1px solid #eee;font-size:14px;text-align:center;font-weight:600;">${item.quantity}</td></tr>`
+    ).join('')
+    const totalQty = tallyData.reduce((sum, item) => sum + item.quantity, 0)
+    printWindow.document.write(`<html><head><title>Tally - ${tallySelectedOrders.length} Orders</title><style>body{font-family:'Albert Sans',sans-serif;padding:20px;}table{width:100%;border-collapse:collapse;}th{background:#f3f4f6;text-align:left;padding:10px 12px;font-size:13px;font-weight:600;border-bottom:2px solid #ddd;}@media print{body{padding:0;}}</style></head><body><h2 style="text-align:center;">Product Tally</h2><p style="text-align:center;color:#666;font-size:14px;">Orders: ${tallySelectedOrders.map(id => '#' + id).join(', ')}</p><table><thead><tr><th>Product</th><th style="text-align:center;">Quantity</th></tr></thead><tbody>${rows}<tr style="border-top:2px solid #333;"><td style="padding:10px 12px;font-weight:700;">Total</td><td style="padding:10px 12px;text-align:center;font-weight:700;">${totalQty}</td></tr></tbody></table></body></html>`)
+    printWindow.document.close()
+    printWindow.focus()
+    setTimeout(() => { printWindow.print(); printWindow.close() }, 300)
   }
 
   const handleOrderModalClose = () => {
@@ -1136,6 +1215,17 @@ export default function DashboardPage() {
               className="gap-2 text-xs sm:text-sm"
               size="sm"
               style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
+              onClick={handleTally}
+              disabled={tallySelectedOrders.length === 0 || loadingTally}
+            >
+              {loadingTally ? <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" /> : <ClipboardList className="h-3 w-3 sm:h-4 sm:w-4" />}
+              Tally ({tallySelectedOrders.length})
+            </Button>
+            <Button
+              variant="outline"
+              className="gap-2 text-xs sm:text-sm"
+              size="sm"
+              style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
               onClick={() => handlePrint(todayOrders, "Packaged Orders")}
               disabled={todayOrders.length === 0}
             >
@@ -1149,6 +1239,14 @@ export default function DashboardPage() {
             <table className="w-full min-w-[800px]">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">
+                  <th className="px-3 sm:px-4 py-3 sm:py-4 w-10">
+                    <input
+                      type="checkbox"
+                      checked={todayOrders.length > 0 && tallySelectedOrders.length === todayOrders.length}
+                      onChange={handleTallySelectAll}
+                      className="h-4 w-4 rounded border-gray-300 text-[#0d6efd] focus:ring-[#0d6efd]"
+                    />
+                  </th>
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Order ID</th>
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Customer Name</th>
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Customer Phone</th>
@@ -1162,7 +1260,7 @@ export default function DashboardPage() {
                 {loading ? (
                   Array.from({ length: 3 }).map((_, idx) => (
                     <tr key={idx} className="border-b border-gray-100">
-                      {Array.from({ length: 7 }).map((_, colIdx) => (
+                      {Array.from({ length: 8 }).map((_, colIdx) => (
                         <td key={colIdx} className="px-3 sm:px-6 py-3 sm:py-4">
                           <div className="h-4 bg-gray-200 rounded animate-pulse" />
                         </td>
@@ -1172,6 +1270,14 @@ export default function DashboardPage() {
                 ) : todayOrders && todayOrders.length > 0 ? (
                   todayOrders.map((order, index) => (
                     <tr key={order.order_id} className={`border-b border-gray-100 hover:bg-gray-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
+                      <td className="px-3 sm:px-4 py-3 sm:py-4">
+                        <input
+                          type="checkbox"
+                          checked={tallySelectedOrders.includes(order.order_id)}
+                          onChange={() => handleTallyToggle(order.order_id)}
+                          className="h-4 w-4 rounded border-gray-300 text-[#0d6efd] focus:ring-[#0d6efd]"
+                        />
+                      </td>
                       <td className="px-3 sm:px-6 py-3 sm:py-4">
                         <Link href={`/orders/${order.order_id}`} style={{ fontFamily: 'Albert Sans' }} className="text-xs sm:text-sm font-medium text-blue-600 hover:underline cursor-pointer">#{order.order_id}</Link>
                       </td>
@@ -1244,7 +1350,7 @@ export default function DashboardPage() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={7} className="px-3 sm:px-6 py-12 text-center text-gray-500">
+                    <td colSpan={8} className="px-3 sm:px-6 py-12 text-center text-gray-500">
                       <span style={{ fontFamily: 'Albert Sans' }}>No orders to package</span>
                     </td>
                   </tr>
@@ -1262,6 +1368,56 @@ export default function DashboardPage() {
         onOpenChange={handleOrderModalClose}
         onOrderUpdated={handleOrderUpdated}
       />
+
+      {/* Tally Modal */}
+      {showTallyModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setShowTallyModal(false)}>
+          <div className="bg-white rounded-lg shadow-xl max-w-lg w-full max-h-[80vh] overflow-hidden" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <h2 style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-lg text-gray-900">
+                Product Tally ({tallySelectedOrders.length} orders)
+              </h2>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handlePrintTally}
+                  className="gap-2"
+                  style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
+                >
+                  <Printer className="h-4 w-4" />
+                  Print
+                </Button>
+                <button onClick={() => setShowTallyModal(false)} className="text-gray-400 hover:text-gray-600 text-xl leading-none">&times;</button>
+              </div>
+            </div>
+            <div className="overflow-y-auto max-h-[60vh] p-0">
+              <table className="w-full">
+                <thead className="sticky top-0 bg-gray-50">
+                  <tr className="border-b border-gray-200">
+                    <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-4 py-3 text-sm text-gray-700">Product</th>
+                    <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-center px-4 py-3 text-sm text-gray-700 w-24">Qty</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tallyData.map((item, idx) => (
+                    <tr key={idx} className={`border-b border-gray-100 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
+                      <td style={{ fontFamily: 'Albert Sans' }} className="px-4 py-3 text-sm text-gray-900">{item.name}</td>
+                      <td style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="px-4 py-3 text-sm text-center text-gray-900">{item.quantity}</td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr className="bg-gray-100 border-t-2 border-gray-300">
+                    <td style={{ fontFamily: 'Albert Sans', fontWeight: 700 }} className="px-4 py-3 text-sm text-gray-900">Total</td>
+                    <td style={{ fontFamily: 'Albert Sans', fontWeight: 700 }} className="px-4 py-3 text-sm text-center text-gray-900">{tallyData.reduce((sum, item) => sum + item.quantity, 0)}</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   )
