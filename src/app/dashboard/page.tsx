@@ -1210,28 +1210,30 @@ export default function DashboardPage() {
                 Order packaging workflow
               </p>
             </div>
-            <Button
-              variant="outline"
-              className="gap-2 text-xs sm:text-sm"
-              size="sm"
-              style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
-              onClick={handleTally}
-              disabled={tallySelectedOrders.length === 0 || loadingTally}
-            >
-              {loadingTally ? <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" /> : <ClipboardList className="h-3 w-3 sm:h-4 sm:w-4" />}
-              Tally ({tallySelectedOrders.length})
-            </Button>
-            <Button
-              variant="outline"
-              className="gap-2 text-xs sm:text-sm"
-              size="sm"
-              style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
-              onClick={() => handlePrint(todayOrders, "Packaged Orders")}
-              disabled={todayOrders.length === 0}
-            >
-              <Printer className="h-3 w-3 sm:h-4 sm:w-4" />
-              Print All
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                className="gap-2 text-xs sm:text-sm"
+                size="sm"
+                style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
+                onClick={handleTally}
+                disabled={tallySelectedOrders.length === 0 || loadingTally}
+              >
+                {loadingTally ? <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" /> : <ClipboardList className="h-3 w-3 sm:h-4 sm:w-4" />}
+                Tally ({tallySelectedOrders.length})
+              </Button>
+              <Button
+                variant="outline"
+                className="gap-2 text-xs sm:text-sm"
+                size="sm"
+                style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
+                onClick={() => handlePrint(todayOrders, "Packaged Orders")}
+                disabled={todayOrders.length === 0}
+              >
+                <Printer className="h-3 w-3 sm:h-4 sm:w-4" />
+                Print All
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="p-0">
