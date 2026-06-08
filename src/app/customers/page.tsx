@@ -76,6 +76,8 @@ interface Customer {
   created_from?: string;
   approved?: boolean;
   pay_later?: boolean;
+  company_name?: string;
+  department_name?: string;
   company?: {
     company_id: number;
     company_name: string;
