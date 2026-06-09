@@ -351,29 +351,28 @@ export default function OrderDetailPage() {
   const deliveryFee = parseFloat(String(order.delivery_fee || '0'))
   const products = order.products || order.order_products || []
 
-  // Calculate GST only for ANCILLARIES and packages (10%)
-  const ancillaryGst = products.reduce((sum, p: any) => {
-    // Find the original product to get categories (as order products might not have them)
+  // Calculate GST: items NOT in gst_free categories are taxable
+  // Delivery fee is always taxable
+  const customerType = order.customer_type || '';
+  const isWholesale = customerType.includes('Wholesale') || customerType.includes('Wholesaler');
+
+  const taxableAmount = products.reduce((sum, p: any) => {
     const originalProduct = allProducts.find((ap: any) => Number(ap.product_id) === Number(p.product_id));
-
-    // Check categories from the original product or the order product itself
     const categories = originalProduct?.categories || p.categories || [];
-    const categoryName = p.category || (p.categories && p.categories[0]?.category_name) || p.category_name || "";
+    const isGstFree = categories.some((c: any) => c.gst_free === true);
 
-    const isAncillaryOrPackage = categories.some((c: any) => {
-      const name = (c.category_name || "").toUpperCase();
-      return name === "ANCILLARIES" || name === "PACKAGES" || name === "PACKAGING";
-    }) || categoryName.toUpperCase() === "ANCILLARIES" || categoryName.toUpperCase() === "PACKAGES" || categoryName.toUpperCase() === "PACKAGING";
-
-    if (isAncillaryOrPackage) {
-      return sum + (Number(p.total || 0) * 0.1);
+    if (!isGstFree) {
+      return sum + (Number(p.total || 0));
     }
     return sum;
   }, 0);
 
-  // Use backend total as fallback, but for display we use subtotal + delivery - discounts
-  // (Not adding ancillaryGst to total as requested)
-  const total = subtotal + deliveryFee - (wholesaleDiscount + couponDiscount)
+  const gstAmount = (taxableAmount + deliveryFee) * 0.1;
+
+  // Wholesale: GST exclusive (added to total), Retail: GST inclusive (not added to total)
+  const total = isWholesale
+    ? subtotal + deliveryFee - (wholesaleDiscount + couponDiscount) + gstAmount
+    : subtotal + deliveryFee - (wholesaleDiscount + couponDiscount);
 
   return (
     <div className="bg-gray-50 " style={{ fontFamily: 'Albert Sans' }}>
@@ -685,16 +684,16 @@ export default function OrderDetailPage() {
                     </td>
                   </tr>
 
-                  {ancillaryGst > 0 && (
+                  {gstAmount > 0 && (
                     <tr className="border-b border-gray-200">
                       <td colSpan={4} className="px-4 py-3 text-right">
                         <span className="text-sm text-gray-600" style={{ fontFamily: 'Albert Sans' }}>
-                          GST
+                          GST {isWholesale ? '' : '(Included)'}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-right">
                         <span className="text-sm text-gray-600" style={{ fontFamily: 'Albert Sans' }}>
-                          ${ancillaryGst.toFixed(2)}
+                          ${gstAmount.toFixed(2)}
                         </span>
                       </td>
                     </tr>
@@ -926,7 +925,7 @@ export default function OrderDetailPage() {
                       </div>
                       <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
                         <div>Gateway: {payment.payment_gateway}</div>
-                        <div>Amount: ${(parseFloat(payment.amount || 0) * (total ? (total - ancillaryGst) / total : 1)).toFixed(2)}</div>
+                        <div>Amount: ${parseFloat(payment.amount || 0).toFixed(2)}</div>
                         {payment.refund_amount > 0 && (
                           <div className="text-red-600">
                             Refunded: ${parseFloat(payment.refund_amount || 0).toFixed(2)}
