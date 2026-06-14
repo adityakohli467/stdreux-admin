@@ -108,15 +108,16 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
     enabled: selectedCompany > 0
   })
 
-  // Fetch customers - only when company is selected
+  // Fetch customers - load all if no company selected, or filter by company
   const { data: customersData, isLoading: loadingCustomers } = useQuery({
     queryKey: ['customers', selectedCompany],
     queryFn: async () => {
-      const params = selectedCompany > 0 ? { company_id: selectedCompany } : {}
+      const params: any = { limit: 200 }
+      if (selectedCompany > 0) params.company_id = selectedCompany
       const response = await customersAPI.list(params)
       return response.data
     },
-    enabled: selectedCompany > 0,
+    enabled: true,
   })
 
   // Fetch locations
@@ -422,12 +423,7 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
   }
 
   const handleProceed = () => {
-    // Validation - Company is required (customer depends on it)
-    if (!selectedCompany || selectedCompany === 0) {
-      toast.error("Please select a company")
-      return
-    }
-
+    // Validation - Customer is required
     if (!selectedCustomer || selectedCustomer === 0) {
       toast.error("Please select a customer")
       return
@@ -520,12 +516,12 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
               id="customer"
               value={selectedCustomer}
               onChange={(e) => handleCustomerChange(Number(e.target.value))}
-              disabled={selectedCompany === 0 || loadingCustomers}
+              disabled={loadingCustomers}
               className="flex-1 h-11 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d6efd] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
               style={{ fontFamily: 'Albert Sans' }}
             >
               <option value={0}>
-                {selectedCompany === 0 ? "Select a company first" : loadingCustomers ? "Loading..." : "Enter"}
+                {loadingCustomers ? "Loading..." : "Select a customer"}
               </option>
               {customers.map((customer: Customer) => (
                 <option key={customer.customer_id} value={customer.customer_id}>
