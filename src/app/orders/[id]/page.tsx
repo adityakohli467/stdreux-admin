@@ -240,6 +240,8 @@ export default function OrderDetailPage() {
   const handleSendPaymentLink = async () => {
     if (!orderId) return
 
+    if (!window.confirm('Are you sure you want to send the payment link to the customer?')) return
+
     setSendingPaymentLink(true)
     try {
       const response = await api.post(`/admin/orders/${orderId}/send-payment-link`)
@@ -297,6 +299,8 @@ export default function OrderDetailPage() {
       toast.error("Order ID not found")
       return
     }
+
+    if (!window.confirm('Are you sure you want to send the invoice to the customer?')) return
 
     setSendingInvoice(true)
     try {
