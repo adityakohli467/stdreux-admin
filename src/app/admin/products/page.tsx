@@ -570,8 +570,7 @@ function ProductsPageInner() {
     }
 
     // Final product data for submission
-    // If product has options, base price must be zero (options define the pricing)
-    const hasOptions = selectedOptions.length > 0;
+    // Final product data for submission
     const finalProductData: any = {
       product_name: productName,
       product_description: productDescription,
@@ -581,7 +580,7 @@ function ProductsPageInner() {
       show_other_info: showOtherInfo ? 1 : 0,
       product_desc_1: productDesc1 || null,
       product_desc_2: productDesc2 || null,
-      product_price: hasOptions ? 0 : (productPrice ? parseFloat(productPrice) : 0),
+      product_price: productPrice ? parseFloat(productPrice) : 0,
       retail_price: finalRetailPrice,
       user_price: userPrice ? parseFloat(userPrice) : null,
       retail_discount_percentage: parseFloat(retailDiscountPercentage) || 0,
