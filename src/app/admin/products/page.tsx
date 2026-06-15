@@ -1237,7 +1237,7 @@ function ProductsPageInner() {
                   className="px-4 py-3 text-left text-sm font-semibold text-gray-700"
                   style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
                 >
-                  Product Price
+                  Prices
                 </th>
                 <th
                   className="px-4 py-3 text-left text-sm font-semibold text-gray-700"
@@ -1354,16 +1354,18 @@ function ProductsPageInner() {
                             fontFamily: "Albert Sans",
                             fontWeight: 400,
                             fontStyle: "normal",
-                            fontSize: "14px",
-                            lineHeight: "20px",
+                            fontSize: "12px",
+                            lineHeight: "18px",
                             letterSpacing: "0%",
                           }}
                         >
-                          {product.product_price
-                            ? `$${parseFloat(
-                              product.product_price.toString(),
-                            ).toFixed(2)}`
-                            : "-"}
+                          <div className="flex flex-col gap-0.5">
+                            {product.product_price ? <span>Retail: <strong>${parseFloat(product.product_price.toString()).toFixed(2)}</strong></span> : null}
+                            {product.product_price_premium ? <span>Premium: <strong>${parseFloat(product.product_price_premium.toString()).toFixed(2)}</strong></span> : null}
+                            {product.retail_price ? <span>Essential WS: <strong>${parseFloat(product.retail_price.toString()).toFixed(2)}</strong></span> : null}
+                            {product.subscriber_rate ? <span>Subscriber: <strong>${parseFloat(product.subscriber_rate.toString()).toFixed(2)}</strong></span> : null}
+                            {!product.product_price && !product.product_price_premium && !product.retail_price && !product.subscriber_rate ? <span>-</span> : null}
+                          </div>
                         </td>
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2">
@@ -1436,15 +1438,15 @@ function ProductsPageInner() {
                       {optionIndex === 0 ? (
                         <>
                           <td
-                            className="px-4 py-3 text-sm font-semibold text-gray-900"
+                            className="px-4 py-3 text-gray-900"
                             rowSpan={rowSpan}
-                            style={{ fontFamily: "Albert Sans" }}
+                            style={{ fontFamily: "Albert Sans", fontSize: "12px" }}
                           >
-                            {product.product_price
-                              ? `$${parseFloat(
-                                product.product_price.toString(),
-                              ).toFixed(2)}`
-                              : "-"}
+                            <div className="flex flex-col gap-0.5">
+                              {productOptions.map((opt, i) => (
+                                <span key={i}>{opt.option_value_name}: <strong>${parseFloat((opt.option_price || 0).toString()).toFixed(2)}</strong></span>
+                              ))}
+                            </div>
                           </td>
                           <td className="px-4 py-3" rowSpan={rowSpan}>
                             <div className="flex items-center gap-2">
