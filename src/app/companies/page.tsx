@@ -319,14 +319,6 @@ export default function CompaniesPage() {
             Companies
           </button>
         </Link>
-        <Link href="/departments">
-          <button
-            className="px-10 py-3 rounded-full text-[15px] font-medium transition-all bg-white text-[#6c757d] border-2 border-[#e9ecef] hover:border-[#dee2e6]"
-            style={{ fontFamily: 'Albert Sans', fontWeight: 500 }}
-          >
-            Departments
-          </button>
-        </Link>
       </div>
 
       {/* Search and Print */}
