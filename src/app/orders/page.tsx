@@ -662,7 +662,10 @@ export default function OrdersPage() {
         {orderTabs.map((tab: any) => (
           <button
             key={tab.key}
-            onClick={() => setSelectedTab(tab.key)}
+            onClick={() => {
+              setSelectedTab(tab.key)
+              router.replace(`/orders?tab=${tab.key}`, { scroll: false })
+            }}
             className={`px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${selectedTab === tab.key
               ? tab.key === 'wholesale'
                 ? "bg-purple-100 text-purple-700 border-2 border-purple-500"
