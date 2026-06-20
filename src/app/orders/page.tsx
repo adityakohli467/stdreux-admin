@@ -62,6 +62,7 @@ interface Order {
   is_completed?: number | string
   order_made_from?: string | null
   packaging_status?: number // 0=New Order, 1=Printed, 2=Packed, 3=Delivered
+  mark_paid_comment?: string | null
 }
 
 interface Location {
@@ -464,15 +465,29 @@ export default function OrdersPage() {
   }
 
 
-  const handleMarkAsPaid = async (orderId: number) => {
+  const [showMarkPaidModal, setShowMarkPaidModal] = useState(false)
+  const [markPaidOrderId, setMarkPaidOrderId] = useState<number | null>(null)
+  const [markPaidComment, setMarkPaidComment] = useState("")
+  const [markingPaid, setMarkingPaid] = useState(false)
+  const [viewCommentOrder, setViewCommentOrder] = useState<Order | null>(null)
+
+  const handleMarkAsPaid = async () => {
+    if (!markPaidOrderId) return
+    setMarkingPaid(true)
     try {
-      // This endpoint will be created on the backend to update payment_status field
-      await api.put(`/admin/orders/${orderId}/mark-paid`)
+      await api.put(`/admin/orders/${markPaidOrderId}/mark-paid`, { comment: markPaidComment || undefined })
       toast.success("Order marked as paid!")
-      queryClient.invalidateQueries({ queryKey: ['orders'] })
+      setShowMarkPaidModal(false)
+      setMarkPaidComment("")
+      setMarkPaidOrderId(null)
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ['orders'] })
+      }, 300)
     } catch (error: any) {
       console.error("Failed to mark order as paid:", error)
       toast.error(error.response?.data?.message || "Failed to mark order as paid")
+    } finally {
+      setMarkingPaid(false)
     }
   }
 
@@ -1328,11 +1343,15 @@ export default function OrdersPage() {
                                 Process Payment
                               </DropdownMenuItem> */}
                               <DropdownMenuItem
-                                onClick={() => handleMarkAsPaid(order.order_id)}
+                                onClick={() => {
+                                  setMarkPaidOrderId(order.order_id)
+                                  setMarkPaidComment("")
+                                  setShowMarkPaidModal(true)
+                                }}
                                 disabled={
                                   updateStatusMutation.isPending ||
                                   (order.payment_status !== undefined && order.payment_status !== null
-                                    ? (String(order.payment_status) === "1" || Number(order.payment_status) === 1 || String(order.payment_status).toLowerCase() === "paid" || String(order.payment_status).toLowerCase() === "true")
+                                    ? (String(order.payment_status) === "1" || Number(order.payment_status) === 1 || String(order.payment_status).toLowerCase() === "paid" || String(order.payment_status).toLowerCase() === "true" || String(order.payment_status).toLowerCase() === "succeeded")
                                     : (order.order_status === 2 || order.order_status === 3 || order.order_status === 5))
                                 }
                                 className="cursor-pointer"
@@ -1340,6 +1359,15 @@ export default function OrdersPage() {
                                 <CheckCircle2 className="h-4 w-4 mr-2" />
                                 Mark Paid
                               </DropdownMenuItem>
+                              {order.mark_paid_comment && (
+                                <DropdownMenuItem
+                                  onClick={() => setViewCommentOrder(order)}
+                                  className="cursor-pointer"
+                                >
+                                  <Eye className="h-4 w-4 mr-2" />
+                                  View Mark Paid Comment
+                                </DropdownMenuItem>
+                              )}
                               <DropdownMenuItem
                                 onClick={() => handleMarkComplete(order.order_id)}
                                 disabled={String(order.is_completed) === "1" || markingCompleteId === order.order_id}
@@ -1594,6 +1622,77 @@ export default function OrdersPage() {
               style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
             >
               {emailMutation.isPending ? "Sending..." : "Send"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Mark Paid Modal */}
+      <Dialog open={showMarkPaidModal} onOpenChange={(open) => { if (!open) { setShowMarkPaidModal(false); setMarkPaidComment(""); setMarkPaidOrderId(null) } }}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+              Mark Order #{markPaidOrderId} as Paid
+            </DialogTitle>
+            <DialogDescription style={{ fontFamily: 'Albert Sans' }}>
+              Add a comment about this payment (optional)
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-2" style={{ fontFamily: 'Albert Sans' }}>
+                Mark Paid Comment
+              </label>
+              <textarea
+                value={markPaidComment}
+                onChange={(e) => setMarkPaidComment(e.target.value)}
+                placeholder="e.g. Paid via bank transfer, reference #123..."
+                className="w-full border border-gray-300 rounded-md px-3 py-2 min-h-[80px] resize-none"
+                style={{ fontFamily: 'Albert Sans' }}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => { setShowMarkPaidModal(false); setMarkPaidComment(""); setMarkPaidOrderId(null) }}
+              disabled={markingPaid}
+              style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleMarkAsPaid}
+              disabled={markingPaid}
+              className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white"
+              style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
+            >
+              {markingPaid ? "Marking..." : "Mark as Paid"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* View Mark Paid Comment Modal */}
+      <Dialog open={!!viewCommentOrder} onOpenChange={(open) => { if (!open) setViewCommentOrder(null) }}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+              Mark Paid Comment - Order #{viewCommentOrder?.order_id}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="p-4 bg-gray-50 rounded-md">
+            <p className="text-sm text-gray-700" style={{ fontFamily: 'Albert Sans' }}>
+              {viewCommentOrder?.mark_paid_comment}
+            </p>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setViewCommentOrder(null)}
+              style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
+            >
+              Close
             </Button>
           </DialogFooter>
         </DialogContent>
