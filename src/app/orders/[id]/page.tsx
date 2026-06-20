@@ -420,7 +420,7 @@ export default function OrderDetailPage() {
             <Printer className="h-4 w-4" />
             {printingInvoice ? "Printing..." : "Print Tax Invoice"}
           </Button>
-          {order.payment_status !== 'Paid' && order.payment_status !== 'Completed' && (
+          {order.payment_status !== 'succeeded' && order.payment_status !== 'paid' && (
             <Button
               className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white gap-2"
               style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
