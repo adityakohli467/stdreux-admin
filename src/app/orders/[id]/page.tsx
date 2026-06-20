@@ -371,8 +371,8 @@ export default function OrderDetailPage() {
     return sum;
   }, 0);
 
-  // GST is always totalTaxable / 11
-  const gstAmount = (taxableAmount + deliveryFee) / 11;
+  // GST is always totalTaxable / 10
+  const gstAmount = (taxableAmount + deliveryFee) / 10;
 
   // Wholesale: GST exclusive (added to total), Retail: GST inclusive (not added to total)
   const total = isWholesale
