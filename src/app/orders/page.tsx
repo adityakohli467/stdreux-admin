@@ -1641,9 +1641,7 @@ export default function OrdersPage() {
             <DialogTitle style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
               Mark Order #{markPaidOrderId} as Paid
             </DialogTitle>
-            <DialogDescription style={{ fontFamily: 'Albert Sans' }}>
-              Add a comment about this payment (optional)
-            </DialogDescription>
+
           </DialogHeader>
           <div className="space-y-4">
             <div>
@@ -1653,7 +1651,7 @@ export default function OrdersPage() {
               <textarea
                 value={markPaidComment}
                 onChange={(e) => setMarkPaidComment(e.target.value)}
-                placeholder="e.g. Paid via bank transfer, reference #123..."
+                placeholder=""
                 className="w-full border border-gray-300 rounded-md px-3 py-2 min-h-[80px] resize-none"
                 style={{ fontFamily: 'Albert Sans' }}
               />
