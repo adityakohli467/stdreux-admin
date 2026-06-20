@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -59,9 +59,28 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
   const [selectedDepartment, setSelectedDepartment] = useState(0)
   const [selectedCustomer, setSelectedCustomer] = useState(0)
   const [selectedLocation, setSelectedLocation] = useState(0)
+  const [companySearch, setCompanySearch] = useState<string | undefined>(undefined)
+  const [customerSearch, setCustomerSearch] = useState<string | undefined>(undefined)
+  const [showCompanyDropdown, setShowCompanyDropdown] = useState(false)
+  const [showCustomerDropdown, setShowCustomerDropdown] = useState(false)
   const [customerName, setCustomerName] = useState("")
   const [phone, setPhone] = useState("")
   const [email, setEmail] = useState("")
+
+  // Close dropdowns on click outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      if (!target.closest('#company')?.parentElement?.contains(target) && !target.closest('[data-company-dropdown]')) {
+        setShowCompanyDropdown(false)
+      }
+      if (!target.closest('#customer')?.parentElement?.contains(target) && !target.closest('[data-customer-dropdown]')) {
+        setShowCustomerDropdown(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   // Modal states
   const [showAddCompanyModal, setShowAddCompanyModal] = useState(false)
@@ -476,23 +495,48 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
             Company
           </Label>
           <div className="flex gap-2">
-            <select
-              id="company"
-              value={selectedCompany}
-              onChange={(e) => handleCompanyChange(Number(e.target.value))}
-              disabled={loadingCompanies}
-              className="flex-1 h-11 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d6efd] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
-              style={{ fontFamily: 'Albert Sans' }}
-            >
-              <option value={0}>
-                {loadingCompanies ? "Loading..." : "Select"}
-              </option>
-              {companies.map((company: Company) => (
-                <option key={company.company_id} value={company.company_id}>
-                  {company.company_name}
-                </option>
-              ))}
-            </select>
+            <div className="flex-1 relative">
+              <input
+                type="text"
+                id="company"
+                value={companySearch !== undefined ? companySearch : (selectedCompany > 0 ? companies.find((c: Company) => c.company_id === selectedCompany)?.company_name || '' : '')}
+                onChange={(e) => {
+                  setCompanySearch(e.target.value)
+                  setShowCompanyDropdown(true)
+                  if (!e.target.value) handleCompanyChange(0)
+                }}
+                onFocus={() => setShowCompanyDropdown(true)}
+                placeholder={loadingCompanies ? "Loading..." : "Search company..."}
+                disabled={loadingCompanies}
+                className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d6efd] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                style={{ fontFamily: 'Albert Sans' }}
+                autoComplete="off"
+              />
+              {showCompanyDropdown && !loadingCompanies && (
+                <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                  {companies
+                    .filter((c: Company) => !companySearch || c.company_name.toLowerCase().includes(companySearch.toLowerCase()))
+                    .map((company: Company) => (
+                      <div
+                        key={company.company_id}
+                        onClick={() => {
+                          handleCompanyChange(company.company_id)
+                          setCompanySearch(company.company_name)
+                          setShowCompanyDropdown(false)
+                        }}
+                        className={`px-3 py-2 text-sm cursor-pointer hover:bg-blue-50 ${selectedCompany === company.company_id ? 'bg-blue-100 font-medium' : ''}`}
+                        style={{ fontFamily: 'Albert Sans' }}
+                      >
+                        {company.company_name}
+                      </div>
+                    ))
+                  }
+                  {companies.filter((c: Company) => !companySearch || c.company_name.toLowerCase().includes(companySearch.toLowerCase())).length === 0 && (
+                    <div className="px-3 py-2 text-sm text-gray-500">No companies found</div>
+                  )}
+                </div>
+              )}
+            </div>
             <Button
               type="button"
               variant="outline"
@@ -512,22 +556,52 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
             Customer Name <span className="text-red-500">*</span>
           </Label>
           <div className="flex gap-2">
-            <select
-              id="customer"
-              value={selectedCustomer}
-              onChange={(e) => handleCustomerChange(Number(e.target.value))}
-              disabled={loadingCustomers}
-              className="flex-1 h-11 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d6efd] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
-              style={{ fontFamily: 'Albert Sans' }}
-            >
-              <option value={0}>
-                {loadingCustomers ? "Loading..." : "Select a customer"}
-              </option>
-              {customers.map((customer: Customer) => (
-                <option key={customer.customer_id} value={customer.customer_id}>
-                  {customer.firstname} {customer.lastname}
-                </option>
-              ))}
+            <div className="flex-1 relative">
+              <input
+                type="text"
+                id="customer"
+                value={customerSearch !== undefined ? customerSearch : (selectedCustomer > 0 ? (() => { const c = customers.find((c: Customer) => c.customer_id === selectedCustomer); return c ? `${c.firstname} ${c.lastname}` : '' })() : '')}
+                onChange={(e) => {
+                  setCustomerSearch(e.target.value)
+                  setShowCustomerDropdown(true)
+                  if (!e.target.value) handleCustomerChange(0)
+                }}
+                onFocus={() => setShowCustomerDropdown(true)}
+                placeholder={loadingCustomers ? "Loading..." : "Search customer..."}
+                disabled={loadingCustomers}
+                className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d6efd] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                style={{ fontFamily: 'Albert Sans' }}
+                autoComplete="off"
+              />
+              {showCustomerDropdown && !loadingCustomers && (
+                <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                  {customers
+                    .filter((c: Customer) => {
+                      if (!customerSearch) return true
+                      const name = `${c.firstname} ${c.lastname}`.toLowerCase()
+                      return name.includes(customerSearch.toLowerCase())
+                    })
+                    .map((customer: Customer) => (
+                      <div
+                        key={customer.customer_id}
+                        onClick={() => {
+                          handleCustomerChange(customer.customer_id)
+                          setCustomerSearch(`${customer.firstname} ${customer.lastname}`)
+                          setShowCustomerDropdown(false)
+                        }}
+                        className={`px-3 py-2 text-sm cursor-pointer hover:bg-blue-50 ${selectedCustomer === customer.customer_id ? 'bg-blue-100 font-medium' : ''}`}
+                        style={{ fontFamily: 'Albert Sans' }}
+                      >
+                        {customer.firstname} {customer.lastname}
+                      </div>
+                    ))
+                  }
+                  {customers.filter((c: Customer) => { if (!customerSearch) return true; const name = `${c.firstname} ${c.lastname}`.toLowerCase(); return name.includes(customerSearch.toLowerCase()) }).length === 0 && (
+                    <div className="px-3 py-2 text-sm text-gray-500">No customers found</div>
+                  )}
+                </div>
+              )}
+            </div>
             </select>
             <Button
               type="button"
