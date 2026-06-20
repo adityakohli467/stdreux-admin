@@ -167,7 +167,6 @@ export default function OrdersPage() {
     }
 
     if (selectedLocation) params.location_id = selectedLocation
-    if (selectedStatus !== null) params.status = selectedStatus
     if (searchQuery) params.search = searchQuery
     if (dateFrom) params.from_date = format(dateFrom, 'yyyy-MM-dd')
     if (dateTo) params.to_date = format(dateTo, 'yyyy-MM-dd 23:59:59')
@@ -262,6 +261,14 @@ export default function OrdersPage() {
           if (!order.customer_type) return false;
           const type = order.customer_type.toLowerCase();
           return type.includes('wholesale') || type.includes('wholesaler');
+        });
+      }
+
+      // Apply paid filter
+      if (selectedStatus === 3) {
+        finalOrders = finalOrders.filter((order: any) => {
+          const ps = String(order.payment_status || '').toLowerCase();
+          return ps === 'succeeded' || ps === 'paid' || ps === '1' || ps === 'true';
         });
       }
 
