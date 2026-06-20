@@ -478,14 +478,22 @@ export default function OrdersPage() {
 
 
 
+  const [markingCompleteId, setMarkingCompleteId] = useState<number | null>(null)
+
   const handleMarkComplete = async (orderId: number) => {
+    setMarkingCompleteId(orderId)
     try {
       await api.put(`/admin/orders/${orderId}/complete`)
       toast.success("Order marked as complete!")
-      queryClient.invalidateQueries({ queryKey: ['orders'] })
+      // Small delay to let dropdown close before re-render
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ['orders'] })
+        setMarkingCompleteId(null)
+      }, 300)
     } catch (error: any) {
       console.error("Failed to mark order as complete:", error)
       toast.error(error.response?.data?.message || "Failed to mark order as complete")
+      setMarkingCompleteId(null)
     }
   }
 
@@ -1334,11 +1342,11 @@ export default function OrdersPage() {
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() => handleMarkComplete(order.order_id)}
-                                disabled={String(order.is_completed) === "1"}
+                                disabled={String(order.is_completed) === "1" || markingCompleteId === order.order_id}
                                 className="cursor-pointer"
                               >
                                 <CheckCircle2 className="h-4 w-4 mr-2" />
-                                Mark Complete
+                                {markingCompleteId === order.order_id ? "Completing..." : "Mark Complete"}
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() => handleDownloadOrder(order.order_id)}
