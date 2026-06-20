@@ -602,7 +602,6 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
                 </div>
               )}
             </div>
-            </select>
             <Button
               type="button"
               variant="outline"
