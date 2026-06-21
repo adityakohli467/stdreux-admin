@@ -715,15 +715,6 @@ export default function OrdersPage() {
       </div>
 
       {/* Info banner for wholesale tab */}
-      {selectedTab === 'wholesale' && (
-        <div className="mb-4 p-3 bg-purple-50 border border-purple-200 rounded-lg">
-          <p className="text-sm text-purple-800" style={{ fontFamily: 'Albert Sans' }}>
-            <strong>Wholesale Orders Only:</strong> This view shows only orders from wholesale customers.
-            Use Past/Future/Reminder tabs to see all orders regardless of customer type.
-          </p>
-        </div>
-      )}
-
       {/* Search and Filters */}
       <div className="flex flex-col xl:flex-row gap-4 mb-6 items-stretch xl:items-center">
         <div className="flex flex-col md:flex-row flex-wrap gap-4 items-stretch md:items-center flex-1">
