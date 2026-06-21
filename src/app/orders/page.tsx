@@ -63,6 +63,7 @@ interface Order {
   order_made_from?: string | null
   packaging_status?: number // 0=New Order, 1=Printed, 2=Packed, 3=Delivered
   mark_paid_comment?: string | null
+  payment_link_sent?: boolean
 }
 
 interface Location {
@@ -1135,6 +1136,19 @@ export default function OrdersPage() {
                     letterSpacing: '0%'
                   }}
                 >
+                  Sent
+                </th>
+                <th
+                  className="px-4 py-3 text-left"
+                  style={{
+                    fontFamily: 'Albert Sans',
+                    fontWeight: 600,
+                    fontStyle: 'normal',
+                    fontSize: '14px',
+                    lineHeight: '20px',
+                    letterSpacing: '0%'
+                  }}
+                >
                   Xero
                 </th>
                 <th
@@ -1297,6 +1311,15 @@ export default function OrdersPage() {
                           <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 whitespace-nowrap">
                             User Order
                           </Badge>
+                        )}
+                      </td>
+                      <td className="px-4 py-4">
+                        {order.payment_link_sent ? (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            Sent
+                          </span>
+                        ) : (
+                          <span className="text-gray-400">—</span>
                         )}
                       </td>
                       <td className="px-4 py-4">
