@@ -78,6 +78,8 @@ interface Customer {
   pay_later?: boolean;
   company_name?: string;
   department_name?: string;
+  has_similar_company?: boolean;
+  similar_companies?: Array<{ company_id: number; company_name: string }>;
   company?: {
     company_id: number;
     company_name: string;
