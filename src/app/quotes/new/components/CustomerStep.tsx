@@ -513,7 +513,7 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
                 autoComplete="off"
               />
               {showCompanyDropdown && !loadingCompanies && (
-                <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                <div data-company-dropdown className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto">
                   {companies
                     .filter((c: Company) => !companySearch || c.company_name.toLowerCase().includes(companySearch.toLowerCase()))
                     .map((company: Company) => (
@@ -574,7 +574,7 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
                 autoComplete="off"
               />
               {showCustomerDropdown && !loadingCustomers && (
-                <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                <div data-customer-dropdown className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto">
                   {customers
                     .filter((c: Customer) => {
                       if (!customerSearch) return true
