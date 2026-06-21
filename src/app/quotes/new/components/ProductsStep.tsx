@@ -1063,7 +1063,7 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
                                   }
                                   return (
                                     <div key={key} className="flex items-center justify-between">
-                                      <div className="flex items-center gap-2">
+                                      <label className="flex items-center gap-2 cursor-pointer" onClick={() => setSelectedOptions({ ...selectedOptions, [key]: !selectedOptions[key] })}>
                                         <Checkbox
                                           checked={selectedOptions[key] || false}
                                           onCheckedChange={(checked) =>
@@ -1076,7 +1076,7 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
                                             {option.option_price_prefix}${price.toFixed(2)}
                                           </span>
                                         </span>
-                                      </div>
+                                      </label>
                                       {price > 0 && (
                                         <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-md">
                                           <button
