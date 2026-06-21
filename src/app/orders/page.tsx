@@ -246,13 +246,13 @@ export default function OrdersPage() {
 
       if (selectedTab === 'past') {
         finalOrders = finalOrders.filter((order: any) => 
-          String(order.is_completed) === "1" || order.order_status === 5
+          String(order.is_completed) === "1" || order.order_status === 5 || order.order_status === 2
         );
       }
 
       if (selectedTab === 'future') {
         finalOrders = finalOrders.filter((order: any) => 
-          String(order.is_completed) !== "1" && order.order_status !== 5
+          String(order.is_completed) !== "1" && order.order_status !== 5 && order.order_status !== 2
         );
       }
 
