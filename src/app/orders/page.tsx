@@ -288,7 +288,7 @@ export default function OrdersPage() {
   })
 
   const orders: Order[] = ordersData?.orders || []
-
+  console.log("Fetched orders:", orders)
   // Delete mutation
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
