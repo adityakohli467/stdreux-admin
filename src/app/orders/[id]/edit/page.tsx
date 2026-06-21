@@ -284,11 +284,6 @@ export default function EditOrderPage() {
         }))
       }
 
-        coupon_code: orderPayload.coupon_code,
-        coupon_type: orderData.coupon_type,
-        coupon_discount: orderData.coupon_discount
-      })
-
       const response = await ordersAPI.update(Number(orderId), orderPayload)
 
       if (response.data) {

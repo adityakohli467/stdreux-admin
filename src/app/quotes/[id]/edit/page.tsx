@@ -306,11 +306,6 @@ export default function EditQuotePage() {
         }
       }
 
-        coupon_code: quoteData.coupon_code,
-        coupon_type: quoteData.coupon_type,
-        coupon_discount: quoteData.coupon_discount
-      })
-
       // Transform products for API
       const payload = {
         ...quoteData,

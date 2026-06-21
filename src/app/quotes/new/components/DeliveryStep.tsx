@@ -382,11 +382,6 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
     // Skip if we're in the middle of an update
     if (isUpdatingRef.current) return
 
-      delivery_date_time: data.delivery_date_time,
-      delivery_date: data.delivery_date,
-      delivery_time: data.delivery_time,
-    })
-
     if (data.products) setProducts(data.products)
 
     // Always prioritize delivery_date_time if available

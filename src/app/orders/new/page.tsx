@@ -235,7 +235,8 @@ export default function NewOrderPage() {
             product_option_id: addon.product_option_id,
             option_value_id: addon.option_value_id
           }))
-        }))n      }
+        }))
+      }
 
       const response = await ordersAPI.create(orderPayload)
 
