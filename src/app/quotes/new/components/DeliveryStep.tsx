@@ -575,12 +575,6 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
       updateData.coupon_discount = undefined
     }
 
-      appliedCoupon,
-      coupon_code: updateData.coupon_code,
-      coupon_type: updateData.coupon_type,
-      coupon_discount: updateData.coupon_discount,
-    })
-
     // Update state first
     onUpdate(updateData)
 
