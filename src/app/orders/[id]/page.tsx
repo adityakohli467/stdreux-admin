@@ -95,9 +95,7 @@ export default function OrderDetailPage() {
       if (!orderId) {
         throw new Error('Order ID is required')
       }
-      console.log('Fetching order:', orderId)
       const response = await api.get(`/admin/orders/${orderId}`)
-      console.log('Order fetched:', response.data?.order)
       return response.data
     },
     enabled: !!orderId, // Only fetch if orderId exists

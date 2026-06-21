@@ -170,8 +170,6 @@ export default function NewQuotePage() {
       }
 
       // API call to save quote
-      console.log("Saving quote:", quotePayload)
-      console.log("Coupon data:", {
         coupon_code: quotePayload.coupon_code,
         coupon_type: quotePayload.coupon_type,
         coupon_discount: quotePayload.coupon_discount
@@ -182,7 +180,6 @@ export default function NewQuotePage() {
       if (response.data) {
         // Send email via the working /send-email API endpoint
         try {
-          console.log("Quote creation response:", JSON.stringify(response.data))
           // Backend returns order_id (same field used everywhere else in the app)
           const quoteId = response.data.order_id
             || response.data.quote_id
@@ -194,7 +191,6 @@ export default function NewQuotePage() {
           // Use sendToEmail override (from Send to Customer modal) first, then fall back to quote data
           const recipientEmail = sendToEmail || quotePayload.account_email || quotePayload.email || quoteData.email || quoteData.account_email;
 
-          console.log("Quote ID:", quoteId, "| Recipient:", recipientEmail)
 
           if (quoteId && recipientEmail) {
             const emailResponse = await api.post(`/admin/quotes/${quoteId}/send-email`, {

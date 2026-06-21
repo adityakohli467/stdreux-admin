@@ -288,7 +288,6 @@ export default function OrdersPage() {
   })
 
   const orders: Order[] = ordersData?.orders || []
-  console.log("Fetched orders:", orders)
   // Delete mutation
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
@@ -454,19 +453,16 @@ export default function OrdersPage() {
   })
 
   const handleViewOrder = (orderId: number) => {
-    console.log("View order:", orderId)
     setSelectedOrderId(orderId)
     setShowOrderDetailModal(true)
   }
 
   const handleEditOrder = (orderId: number) => {
-    console.log("Edit order:", orderId)
     // Redirect to order edit page
     router.push(`/orders/${orderId}/edit`)
   }
 
   const handlePayment = (orderId: number) => {
-    console.log("Payment order:", orderId)
     // Open payment modal or redirect to payment page
     setPaymentOrderId(orderId)
     setShowPaymentModal(true)
@@ -539,7 +535,6 @@ export default function OrdersPage() {
   }
 
   const handleDownloadOrder = async (orderId: number) => {
-    console.log("Download order:", orderId)
     try {
       await downloadInvoiceMutation.mutateAsync(orderId)
     } catch (error) {
@@ -549,7 +544,6 @@ export default function OrdersPage() {
   }
 
   const handleRefreshOrder = (orderId: number) => {
-    console.log("Refresh order:", orderId)
     queryClient.invalidateQueries({ queryKey: ['orders'] })
     queryClient.invalidateQueries({ queryKey: ['order', orderId] })
     toast.success("Order refreshed")

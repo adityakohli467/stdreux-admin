@@ -301,7 +301,6 @@ export default function RolesPage() {
         permissions: grantedPermissions, // Send empty array if no permissions granted
       }
 
-      console.log("Updating permissions for role:", selectedRole.role_id, updateData)
       updateMutation.mutate({ id: selectedRole.role_id, data: updateData })
     }, 300) // 300ms debounce
   }, [rolePermissionsData, selectedRole, updateMutation])

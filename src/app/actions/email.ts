@@ -47,7 +47,6 @@ export async function sendEmail(options: SendEmailOptions) {
     const fromEmail = process.env.FROM_EMAIL || process.env.SMTP_USER;
     const fromName = process.env.COMPANY_NAME || 'St Dreux Coffee Roasters';
 
-    console.log(`Sending email to ${options.to} via ${process.env.SMTP_HOST}`);
 
     const info = await transporter.sendMail({
       from: `"${fromName}" <${fromEmail}>`,
@@ -57,7 +56,6 @@ export async function sendEmail(options: SendEmailOptions) {
       text: options.text,
     });
 
-    console.log(`Email sent: ${info.messageId}`);
     return { success: true, messageId: info.messageId };
   } catch (error: any) {
     console.error('Error sending email:', error);

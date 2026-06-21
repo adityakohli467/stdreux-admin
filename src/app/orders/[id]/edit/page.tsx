@@ -84,9 +84,7 @@ export default function EditOrderPage() {
       if (!orderId || !isValidOrderId) {
         throw new Error('Invalid order ID')
       }
-      console.log('Fetching order:', orderId)
       const response = await ordersAPI.get(Number(orderId))
-      console.log('Order fetched:', response.data.order)
       return response.data.order
     },
     enabled: !!isValidOrderId, // Only fetch if orderId exists and is valid
@@ -99,7 +97,6 @@ export default function EditOrderPage() {
 
   // Reset data loaded state when orderId changes
   useEffect(() => {
-    console.log('OrderId changed:', orderId)
     setIsDataLoaded(false)
     setOrderData({ products: [] })
     setCurrentStep(1)
@@ -108,7 +105,6 @@ export default function EditOrderPage() {
   // Handle order data loading with improved error handling
   useEffect(() => {
     if (existingOrder && !isDataLoaded) {
-      console.log('Processing order data:', existingOrder)
       // Use a longer delay to ensure all data is ready and avoid race conditions
       const timer = setTimeout(() => {
         try {
@@ -177,8 +173,6 @@ export default function EditOrderPage() {
             delivery_method: order.delivery_method || 'pickup',
           }
 
-          console.log('Setting order data:', mappedOrderData)
-          console.log('Delivery fields being set:', {
             delivery_date_time: mappedOrderData.delivery_date_time,
             delivery_address: mappedOrderData.delivery_address,
             delivery_method: mappedOrderData.delivery_method,
@@ -189,7 +183,6 @@ export default function EditOrderPage() {
           })
           setOrderData(mappedOrderData)
           setIsDataLoaded(true)
-          console.log('Order data loaded successfully')
         } catch (err) {
           console.error('Error processing order data:', err)
           toast.error('Failed to process order data')
@@ -299,8 +292,6 @@ export default function EditOrderPage() {
         }))
       }
 
-      console.log("Updating order:", orderPayload)
-      console.log("Coupon data in update:", {
         coupon_code: orderPayload.coupon_code,
         coupon_type: orderData.coupon_type,
         coupon_discount: orderData.coupon_discount

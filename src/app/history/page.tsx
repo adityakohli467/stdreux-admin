@@ -86,9 +86,7 @@ export default function HistoryPage() {
         if (startDate) params.startDate = startDate
         if (endDate) params.endDate = endDate
 
-        console.log("Fetching history with params:", params)
         const response = await historyAPI.list(params)
-        console.log("History API response:", response.data)
         return response.data
       } catch (error: any) {
         console.error("Error fetching history:", error)

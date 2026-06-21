@@ -119,9 +119,7 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
   const { data: departmentsData, isLoading: loadingDepartments } = useQuery({
     queryKey: ['departments', selectedCompany],
     queryFn: async () => {
-      console.log("Fetching departments for company:", selectedCompany)
       const response = await companiesAPI.getDepartments(selectedCompany)
-      console.log("Departments loaded:", response.data)
       return response.data
     },
     enabled: selectedCompany > 0

@@ -154,7 +154,6 @@ export default function BlogsPage() {
       return response.data
     },
     onSuccess: (data) => {
-      console.log("Image upload response:", data)
       const imageUrl = data.image_url || data.url || data.imageUrl
       if (!imageUrl) {
         console.error("No image URL in response:", data)

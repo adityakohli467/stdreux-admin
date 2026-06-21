@@ -120,7 +120,6 @@ export default function ReminderOrdersPage() {
   }
 
   const handleSendReminderEmail = () => {
-    console.log("Sending reminder email to selected orders:", selectedOrders)
     setShowSuccessMessage(true)
     setTimeout(() => {
       setShowSuccessMessage(false)
@@ -128,7 +127,6 @@ export default function ReminderOrdersPage() {
   }
 
   const handleSendIndividualEmail = (orderId: string) => {
-    console.log("Sending reminder email to order:", orderId)
     setShowSuccessMessage(true)
     setTimeout(() => {
       setShowSuccessMessage(false)

@@ -130,9 +130,7 @@ export default function QuoteDetailPage() {
       if (!quoteId) {
         throw new Error('Quote ID is required')
       }
-      console.log('Fetching quote:', quoteId)
       const response = await api.get(`/admin/quotes/${quoteId}`)
-      console.log('Quote fetched:', response.data?.quote)
       return response.data
     },
     enabled: !!quoteId, // Only fetch if quoteId exists

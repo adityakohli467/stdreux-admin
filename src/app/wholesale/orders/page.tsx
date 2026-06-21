@@ -112,7 +112,6 @@ export default function WholesaleOrdersPage() {
       if (maxAmount) params.max_amount = maxAmount
 
       const response = await ordersAPI.listWholesale(params)
-      console.log("Wholesale orders fetched:", response.data)
       return response.data
     },
     refetchOnWindowFocus: true,

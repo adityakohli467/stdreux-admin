@@ -102,7 +102,6 @@ export default function WholesaleCustomersPage() {
       if (searchQuery) params.search = searchQuery
       
       const response = await customersAPI.listWholesale(params)
-      console.log("Wholesale customers fetched:", response.data)
       return response.data
     },
     refetchOnWindowFocus: true,

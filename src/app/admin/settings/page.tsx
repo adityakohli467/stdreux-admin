@@ -36,7 +36,6 @@ export default function SettingsPage() {
     queryFn: async () => {
       try {
         const response = await settingsAPI.get()
-        console.log('Settings fetched:', response.data)
 
         // Normalize response: if data has 'settings' key, use it; otherwise treat data as settings
         if (response.data && typeof response.data === 'object' && 'settings' in response.data) {

@@ -87,9 +87,7 @@ export default function EditQuotePage() {
       if (!quoteId || !isValidQuoteId) {
         throw new Error('Invalid quote ID')
       }
-      console.log('Fetching quote:', quoteId)
       const response = await api.get(`/admin/quotes/${quoteId}`)
-      console.log('Quote fetched:', response.data.quote)
       return response.data.quote
     },
     enabled: !!isValidQuoteId, // Only fetch if quoteId exists and is valid
@@ -102,7 +100,6 @@ export default function EditQuotePage() {
 
   // Reset data loaded state when quoteId changes
   useEffect(() => {
-    console.log('QuoteId changed:', quoteId)
     setIsDataLoaded(false)
     setQuoteData({ products: [] })
     // Start at step 2 (products) by default, or use step from URL query param
@@ -113,7 +110,6 @@ export default function EditQuotePage() {
   // Handle quote data loading with improved error handling
   useEffect(() => {
     if (existingQuote && !isDataLoaded) {
-      console.log('Processing quote data:', existingQuote)
       // Use a longer delay to ensure all data is ready and avoid race conditions
       const timer = setTimeout(() => {
         try {
@@ -186,8 +182,6 @@ export default function EditQuotePage() {
             delivery_method: quote.delivery_method || 'pickup',
           }
           
-          console.log('Setting quote data:', mappedQuoteData)
-          console.log('Delivery fields being set:', {
             delivery_date_time: mappedQuoteData.delivery_date_time,
             delivery_address: mappedQuoteData.delivery_address,
             delivery_method: mappedQuoteData.delivery_method,
@@ -198,7 +192,6 @@ export default function EditQuotePage() {
           })
           setQuoteData(mappedQuoteData)
           setIsDataLoaded(true)
-          console.log('Quote data loaded successfully')
         } catch (err) {
           console.error('Error processing quote data:', err)
           toast.error('Failed to process quote data')
@@ -321,8 +314,6 @@ export default function EditQuotePage() {
         }
       }
 
-      console.log("Updating quote:", quoteData)
-      console.log("Coupon data in update:", {
         coupon_code: quoteData.coupon_code,
         coupon_type: quoteData.coupon_type,
         coupon_discount: quoteData.coupon_discount

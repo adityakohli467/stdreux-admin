@@ -192,7 +192,6 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
           const hours = dateObj.getHours().toString().padStart(2, '0')
           const minutes = dateObj.getMinutes().toString().padStart(2, '0')
           const time = `${hours}:${minutes}`
-          console.log('Parsed ISO dateTime:', dateTime, 'to date:', date, 'time:', time)
           return { date, time }
         }
       }
@@ -247,7 +246,6 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
     queryKey: ['coupons-active'],
     queryFn: async () => {
       const response = await api.get('/admin/coupons?status=1&limit=100')
-      console.log("Coupons response:", response.data)
       return response.data
     }
   })
@@ -384,7 +382,6 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
     // Skip if we're in the middle of an update
     if (isUpdatingRef.current) return
 
-    console.log('DeliveryStep useEffect triggered - data:', {
       delivery_date_time: data.delivery_date_time,
       delivery_date: data.delivery_date,
       delivery_time: data.delivery_time,
@@ -395,12 +392,9 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
     // Always prioritize delivery_date_time if available
     if (data.delivery_date_time) {
       const parsed = parseDeliveryDateTime(data.delivery_date_time)
-      console.log('Parsed delivery_date_time:', parsed, 'from:', data.delivery_date_time)
       // Always set date and time from parsed result (even if empty strings)
-      console.log('Setting deliveryDate to:', parsed.date)
       setDeliveryDate(parsed.date || "")
       if (parsed.time) {
-        console.log('Setting deliveryTime to:', parsed.time)
         setDeliveryTime(parsed.time)
       } else {
         // If no time in delivery_date_time, clear time field
@@ -409,11 +403,9 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
     } else {
       // Fallback to separate date/time fields if delivery_date_time is not available
       if (data.delivery_date !== undefined) {
-        console.log('Setting deliveryDate from delivery_date:', data.delivery_date)
         setDeliveryDate(data.delivery_date || "")
       }
       if (data.delivery_time !== undefined) {
-        console.log('Setting deliveryTime from delivery_time:', data.delivery_time)
         setDeliveryTime(data.delivery_time || "")
       }
     }
@@ -437,12 +429,10 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
     }
 
     // Log current deliveryDate state for debugging
-    console.log('Current deliveryDate state after useEffect:', deliveryDate)
   }, [data, data.delivery_date_time, data.delivery_date, data.delivery_time])
 
   // Log deliveryDate whenever it changes
   useEffect(() => {
-    console.log('deliveryDate state changed to:', deliveryDate)
   }, [deliveryDate])
 
   const calculateSubtotal = () => {
@@ -590,7 +580,6 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
       updateData.coupon_discount = undefined
     }
 
-    console.log("DeliveryStep - Saving quote with coupon data:", {
       appliedCoupon,
       coupon_code: updateData.coupon_code,
       coupon_type: updateData.coupon_type,

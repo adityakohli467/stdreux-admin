@@ -238,8 +238,6 @@ export default function NewOrderPage() {
         }))
       }
 
-      console.log("Saving order:", orderPayload)
-      console.log("Coupon data:", {
         coupon_code: orderPayload.coupon_code,
         coupon_type: dataToUse.coupon_type,
         coupon_discount: dataToUse.coupon_discount
@@ -252,8 +250,6 @@ export default function NewOrderPage() {
         if (sendToEmail) {
           try {
             const orderId = response.data.id || response.data.order_id || response.data.order?.order_id;
-            console.log("Order creation response:", JSON.stringify(response.data));
-            console.log("Order ID:", orderId, "| Recipient:", sendToEmail);
 
             if (orderId) {
               const emailResponse = await ordersAPI.sendEmail(orderId, {

@@ -57,7 +57,6 @@ export default function FeedbacksPage() {
         params.append("offset", "0")
         
         const response = await api.get(`/admin/feedbacks?${params}`)
-        console.log("Feedbacks API response:", response.data)
         return response.data
       } catch (error: any) {
         console.error("Error fetching feedbacks:", error)
