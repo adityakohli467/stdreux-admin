@@ -1314,13 +1314,11 @@ export default function OrdersPage() {
                         )}
                       </td>
                       <td className="px-4 py-4">
-                        {(order.payment_link_sent === true || order.payment_link_sent === 'true' || String(order.payment_link_sent) === 'true') ? (
+                        {(order.payment_link_sent && order.payment_link_sent !== false && order.payment_link_sent !== 'false' && order.payment_link_sent !== 'f') ? (
                           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                             Sent
                           </span>
-                        ) : (
-                          <span className="text-gray-400">—</span>
-                        )}
+                        ) : null}
                       </td>
                       <td className="px-4 py-4">
                         {order.xero_synced ? (
