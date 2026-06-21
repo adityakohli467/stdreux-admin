@@ -417,7 +417,7 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
 
   // Fetch products with customer-based pricing
   const { data: productsData, isLoading: loadingProducts } = useQuery({
-    queryKey: ['products-for-quote', searchQuery, selectedCategory, data.customer_id],
+    queryKey: ['products-for-quote', searchQuery, selectedCategory, data.customer_id, data.company_id],
     queryFn: async () => {
       const params = new URLSearchParams()
       params.append('status', '1') // Only active products
@@ -427,6 +427,11 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
       // Include customer_id to get customer-specific pricing (retail vs wholesale)
       if (data.customer_id) {
         params.append('customer_id', data.customer_id.toString())
+      }
+
+      // Include company_id to apply company-level pricing (overrides customer pricing)
+      if (data.company_id) {
+        params.append('company_id', data.company_id.toString())
       }
 
       // Filter by category_id if a specific category is selected

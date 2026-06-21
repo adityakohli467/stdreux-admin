@@ -179,6 +179,8 @@ export const companiesAPI = {
   createDepartment: (data: any) => api.post("/admin/companies/departments", data),
   updateDepartment: (id: number, data: any) => api.put(`/admin/companies/departments/${id}`, data),
   deleteDepartment: (id: number) => api.delete(`/admin/companies/departments/${id}`),
+  getProductOptionDiscounts: (id: number) => api.get(`/admin/companies/${id}/product-option-discounts`),
+  setProductOptionDiscounts: (id: number, discounts: any[]) => api.post(`/admin/companies/${id}/product-option-discounts`, { discounts }),
 }
 
 export const invoicesAPI = {

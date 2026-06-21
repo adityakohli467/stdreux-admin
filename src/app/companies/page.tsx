@@ -1,18 +1,19 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { companiesAPI } from "@/lib/api"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { ValidatedInput } from "@/components/ui/validated-input"
 import { ValidatedTextarea } from "@/components/ui/validated-textarea"
 import { ValidationRules } from "@/lib/validation"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Search, Printer, Plus, Edit, Trash2, Loader2, AlertTriangle } from "lucide-react"
+import { Search, Printer, Plus, Edit, Trash2, Loader2, AlertTriangle, DollarSign } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
 import { validateRequired, validateAustralianPhone, validateABN } from "@/lib/validations"
@@ -25,6 +26,7 @@ interface Company {
   company_phone: string
   company_address: string
   company_abn?: string
+  pay_later?: boolean
 }
 
 // Phone formatting function from PHP
@@ -64,6 +66,7 @@ export default function CompaniesPage() {
   const [showAddModal, setShowAddModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showDiscountModal, setShowDiscountModal] = useState(false)
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
   const [companyToDelete, setCompanyToDelete] = useState<{ id: number, name: string } | null>(null)
   const [isClosingModal, setIsClosingModal] = useState(false)
@@ -73,6 +76,7 @@ export default function CompaniesPage() {
   const [abn, setAbn] = useState("")
   const [phone, setPhone] = useState("")
   const [address, setAddress] = useState("")
+  const [payLater, setPayLater] = useState(false)
 
   // Fetch companies from API
   const { data: companiesData, isPending, error } = useQuery({
@@ -162,7 +166,13 @@ export default function CompaniesPage() {
     setAbn(company.company_abn || "")
     setPhone(company.company_phone)
     setAddress(company.company_address || "")
+    setPayLater(company.pay_later === true)
     setShowEditModal(true)
+  }
+
+  const handleManageDiscounts = (company: Company) => {
+    setSelectedCompany(company)
+    setShowDiscountModal(true)
   }
 
   // Validation errors state
@@ -225,7 +235,8 @@ export default function CompaniesPage() {
       company_abn: abn.trim() || null,
       company_phone: cleanPhoneNumber(phone), // Clean and format before saving
       company_address: address.trim() || null,
-      company_status: 1
+      company_status: 1,
+      pay_later: payLater
     })
   }
 
@@ -240,6 +251,7 @@ export default function CompaniesPage() {
         company_abn: abn.trim() || null,
         company_phone: cleanPhoneNumber(phone), // Clean and format before saving
         company_address: address.trim() || null,
+        pay_later: payLater,
       }
     })
   }
@@ -266,6 +278,7 @@ export default function CompaniesPage() {
     setAbn("")
     setPhone("")
     setAddress("")
+    setPayLater(false)
     setSelectedCompany(null)
     setErrors({}) // Clear all validation errors
   }
@@ -417,6 +430,13 @@ export default function CompaniesPage() {
                     </td>
                     <td className="px-3 sm:px-6 py-3 sm:py-4">
                       <div className="flex items-center gap-1 sm:gap-2">
+                        <button 
+                          onClick={() => handleManageDiscounts(company)}
+                          className="p-2 text-[#198754] hover:bg-[#d1e7dd] rounded-md transition-colors" 
+                          title="Company Pricing"
+                        >
+                          <DollarSign className="h-[18px] w-[18px]" />
+                        </button>
                         <button 
                           onClick={() => handleEditCompany(company)}
                           className="p-2 text-[#0d6efd] hover:bg-[#e7f1ff] rounded-md transition-colors" 
@@ -602,6 +622,19 @@ export default function CompaniesPage() {
               className="border-gray-300 resize-none"
             />
 
+            {/* Pay Later */}
+            <div className="flex items-center justify-between rounded-lg border border-gray-200 p-3">
+              <div>
+                <Label htmlFor="add-pay-later" className="text-sm font-medium text-gray-700">
+                  Enable Pay Later
+                </Label>
+                <p className="text-xs text-gray-500">
+                  Any customer from this company can checkout without paying.
+                </p>
+              </div>
+              <Switch id="add-pay-later" checked={payLater} onCheckedChange={setPayLater} />
+            </div>
+
             {/* Action Buttons */}
             <div className="flex gap-3 pt-4">
               <Button
@@ -730,6 +763,19 @@ export default function CompaniesPage() {
               />
             </div>
 
+            {/* Pay Later */}
+            <div className="flex items-center justify-between rounded-lg border border-gray-200 p-3">
+              <div>
+                <Label htmlFor="edit-pay-later" className="text-sm font-medium text-gray-700">
+                  Enable Pay Later
+                </Label>
+                <p className="text-xs text-gray-500">
+                  Any customer from this company can checkout without paying.
+                </p>
+              </div>
+              <Switch id="edit-pay-later" checked={payLater} onCheckedChange={setPayLater} />
+            </div>
+
             {/* Action Buttons */}
             <div className="flex gap-3 pt-4">
               <Button
@@ -764,9 +810,34 @@ export default function CompaniesPage() {
         </DialogContent>
       </Dialog>
 
+      {/* Company Pricing (Discounts) Modal */}
+      <Dialog open={showDiscountModal} onOpenChange={(open) => {
+        setShowDiscountModal(open)
+        if (!open) setSelectedCompany(null)
+      }}>
+        <DialogContent className="w-[95vw] sm:w-full max-w-5xl max-h-[90vh] overflow-y-auto mx-4 sm:mx-auto" style={{ fontFamily: 'Albert Sans' }}>
+          <DialogHeader>
+            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-green-100 mx-auto mb-4">
+              <DollarSign className="h-6 w-6 text-[#198754]" />
+            </div>
+            <DialogTitle className="text-center text-xl font-semibold">
+              Company Pricing{selectedCompany ? ` — ${selectedCompany.company_name}` : ''}
+            </DialogTitle>
+          </DialogHeader>
+          {selectedCompany && (
+            <CompanyProductOptionDiscountsContent
+              companyId={selectedCompany.company_id}
+              onClose={() => {
+                setShowDiscountModal(false)
+                setSelectedCompany(null)
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
+
       {/* Delete Confirmation Modal */}
-      <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
-        <DialogContent className="w-[95vw] sm:w-full max-w-md max-h-[90vh] overflow-y-auto mx-4 sm:mx-auto" style={{ fontFamily: 'Albert Sans' }}>
+      <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>        <DialogContent className="w-[95vw] sm:w-full max-w-md max-h-[90vh] overflow-y-auto mx-4 sm:mx-auto" style={{ fontFamily: 'Albert Sans' }}>
           <DialogHeader>
             <div className="flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mx-auto mb-4">
               <AlertTriangle className="h-8 w-8 text-[#dc3545]" />
@@ -817,6 +888,307 @@ export default function CompaniesPage() {
           </div>
         </DialogContent>
       </Dialog>
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Company-level pricing editor (mirrors the customer-level discount editor)
+// ---------------------------------------------------------------------------
+
+interface CompanyProductOptionDiscountsContentProps {
+  companyId?: number
+  onClose: () => void
+}
+
+interface CompanyProductOption {
+  product_option_id: number
+  option_value_id: number
+  option_value_name: string
+  option_base_price?: number
+  option_price: number
+  option_price_prefix: string
+  discount_percentage: number
+  company_product_option_discount_id?: number
+}
+
+interface CompanyProductWithOptions {
+  product_id: number
+  product_name: string
+  options?: CompanyProductOption[]
+  has_options?: boolean
+  product_price?: number
+  discount_percentage?: number
+  company_product_discount_id?: number
+}
+
+function CompanyProductOptionDiscountsContent({
+  companyId,
+  onClose,
+}: CompanyProductOptionDiscountsContentProps) {
+  const queryClient = useQueryClient()
+  const [localDiscounts, setLocalDiscounts] = useState<Record<string, number>>({})
+  const [isSaving, setIsSaving] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
+
+  const { data: discountsData, isLoading, error } = useQuery({
+    queryKey: ["company-product-option-discounts", companyId],
+    queryFn: async () => {
+      if (!companyId) return null
+      const response = await companiesAPI.getProductOptionDiscounts(companyId)
+      return response.data
+    },
+    enabled: !!companyId,
+    retry: false,
+    refetchOnWindowFocus: false,
+    staleTime: 0,
+  })
+
+  useEffect(() => {
+    if (discountsData?.products) {
+      const initialDiscounts: Record<string, number> = {}
+      discountsData.products.forEach((product: CompanyProductWithOptions) => {
+        if (product.has_options && product.options && product.options.length > 0) {
+          product.options.forEach((option: CompanyProductOption) => {
+            const key = `${product.product_id}_${option.option_value_id}`
+            initialDiscounts[key] = option.discount_percentage || 0
+          })
+        } else {
+          const key = `product_${product.product_id}`
+          initialDiscounts[key] = product.discount_percentage || 0
+        }
+      })
+      setLocalDiscounts(initialDiscounts)
+    }
+  }, [discountsData])
+
+  const saveMutation = useMutation({
+    mutationFn: async (discountsToSave: Record<string, number>) => {
+      if (!companyId) return
+      const discountsArray = Object.entries(discountsToSave)
+        .filter(([_, value]) => value > 0)
+        .map(([key, value]) => {
+          if (key.startsWith("product_")) {
+            const product_id = parseInt(key.replace("product_", ""))
+            return {
+              product_id,
+              option_value_id: null,
+              discount_percentage: parseFloat(value.toString()),
+            }
+          }
+          const [product_id, option_value_id] = key.split("_").map(Number)
+          return {
+            product_id,
+            option_value_id,
+            discount_percentage: parseFloat(value.toString()),
+          }
+        })
+      return await companiesAPI.setProductOptionDiscounts(companyId, discountsArray)
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["company-product-option-discounts", companyId] })
+      await queryClient.refetchQueries({ queryKey: ["company-product-option-discounts", companyId] })
+      toast.success("Company pricing saved successfully")
+      setIsSaving(false)
+    },
+    onError: (err: any) => {
+      console.error("Save company discounts error:", err)
+      toast.error(err.response?.data?.message || "Failed to save company pricing")
+      setIsSaving(false)
+    },
+  })
+
+  const handleDiscountChange = (productId: number, optionValueId: number | null, value: string) => {
+    const key = optionValueId !== null ? `${productId}_${optionValueId}` : `product_${productId}`
+    const numValue = parseFloat(value) || 0
+    const clampedValue = Math.max(0, Math.min(100, numValue))
+    setLocalDiscounts((prev) => ({ ...prev, [key]: clampedValue }))
+  }
+
+  const handleSave = () => {
+    setIsSaving(true)
+    saveMutation.mutate(localDiscounts)
+  }
+
+  const filteredProducts = useMemo(() => {
+    if (!discountsData?.products) return []
+    const query = searchQuery.toLowerCase()
+    return discountsData.products.filter((product: CompanyProductWithOptions) => {
+      if (product.product_name.toLowerCase().includes(query)) return true
+      if (product.has_options && product.options) {
+        return product.options.some((option: CompanyProductOption) =>
+          option.option_value_name.toLowerCase().includes(query)
+        )
+      }
+      return false
+    })
+  }, [discountsData, searchQuery])
+
+  if (!companyId) {
+    return <div className="text-center py-8 text-gray-500">No company selected</div>
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+        <span className="ml-3 text-gray-600">Loading products and pricing...</span>
+      </div>
+    )
+  }
+
+  if (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred"
+    return (
+      <div className="text-center py-8">
+        <p className="text-red-600 mb-2 font-semibold">Error loading company pricing</p>
+        <p className="text-sm text-gray-600 mb-4">{errorMessage}</p>
+        <Button onClick={onClose} variant="outline">Close</Button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="mt-4">
+      <div className="mb-4 flex items-center justify-between gap-4">
+        <Input
+          placeholder="Search products or options..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full"
+        />
+        <div className="text-sm text-gray-600 whitespace-nowrap">
+          {searchQuery ? (
+            <span>
+              Showing <span className="font-semibold">{filteredProducts.length}</span> of{" "}
+              <span className="font-semibold">{discountsData?.products?.length || 0}</span> products
+            </span>
+          ) : (
+            <span>
+              Total: <span className="font-semibold">{discountsData?.products?.length || 0}</span> products
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div className="space-y-4 max-h-[70vh] overflow-y-auto">
+        {filteredProducts.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            {searchQuery ? "No products found matching your search" : "No products available"}
+          </div>
+        ) : (
+          filteredProducts.map((product: CompanyProductWithOptions) => {
+            const hasOptions = product.has_options && product.options && product.options.length > 0
+            return (
+              <Card key={product.product_id} className="p-4">
+                <h3 className="font-semibold text-lg mb-3 text-gray-900">{product.product_name}</h3>
+                {hasOptions ? (
+                  <div className="space-y-3">
+                    {product.options!.map((option: CompanyProductOption) => {
+                      const key = `${product.product_id}_${option.option_value_id}`
+                      const discountValue = localDiscounts[key] || 0
+                      const basePrice = option.option_base_price || option.option_price
+                      const finalPrice = discountValue > 0 ? basePrice * (1 - discountValue / 100) : basePrice
+                      return (
+                        <div key={option.option_value_id} className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
+                          <div className="flex-1">
+                            <div className="font-medium text-gray-900">{option.option_value_name}</div>
+                            <div className="text-sm text-gray-600">
+                              {discountValue > 0 ? (
+                                <>
+                                  <span className="line-through text-gray-500">
+                                    Price: {option.option_price_prefix}${basePrice.toFixed(2)}
+                                  </span>
+                                  <span className="ml-2 text-green-600 font-semibold">
+                                    → {option.option_price_prefix}${finalPrice.toFixed(2)} ({discountValue}% off)
+                                  </span>
+                                </>
+                              ) : (
+                                <span>Price: {option.option_price_prefix}${basePrice.toFixed(2)}</span>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Input
+                              type="number"
+                              min="0"
+                              max="100"
+                              step="0.01"
+                              value={discountValue}
+                              onChange={(e) => handleDiscountChange(product.product_id, option.option_value_id, e.target.value)}
+                              className="w-24 text-right"
+                              placeholder="0"
+                            />
+                            <span className="text-sm text-gray-600 w-8">%</span>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
+                    <div className="flex-1">
+                      <div className="font-medium text-gray-900">Product Price</div>
+                      <div className="text-sm text-gray-600">
+                        {(() => {
+                          const key = `product_${product.product_id}`
+                          const discountValue = localDiscounts[key] || 0
+                          const basePrice = product.product_price || 0
+                          const finalPrice = discountValue > 0 ? basePrice * (1 - discountValue / 100) : basePrice
+                          return discountValue > 0 ? (
+                            <>
+                              <span className="line-through text-gray-500">Price: ${basePrice.toFixed(2)}</span>
+                              <span className="ml-2 text-green-600 font-semibold">
+                                → ${finalPrice.toFixed(2)} ({discountValue}% off)
+                              </span>
+                            </>
+                          ) : (
+                            <span>Price: ${basePrice.toFixed(2)}</span>
+                          )
+                        })()}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="number"
+                        min="0"
+                        max="100"
+                        step="0.01"
+                        value={localDiscounts[`product_${product.product_id}`] || 0}
+                        onChange={(e) => handleDiscountChange(product.product_id, null, e.target.value)}
+                        className="w-24 text-right"
+                        placeholder="0"
+                      />
+                      <span className="text-sm text-gray-600 w-8">%</span>
+                    </div>
+                  </div>
+                )}
+              </Card>
+            )
+          })
+        )}
+      </div>
+
+      <div className="flex gap-3 mt-6 pt-4 border-t">
+        <Button onClick={onClose} variant="outline" className="flex-1 border-gray-300" style={{ fontFamily: "Albert Sans", fontWeight: 600 }}>
+          Cancel
+        </Button>
+        <Button
+          onClick={handleSave}
+          disabled={isSaving || saveMutation.isPending}
+          className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+          style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
+        >
+          {isSaving || saveMutation.isPending ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin mr-2" />
+              Saving...
+            </>
+          ) : (
+            "Save Company Pricing"
+          )}
+        </Button>
+      </div>
     </div>
   )
 }
