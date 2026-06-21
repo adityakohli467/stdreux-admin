@@ -135,6 +135,7 @@ export const customersAPI = {
   delete: (id: number) => api.delete(`/admin/customers/${id}`),
   approve: (id: number) => api.post(`/admin/customers/${id}/approve`),
   reject: (id: number) => api.post(`/admin/customers/${id}/reject`),
+  mapCompany: (id: number, data: { company_id?: number; approve_new?: boolean }) => api.post(`/admin/customers/${id}/map-company`, data),
   getProductOptionDiscounts: (id: number) => api.get(`/admin/customers/${id}/product-option-discounts`),
   setProductOptionDiscounts: (id: number, discounts: any[]) => api.post(`/admin/customers/${id}/product-option-discounts`, { discounts }),
 }

@@ -118,6 +118,8 @@ function CustomersContent() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDiscountModal, setShowDiscountModal] = useState(false);
+  const [mapCompanyCustomer, setMapCompanyCustomer] = useState<any>(null);
+  const [mappingCompany, setMappingCompany] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
     null
   );
@@ -831,8 +833,8 @@ function CustomersContent() {
                               </span>
                             )}
                           {activeTab === "Pending Approval" && (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
-                              Pending
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${customer.has_similar_company ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                              {customer.has_similar_company ? 'Similar Company Found' : 'Pending'}
                             </span>
                           )}
                         </div>
@@ -913,6 +915,15 @@ function CustomersContent() {
                         <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
                           {activeTab === "Pending Approval" ? (
                             <>
+                              {customer.has_similar_company && (
+                                <button
+                                  onClick={() => setMapCompanyCustomer(customer)}
+                                  className="px-2 py-1 text-xs font-medium text-white bg-red-600 hover:bg-red-700 rounded transition-colors"
+                                  title="Map Company"
+                                >
+                                  Map Company
+                                </button>
+                              )}
                               <button
                                 onClick={() =>
                                   approveCustomerMutation.mutate(
@@ -2311,6 +2322,80 @@ function ProductOptionDiscountsContent({
         </Button>
       </div>
     </div>
+
+    {/* Map Company Modal */}
+    <Dialog open={!!mapCompanyCustomer} onOpenChange={(open) => { if (!open) setMapCompanyCustomer(null) }}>
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+            Map Company - {mapCompanyCustomer?.firstname} {mapCompanyCustomer?.lastname}
+          </DialogTitle>
+        </DialogHeader>
+        {mapCompanyCustomer && (
+          <div className="space-y-4">
+            <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <p className="text-sm font-medium text-yellow-800">Company submitted by customer:</p>
+              <p className="text-base font-semibold text-yellow-900 mt-1">{mapCompanyCustomer.company_name}</p>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-700 mb-2">Similar existing companies found:</p>
+              <div className="space-y-2 max-h-48 overflow-y-auto">
+                {mapCompanyCustomer.similar_companies?.map((company: any) => (
+                  <div
+                    key={company.company_id}
+                    className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors"
+                  >
+                    <span className="text-sm font-medium">{company.company_name}</span>
+                    <Button
+                      size="sm"
+                      disabled={mappingCompany}
+                      onClick={async () => {
+                        setMappingCompany(true);
+                        try {
+                          await customersAPI.mapCompany(mapCompanyCustomer.customer_id, { company_id: company.company_id });
+                          toast.success(`Mapped to "${company.company_name}"`);
+                          setMapCompanyCustomer(null);
+                          queryClient.invalidateQueries({ queryKey: ['customers'] });
+                        } catch (err: any) {
+                          toast.error(err.response?.data?.message || 'Failed to map company');
+                        } finally {
+                          setMappingCompany(false);
+                        }
+                      }}
+                      className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white text-xs"
+                    >
+                      Map to this
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="border-t pt-4">
+              <Button
+                variant="outline"
+                disabled={mappingCompany}
+                onClick={async () => {
+                  setMappingCompany(true);
+                  try {
+                    await customersAPI.mapCompany(mapCompanyCustomer.customer_id, { approve_new: true });
+                    toast.success(`Approved "${mapCompanyCustomer.company_name}" as new company`);
+                    setMapCompanyCustomer(null);
+                    queryClient.invalidateQueries({ queryKey: ['customers'] });
+                  } catch (err: any) {
+                    toast.error(err.response?.data?.message || 'Failed to approve company');
+                  } finally {
+                    setMappingCompany(false);
+                  }
+                }}
+                className="w-full border-green-300 text-green-700 hover:bg-green-50"
+              >
+                Approve &quot;{mapCompanyCustomer.company_name}&quot; as New Company
+              </Button>
+            </div>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }
 
