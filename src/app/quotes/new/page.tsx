@@ -170,11 +170,6 @@ export default function NewQuotePage() {
       }
 
       // API call to save quote
-        coupon_code: quotePayload.coupon_code,
-        coupon_type: quotePayload.coupon_type,
-        coupon_discount: quotePayload.coupon_discount
-      })
-
       const response = await api.post("/admin/quotes", quotePayload)
 
       if (response.data) {

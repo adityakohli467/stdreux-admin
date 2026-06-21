@@ -173,14 +173,6 @@ export default function EditOrderPage() {
             delivery_method: order.delivery_method || 'pickup',
           }
 
-            delivery_date_time: mappedOrderData.delivery_date_time,
-            delivery_address: mappedOrderData.delivery_address,
-            delivery_method: mappedOrderData.delivery_method,
-            delivery_contact: mappedOrderData.delivery_contact,
-            delivery_details: mappedOrderData.delivery_details,
-            account_email: mappedOrderData.account_email,
-            cost_center: mappedOrderData.cost_center,
-          })
           setOrderData(mappedOrderData)
           setIsDataLoaded(true)
         } catch (err) {

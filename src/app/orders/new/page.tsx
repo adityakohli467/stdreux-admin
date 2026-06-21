@@ -235,13 +235,7 @@ export default function NewOrderPage() {
             product_option_id: addon.product_option_id,
             option_value_id: addon.option_value_id
           }))
-        }))
-      }
-
-        coupon_code: orderPayload.coupon_code,
-        coupon_type: dataToUse.coupon_type,
-        coupon_discount: dataToUse.coupon_discount
-      })
+        }))n      }
 
       const response = await ordersAPI.create(orderPayload)
 

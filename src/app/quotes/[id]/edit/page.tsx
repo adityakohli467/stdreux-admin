@@ -181,15 +181,7 @@ export default function EditQuotePage() {
             delivery_details: quote.delivery_details || '',
             delivery_method: quote.delivery_method || 'pickup',
           }
-          
-            delivery_date_time: mappedQuoteData.delivery_date_time,
-            delivery_address: mappedQuoteData.delivery_address,
-            delivery_method: mappedQuoteData.delivery_method,
-            delivery_contact: mappedQuoteData.delivery_contact,
-            delivery_details: mappedQuoteData.delivery_details,
-            account_email: mappedQuoteData.account_email,
-            cost_center: mappedQuoteData.cost_center,
-          })
+
           setQuoteData(mappedQuoteData)
           setIsDataLoaded(true)
         } catch (err) {
