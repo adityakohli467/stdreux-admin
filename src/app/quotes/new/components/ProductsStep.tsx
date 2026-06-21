@@ -184,7 +184,7 @@ function SortableCartItem({ item, index, onRemove, onQuantityChange, onAddOnQuan
             </button>
           </div>
           <div className="flex items-center justify-between mb-2">
-            {item.price > 0 && (
+            {(item.price > 0 || hasOptions) && (
               <div className="flex items-center gap-2 bg-gray-100 rounded-md">
                 <button
                   onClick={() => onQuantityChange(index, -1)}
@@ -252,8 +252,8 @@ function SortableCartItem({ item, index, onRemove, onQuantityChange, onAddOnQuan
                 )}
               </div>
             )}
-            {/* Show plain price (no edit) if product has options */}
-            {hasOptions && (
+            {/* Show plain price (no edit) if product has options and price > 0 */}
+            {hasOptions && item.price > 0 && (
               <span className="text-sm font-medium text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
                 ${item.price.toFixed(2)}
               </span>
