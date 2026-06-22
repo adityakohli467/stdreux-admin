@@ -279,7 +279,7 @@ export default function CompanyPricingPage() {
         body,
         margin: { left: marginX, right: marginX },
         styles: { fontSize: 9, cellPadding: 5, valign: "middle", lineColor: [200, 200, 200], lineWidth: 0.5 },
-        headStyles: { fillColor: [13, 26, 68], textColor: 255, fontStyle: "bold", halign: "center" },
+        headStyles: { fillColor: [13, 110, 253], textColor: 255, fontStyle: "bold", halign: "center" },
         columnStyles: {
           0: { halign: "center", cellWidth: 30 },
           6: { halign: "right" },
@@ -332,7 +332,7 @@ export default function CompanyPricingPage() {
             <Button
               onClick={handleSave}
               disabled={isSaving || saveMutation.isPending || isLoading}
-              className="bg-[#0D1A44] hover:bg-[#1a2d5c] text-white"
+              className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white"
               style={{ fontWeight: 600 }}
             >
               {isSaving || saveMutation.isPending ? (
@@ -378,7 +378,7 @@ export default function CompanyPricingPage() {
         {/* Content */}
         {isLoading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="h-8 w-8 animate-spin text-[#0D1A44]" />
+            <Loader2 className="h-8 w-8 animate-spin text-[#0d6efd]" />
             <span className="ml-3 text-gray-600">Loading products and pricing...</span>
           </div>
         ) : error ? (
@@ -400,16 +400,16 @@ export default function CompanyPricingPage() {
             <div className="overflow-x-auto">
               <table className="w-full border-collapse text-sm">
                 <thead>
-                  <tr className="bg-[#0D1A44] text-white">
-                    <th className="px-3 py-3 text-left font-semibold border border-[#26396b] w-12">No</th>
-                    <th className="px-3 py-3 text-left font-semibold border border-[#26396b]">Category</th>
-                    <th className="px-3 py-3 text-left font-semibold border border-[#26396b]">Sub category</th>
-                    <th className="px-3 py-3 text-left font-semibold border border-[#26396b]">Product code</th>
-                    <th className="px-3 py-3 text-left font-semibold border border-[#26396b]">Product Name</th>
-                    <th className="px-3 py-3 text-left font-semibold border border-[#26396b]">Product Option</th>
-                    <th className="px-3 py-3 text-right font-semibold border border-[#26396b]">Retail Price</th>
-                    <th className="px-3 py-3 text-center font-semibold border border-[#26396b]">Discount %</th>
-                    <th className="px-3 py-3 text-right font-semibold border border-[#26396b]">Total</th>
+                  <tr className="bg-[#0d6efd] text-white">
+                    <th className="px-3 py-3 text-left font-semibold border border-[#3b82f6] w-12">No</th>
+                    <th className="px-3 py-3 text-left font-semibold border border-[#3b82f6]">Category</th>
+                    <th className="px-3 py-3 text-left font-semibold border border-[#3b82f6]">Sub category</th>
+                    <th className="px-3 py-3 text-left font-semibold border border-[#3b82f6]">Product code</th>
+                    <th className="px-3 py-3 text-left font-semibold border border-[#3b82f6]">Product Name</th>
+                    <th className="px-3 py-3 text-left font-semibold border border-[#3b82f6]">Product Option</th>
+                    <th className="px-3 py-3 text-right font-semibold border border-[#3b82f6]">Retail Price</th>
+                    <th className="px-3 py-3 text-center font-semibold border border-[#3b82f6]">Discount %</th>
+                    <th className="px-3 py-3 text-right font-semibold border border-[#3b82f6]">Total</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -475,7 +475,7 @@ export default function CompanyPricingPage() {
                         </td>
                         <td className="px-3 py-3 text-right border border-gray-200 whitespace-nowrap">
                           {discount > 0 ? (
-                            <span className="font-semibold text-[#0D1A44]">${total.toFixed(2)}</span>
+                            <span className="font-semibold text-[#0d6efd]">${total.toFixed(2)}</span>
                           ) : (
                             <span className="text-gray-900">${total.toFixed(2)}</span>
                           )}
