@@ -59,6 +59,7 @@ interface ProductOption {
 interface Product {
   product_id: number;
   product_name: string;
+  product_code?: string;
   product_description: string;
   short_description?: string;
   product_price: number;
@@ -128,6 +129,7 @@ function ProductsPageInner() {
 
   // Form state
   const [productName, setProductName] = useState("");
+  const [productCode, setProductCode] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [shortDescription, setShortDescription] = useState("");
   const [roastLevel, setRoastLevel] = useState<string>("");
@@ -396,6 +398,7 @@ function ProductsPageInner() {
   const handleEditProduct = (product: Product) => {
     setSelectedProduct(product);
     setProductName(product.product_name);
+    setProductCode(product.product_code || "");
     setProductDescription(product.product_description || "");
     setShortDescription(product.short_description || "");
     setRoastLevel(product.roast_level || "");
@@ -573,6 +576,7 @@ function ProductsPageInner() {
     // Final product data for submission
     const finalProductData: any = {
       product_name: productName,
+      product_code: productCode || null,
       product_description: productDescription,
       short_description: shortDescription || null,
       roast_level: roastLevel || null,
@@ -991,6 +995,7 @@ function ProductsPageInner() {
 
   const resetForm = () => {
     setProductName("");
+    setProductCode("");
     setProductDescription("");
     setShortDescription("");
     setRoastLevel("");
@@ -1582,6 +1587,23 @@ function ProductsPageInner() {
                 }}
                 className="h-11 border-gray-300 bg-white"
               />
+
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-700">
+                  Product Code
+                  <span className="text-gray-400 text-xs font-normal ml-1">
+                    (Optional)
+                  </span>
+                </Label>
+                <Input
+                  type="text"
+                  placeholder="e.g., 12BN"
+                  value={productCode}
+                  onChange={(e) => setProductCode(e.target.value)}
+                  className="h-11 border-gray-300 bg-white"
+                  maxLength={100}
+                />
+              </div>
 
               <div className="space-y-2">
                 <Label className="text-sm font-medium text-gray-700">

@@ -15,6 +15,7 @@ import { ValidationRules } from "@/lib/validation"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Search, Printer, Plus, Edit, Trash2, Loader2, AlertTriangle, DollarSign } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { validateRequired, validateAustralianPhone, validateABN } from "@/lib/validations"
 import { formatAustralianPhone, cleanPhoneNumber, getPhonePlaceholder, getPhoneValidationError } from "@/lib/phone-mask"
@@ -61,12 +62,12 @@ const formatPhone = (phone: string): string => {
 
 export default function CompaniesPage() {
   const queryClient = useQueryClient()
+  const router = useRouter()
   const [searchQuery, setSearchQuery] = useState("")
   const [activeTab, setActiveTab] = useState("Companies")
   const [showAddModal, setShowAddModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [showDiscountModal, setShowDiscountModal] = useState(false)
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
   const [companyToDelete, setCompanyToDelete] = useState<{ id: number, name: string } | null>(null)
   const [isClosingModal, setIsClosingModal] = useState(false)
@@ -171,8 +172,7 @@ export default function CompaniesPage() {
   }
 
   const handleManageDiscounts = (company: Company) => {
-    setSelectedCompany(company)
-    setShowDiscountModal(true)
+    router.push(`/companies/${company.company_id}/pricing`)
   }
 
   // Validation errors state
@@ -807,32 +807,6 @@ export default function CompaniesPage() {
               </Button>
             </div>
       </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Company Pricing (Discounts) Modal */}
-      <Dialog open={showDiscountModal} onOpenChange={(open) => {
-        setShowDiscountModal(open)
-        if (!open) setSelectedCompany(null)
-      }}>
-        <DialogContent className="w-[95vw] sm:w-full max-w-5xl max-h-[90vh] overflow-y-auto mx-4 sm:mx-auto" style={{ fontFamily: 'Albert Sans' }}>
-          <DialogHeader>
-            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-green-100 mx-auto mb-4">
-              <DollarSign className="h-6 w-6 text-[#198754]" />
-            </div>
-            <DialogTitle className="text-center text-xl font-semibold">
-              Company Pricing{selectedCompany ? ` — ${selectedCompany.company_name}` : ''}
-            </DialogTitle>
-          </DialogHeader>
-          {selectedCompany && (
-            <CompanyProductOptionDiscountsContent
-              companyId={selectedCompany.company_id}
-              onClose={() => {
-                setShowDiscountModal(false)
-                setSelectedCompany(null)
-              }}
-            />
-          )}
         </DialogContent>
       </Dialog>
 
