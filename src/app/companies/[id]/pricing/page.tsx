@@ -279,7 +279,7 @@ export default function CompanyPricingPage() {
       // --- Company header -------------------------------------------------
       // Logo (top-center)
       let headerY = 20
-      const logoH = 42
+      const logoH = 28
       try {
         const logo = await loadImage("/assets/logo-stdreux.svg")
         const logoW = (logo.width / logo.height) * logoH
