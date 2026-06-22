@@ -375,17 +375,17 @@ export default function CompaniesPage() {
           <div className="inline-block min-w-full align-middle">
             <table className="w-full min-w-[600px]">
               <thead>
-                <tr className="bg-white border-b-2 border-[#105a9c]">
-                  <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-[#212529] whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600, lineHeight: '20px', letterSpacing: '0%' }}>
+                <tr className="bg-[#105a9c] border-b-2 border-[#0d4a82]">
+                  <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600, lineHeight: '20px', letterSpacing: '0%' }}>
                     Company Name
                   </th>
-                  <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-[#212529] whitespace-nowrap hidden md:table-cell" style={{ fontFamily: 'Albert Sans', fontWeight: 600, lineHeight: '20px', letterSpacing: '0%' }}>
+                  <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap hidden md:table-cell" style={{ fontFamily: 'Albert Sans', fontWeight: 600, lineHeight: '20px', letterSpacing: '0%' }}>
                     Address
                   </th>
-                  <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-[#212529] whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600, lineHeight: '20px', letterSpacing: '0%' }}>
+                  <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600, lineHeight: '20px', letterSpacing: '0%' }}>
                     Contact
                   </th>
-                  <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-[#212529] whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600, lineHeight: '20px', letterSpacing: '0%' }}>
+                  <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600, lineHeight: '20px', letterSpacing: '0%' }}>
                     Actions
                   </th>
                 </tr>
