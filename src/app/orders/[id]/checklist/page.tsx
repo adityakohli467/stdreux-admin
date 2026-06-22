@@ -195,7 +195,7 @@ export default function OrderChecklistPage({ params }: { params: { id: string } 
             Print
           </Button>
           <Button
-            className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white gap-2"
+            className="bg-[#105a9c] hover:bg-[#0d4a82] text-white gap-2"
             onClick={() => router.push(`/orders/${orderId}/edit`)}
             style={{ fontWeight: 600 }}
           >
@@ -350,7 +350,7 @@ export default function OrderChecklistPage({ params }: { params: { id: string } 
           <Button
             onClick={handleSave}
             disabled={saveChecklistMutation.isPending}
-            className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white px-12 py-3 text-base rounded-full"
+            className="bg-[#105a9c] hover:bg-[#0d4a82] text-white px-12 py-3 text-base rounded-full"
             style={{ fontWeight: 600 }}
           >
             {saveChecklistMutation.isPending ? "Saving..." : "Save Checklist"}

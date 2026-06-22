@@ -31,7 +31,7 @@ export default function GlobalError({
             <div className="flex gap-4 justify-center">
               <Button
                 onClick={reset}
-                className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white"
+                className="bg-[#105a9c] hover:bg-[#0d4a82] text-white"
                 style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
               >
                 Try again

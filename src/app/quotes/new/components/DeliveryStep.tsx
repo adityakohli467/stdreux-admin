@@ -684,7 +684,7 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
             {/* Customer Info */}
             <div className="mb-8">
               <h3 className="text-lg font-semibold text-gray-900 mb-4" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
-                Ordering for <span className="text-[#0d6efd]">{data.customer_name || "John Doe"}</span>
+                Ordering for <span className="text-[#105a9c]">{data.customer_name || "John Doe"}</span>
               </h3>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div className="flex items-center gap-2">
@@ -768,7 +768,7 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
                         setSelectedPickupLocation(0)
                         onUpdate({ delivery_method: newMethod, location_id: undefined })
                       }}
-                      className="w-4 h-4 text-[#0d6efd]"
+                      className="w-4 h-4 text-[#105a9c]"
                     />
                     <span className="text-sm text-gray-700" style={{ fontFamily: 'Albert Sans' }}>
                       Delivery
@@ -785,7 +785,7 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
                         setDeliveryMethod(newMethod)
                         onUpdate({ delivery_method: newMethod })
                       }}
-                      className="w-4 h-4 text-[#0d6efd]"
+                      className="w-4 h-4 text-[#105a9c]"
                     />
                     <span className="text-sm text-gray-700" style={{ fontFamily: 'Albert Sans' }}>
                       Pickup
@@ -811,7 +811,7 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
                         setDeliveryAddress(location.pickup_address || '')
                       }
                     }}
-                    className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d6efd] focus:border-transparent"
+                    className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#105a9c] focus:border-transparent"
                     style={{ fontFamily: 'Albert Sans' }}
                   >
                     <option value={0}>Select Pickup Location</option>
@@ -923,7 +923,7 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
                 {!appliedCoupon ? (
                   <Button
                     onClick={handleApplyCoupon}
-                    className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white px-6"
+                    className="bg-[#105a9c] hover:bg-[#0d4a82] text-white px-6"
                     style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
                   >
                     Apply
@@ -932,7 +932,7 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
                   <Button
                     onClick={handleRemoveCoupon}
                     variant="outline"
-                    className="text-[#0d6efd] border-[#0d6efd] px-6"
+                    className="text-[#105a9c] border-[#105a9c] px-6"
                     style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
                   >
                     Remove
@@ -949,7 +949,7 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
               )}
               <button
                 onClick={() => setShowCouponList(true)}
-                className="text-sm text-[#0d6efd] hover:underline flex items-center gap-1"
+                className="text-sm text-[#105a9c] hover:underline flex items-center gap-1"
                 style={{ fontFamily: 'Albert Sans' }}
               >
                 <Tag className="h-3 w-3" />
@@ -999,7 +999,7 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
               </div>
               <div className="flex justify-between text-lg font-semibold border-t pt-2">
                 <span className="text-gray-900" style={{ fontFamily: 'Albert Sans' }}>Total</span>
-                <span className="text-[#0d6efd]" style={{ fontFamily: 'Albert Sans' }}>${total.toFixed(2)}</span>
+                <span className="text-[#105a9c]" style={{ fontFamily: 'Albert Sans' }}>${total.toFixed(2)}</span>
               </div>
             </div>
 
@@ -1025,14 +1025,14 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
               <Button
                 onClick={handleSaveQuote}
                 variant="outline"
-                className="w-full border-[#0d6efd] text-[#0d6efd] hover:bg-[#0d6efd] hover:text-white"
+                className="w-full border-[#105a9c] text-[#105a9c] hover:bg-[#105a9c] hover:text-white"
                 style={{ fontFamily: 'Albert Sans', fontWeight: 600, height: '50px' }}
               >
                 💾 Save Quote
               </Button>
               <Button
                 onClick={handleSendToCustomer}
-                className="w-full bg-[#0d6efd] hover:bg-[#0b5ed7] text-white rounded-full"
+                className="w-full bg-[#105a9c] hover:bg-[#0d4a82] text-white rounded-full"
                 style={{ fontFamily: 'Albert Sans', fontWeight: 600, height: '50px' }}
               >
                 Send to Customer
@@ -1068,13 +1068,13 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
                   {activeCoupons.map((coupon: Coupon) => (
                     <div
                       key={coupon.coupon_id}
-                      className="border border-gray-200 rounded-lg p-4 hover:border-[#0d6efd] transition-colors cursor-pointer"
+                      className="border border-gray-200 rounded-lg p-4 hover:border-[#105a9c] transition-colors cursor-pointer"
                       onClick={() => handleSelectCoupon(coupon.coupon_id.toString())}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <Tag className="h-4 w-4 text-[#0d6efd]" />
+                            <Tag className="h-4 w-4 text-[#105a9c]" />
                             <span className="font-semibold text-gray-900" style={{ fontFamily: 'Albert Sans' }}>
                               {coupon.coupon_code}
                             </span>
@@ -1090,7 +1090,7 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
                             e.stopPropagation()
                             handleSelectCoupon(coupon.coupon_id.toString())
                           }}
-                          className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white text-xs px-3 py-1"
+                          className="bg-[#105a9c] hover:bg-[#0d4a82] text-white text-xs px-3 py-1"
                           style={{ fontFamily: 'Albert Sans' }}
                         >
                           Apply
@@ -1122,7 +1122,7 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
           <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
             <div className="text-center mb-6">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Mail className="h-8 w-8 text-[#0d6efd]" />
+                <Mail className="h-8 w-8 text-[#105a9c]" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2" style={{ fontFamily: 'Albert Sans' }}>
                 Send to Customer
@@ -1163,7 +1163,7 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
               </Button>
               <Button
                 onClick={handleConfirmSend}
-                className="flex-1 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white"
+                className="flex-1 bg-[#105a9c] hover:bg-[#0d4a82] text-white"
                 style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
               >
                 Yes, Send

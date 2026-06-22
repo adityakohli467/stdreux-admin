@@ -222,7 +222,7 @@ export default function SettingsPage() {
     sessionTimeout: 30,
     passwordExpiry: 90,
     theme: "light",
-    primaryColor: "#0d6efd",
+    primaryColor: "#105a9c",
     language: "en",
     maintenanceMode: false,
   }
@@ -237,7 +237,7 @@ export default function SettingsPage() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin text-[#0d6efd]" />
+          <Loader2 className="h-8 w-8 animate-spin text-[#105a9c]" />
           <p className="text-gray-600" style={{ fontFamily: 'Albert Sans' }}>Loading settings...</p>
         </div>
       </div>
@@ -278,7 +278,7 @@ export default function SettingsPage() {
                   psql -U your_user -d your_database -f migrations/create_settings_table.sql
                 </code>
               )}
-              <Button onClick={() => refetch()} className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white">
+              <Button onClick={() => refetch()} className="bg-[#105a9c] hover:bg-[#0d4a82] text-white">
                 Retry
               </Button>
             </div>
@@ -303,7 +303,7 @@ export default function SettingsPage() {
         <Button
           onClick={handleSave}
           disabled={!hasChanges || updateMutation.isPending}
-          className="bg-[#0d6efd] hover:bg-[#0b5ed7] gap-2"
+          className="bg-[#105a9c] hover:bg-[#0d4a82] gap-2"
           style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
         >
           {updateMutation.isPending ? (
@@ -595,14 +595,14 @@ export default function SettingsPage() {
                   <Input
                     id="primaryColor"
                     type="color"
-                    value={currentSettings.primaryColor || "#0d6efd"}
+                    value={currentSettings.primaryColor || "#105a9c"}
                     onChange={(e) => handleInputChange('primaryColor', e.target.value)}
                     className="w-16 h-10 p-1 border rounded"
                   />
                   <Input
-                    value={currentSettings.primaryColor || "#0d6efd"}
+                    value={currentSettings.primaryColor || "#105a9c"}
                     onChange={(e) => handleInputChange('primaryColor', e.target.value)}
-                    placeholder="#0d6efd"
+                    placeholder="#105a9c"
                     style={{ fontFamily: 'Albert Sans' }}
                   />
                 </div>

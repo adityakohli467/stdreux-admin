@@ -303,7 +303,7 @@ export default function ReportsPage() {
         <div className="flex items-center justify-end gap-3">
           <Button
             onClick={handleApplyFilters}
-            className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white shadow-sm transition-all hover:shadow-md"
+            className="bg-[#105a9c] hover:bg-[#0d4a82] text-white shadow-sm transition-all hover:shadow-md"
             style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
           >
             <Filter className="h-4 w-4 mr-2" />
@@ -333,7 +333,7 @@ export default function ReportsPage() {
                 handleApplyFilters()
               }
             }}
-            className="w-[488px] h-[54px] border border-gray-200 bg-white rounded-full focus:ring-2 focus:ring-[#0d6efd] focus:border-[#0d6efd] focus:outline-none"
+            className="w-[488px] h-[54px] border border-gray-200 bg-white rounded-full focus:ring-2 focus:ring-[#105a9c] focus:border-[#105a9c] focus:outline-none"
             style={{ fontFamily: 'Albert Sans', paddingLeft: '44px', paddingRight: '12px', paddingTop: '8px', paddingBottom: '8px' }}
           />
         </div>
@@ -366,14 +366,14 @@ export default function ReportsPage() {
             lineHeight: '20px',
             letterSpacing: '0%',
             textAlign: 'center',
-            color: '#0d6efd',
+            color: '#105a9c',
             backgroundColor: 'transparent',
             padding: 0,
             gap: '8px',
             opacity: 1
           }}
         >
-          <Printer className="h-5 w-5 text-[#0d6efd]" />
+          <Printer className="h-5 w-5 text-[#105a9c]" />
           Print
         </Button>
       </div>
@@ -388,39 +388,39 @@ export default function ReportsPage() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+              <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
+                <th className="px-4 py-3 text-left text-xs font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Order ID
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Order Date
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Type
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Customer
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Company
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Department
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Status
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Subtotal
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Delivery Fee
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Discount
                 </th>
 
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Total
                 </th>
               </tr>

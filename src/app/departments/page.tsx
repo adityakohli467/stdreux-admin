@@ -292,7 +292,7 @@ export default function DepartmentsPage() {
         </h1>
         <Button 
           onClick={handleAddDepartment}
-          className="no-print bg-[#0d6efd] hover:bg-[#0b5ed7] text-white whitespace-nowrap w-full sm:w-auto"
+          className="no-print bg-[#105a9c] hover:bg-[#0d4a82] text-white whitespace-nowrap w-full sm:w-auto"
           style={{ 
             fontWeight: 600,
             minWidth: '196px',
@@ -325,7 +325,7 @@ export default function DepartmentsPage() {
           <button
             className={`w-full sm:w-auto px-6 sm:px-10 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm lg:text-[15px] font-medium transition-all ${
               activeTab === "Departments"
-                ? "bg-[#e7f1ff] text-[#0d6efd] border-2 border-[#0d6efd]"
+                ? "bg-[#e7f1ff] text-[#105a9c] border-2 border-[#105a9c]"
                 : "bg-white text-[#6c757d] border-2 border-[#e9ecef] hover:border-[#dee2e6]"
             }`}
             style={{ fontFamily: 'Albert Sans', fontWeight: 500 }}
@@ -343,7 +343,7 @@ export default function DepartmentsPage() {
             placeholder="Search departments..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full sm:w-[488px] h-[54px] border border-gray-200 bg-white rounded-full focus:ring-2 focus:ring-[#0d6efd] focus:border-[#0d6efd] focus:outline-none"
+            className="w-full sm:w-[488px] h-[54px] border border-gray-200 bg-white rounded-full focus:ring-2 focus:ring-[#105a9c] focus:border-[#105a9c] focus:outline-none"
             style={{ fontFamily: 'Albert Sans', paddingLeft: '44px', paddingRight: '12px', paddingTop: '8px', paddingBottom: '8px' }}
           />
         </div>
@@ -358,14 +358,14 @@ export default function DepartmentsPage() {
             lineHeight: '20px',
             letterSpacing: '0%',
             textAlign: 'center',
-            color: '#0d6efd',
+            color: '#105a9c',
             backgroundColor: 'transparent',
             padding: 0,
             gap: '8px',
             opacity: 1
           }}
         >
-          <Printer className="h-5 w-5 text-[#0d6efd]" />
+          <Printer className="h-5 w-5 text-[#105a9c]" />
           Print
         </Button>
       </div>
@@ -376,7 +376,7 @@ export default function DepartmentsPage() {
           <div className="inline-block min-w-full align-middle">
             <table className="w-full min-w-[500px]">
               <thead>
-                <tr className="bg-white border-b-2 border-[#0d6efd]">
+                <tr className="bg-white border-b-2 border-[#105a9c]">
                   <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-[#212529] whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600, lineHeight: '20px', letterSpacing: '0%' }}>
                     Department Name
                   </th>
@@ -393,7 +393,7 @@ export default function DepartmentsPage() {
                 <tr>
                   <td colSpan={3} className="px-6 py-12 text-center">
                     <div className="flex items-center justify-center gap-2">
-                      <Loader2 className="h-5 w-5 animate-spin text-[#0d6efd]" />
+                      <Loader2 className="h-5 w-5 animate-spin text-[#105a9c]" />
                       <span className="text-[14px] text-[#6c757d]" style={{ fontFamily: 'Albert Sans' }}>
                         Loading departments...
                       </span>
@@ -425,7 +425,7 @@ export default function DepartmentsPage() {
                       <div className="flex items-center gap-1 sm:gap-2">
                         <button 
                           onClick={() => handleEditDepartment(department)}
-                          className="p-2 text-[#0d6efd] hover:bg-[#e7f1ff] rounded-md transition-colors" 
+                          className="p-2 text-[#105a9c] hover:bg-[#e7f1ff] rounded-md transition-colors" 
                           title="Edit"
                         >
                           <Edit className="h-[18px] w-[18px]" />
@@ -467,7 +467,7 @@ export default function DepartmentsPage() {
             </Button>
             <Button 
               size="sm" 
-              className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white px-4 h-9 rounded-md text-[14px] min-w-[40px]"
+              className="bg-[#105a9c] hover:bg-[#0d4a82] text-white px-4 h-9 rounded-md text-[14px] min-w-[40px]"
               style={{ fontFamily: 'Albert Sans', fontWeight: 500 }}
             >
               1
@@ -516,7 +516,7 @@ export default function DepartmentsPage() {
         >
           <DialogHeader>
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 mx-auto mb-4">
-              <Plus className="h-6 w-6 text-[#0d6efd]" />
+              <Plus className="h-6 w-6 text-[#105a9c]" />
             </div>
             <DialogTitle className="text-center text-xl font-semibold">
               Add Departments
@@ -545,7 +545,7 @@ export default function DepartmentsPage() {
                         setErrors({ ...errors, company_id: undefined })
                       }
                     }}
-                    className={`w-full h-11 rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d6efd] ${
+                    className={`w-full h-11 rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#105a9c] ${
                       errors.company_id ? 'border-red-500' : 'border-gray-300'
                     } bg-white`}
                     style={{ fontFamily: 'Albert Sans' }}
@@ -625,7 +625,7 @@ export default function DepartmentsPage() {
               <Button
                 onClick={handleSaveNewDepartment}
                 disabled={createDepartmentMutation.isPending || !selectedCompanyId || !departmentName}
-                className="flex-1 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white disabled:opacity-50"
+                className="flex-1 bg-[#105a9c] hover:bg-[#0d4a82] text-white disabled:opacity-50"
                 style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
               >
                 {createDepartmentMutation.isPending ? (
@@ -673,7 +673,7 @@ export default function DepartmentsPage() {
         >
           <DialogHeader>
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 mx-auto mb-4">
-              <Edit className="h-6 w-6 text-[#0d6efd]" />
+              <Edit className="h-6 w-6 text-[#105a9c]" />
             </div>
             <DialogTitle className="text-center text-xl font-semibold">
               Update Departments
@@ -702,7 +702,7 @@ export default function DepartmentsPage() {
                         setErrors({ ...errors, company_id: undefined })
                       }
                     }}
-                    className={`w-full h-11 rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d6efd] ${
+                    className={`w-full h-11 rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#105a9c] ${
                       errors.company_id ? 'border-red-500' : 'border-gray-300'
                     } bg-white`}
                     style={{ fontFamily: 'Albert Sans' }}
@@ -789,7 +789,7 @@ export default function DepartmentsPage() {
               <Button
                 onClick={handleUpdateDepartment}
                 disabled={updateDepartmentMutation.isPending}
-                className="flex-1 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white"
+                className="flex-1 bg-[#105a9c] hover:bg-[#0d4a82] text-white"
                 style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
               >
                 {updateDepartmentMutation.isPending ? (

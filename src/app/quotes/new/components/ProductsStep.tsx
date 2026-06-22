@@ -861,8 +861,8 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
                     setSearchQuery("") // Clear search when selecting all
                   }}
                   className={`px-3 py-1.5 text-xs rounded-md border transition-all ${selectedCategory === 0
-                    ? "bg-[#0d6efd] text-white border-[#0d6efd] shadow-sm"
-                    : "bg-white text-gray-700 border-gray-300 hover:border-[#0d6efd] hover:bg-gray-50"
+                    ? "bg-[#105a9c] text-white border-[#105a9c] shadow-sm"
+                    : "bg-white text-gray-700 border-gray-300 hover:border-[#105a9c] hover:bg-gray-50"
                     }`}
                   style={{ fontFamily: 'Albert Sans', fontWeight: 500 }}
                 >
@@ -876,8 +876,8 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
                       setSearchQuery("") // Clear search when selecting category
                     }}
                     className={`px-3 py-1.5 text-xs rounded-md border transition-all ${selectedCategory === category.category_id
-                      ? "bg-[#0d6efd] text-white border-[#0d6efd] shadow-sm"
-                      : "bg-white text-gray-700 border-gray-300 hover:border-[#0d6efd] hover:bg-gray-50"
+                      ? "bg-[#105a9c] text-white border-[#105a9c] shadow-sm"
+                      : "bg-white text-gray-700 border-gray-300 hover:border-[#105a9c] hover:bg-gray-50"
                       }`}
                     style={{ fontFamily: 'Albert Sans', fontWeight: 500 }}
                   >
@@ -1030,7 +1030,7 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
                           {product.options && product.options.length > 0 ? (
                             <button
                               onClick={() => handleExpandProduct(product)}
-                              className="text-[#0d6efd] hover:text-[#0b5ed7] text-sm font-medium flex items-center gap-1"
+                              className="text-[#105a9c] hover:text-[#0d4a82] text-sm font-medium flex items-center gap-1"
                               style={{ fontFamily: 'Albert Sans' }}
                             >
                               <ShoppingCart className="h-4 w-4" />
@@ -1039,7 +1039,7 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
                           ) : (
                             <button
                               onClick={() => handleAddToCart(product)}
-                              className="text-[#0d6efd] hover:text-[#0b5ed7] text-sm font-medium flex items-center gap-1"
+                              className="text-[#105a9c] hover:text-[#0d4a82] text-sm font-medium flex items-center gap-1"
                               style={{ fontFamily: 'Albert Sans' }}
                             >
                               <ShoppingCart className="h-4 w-4" />
@@ -1108,7 +1108,7 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
                               <div className="mt-4 flex justify-end">
                                 <button
                                   onClick={() => handleAddToCart(product)}
-                                  className="text-[#0d6efd] hover:text-[#0b5ed7] text-sm font-medium flex items-center gap-1"
+                                  className="text-[#105a9c] hover:text-[#0d4a82] text-sm font-medium flex items-center gap-1"
                                   style={{ fontFamily: 'Albert Sans' }}
                                 >
                                   <ShoppingCart className="h-4 w-4" />
@@ -1214,7 +1214,7 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
 
               <div className="flex justify-between text-lg font-semibold border-t pt-2 mt-2">
                 <span className="text-gray-900" style={{ fontFamily: 'Albert Sans' }}>Total</span>
-                <span className="text-[#0d6efd]" style={{ fontFamily: 'Albert Sans' }}>
+                <span className="text-[#105a9c]" style={{ fontFamily: 'Albert Sans' }}>
                   ${(calculateSubtotal() + Number(data.delivery_fee || 0)).toFixed(2)}
                 </span>
               </div>
@@ -1224,7 +1224,7 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
           <Button
             onClick={handleProceed}
             disabled={cart.length === 0}
-            className="w-full bg-[#0d6efd] hover:bg-[#0b5ed7] text-white rounded-full disabled:opacity-50"
+            className="w-full bg-[#105a9c] hover:bg-[#0d4a82] text-white rounded-full disabled:opacity-50"
             style={{
               fontFamily: 'Albert Sans',
               fontWeight: 600,

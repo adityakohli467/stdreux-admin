@@ -587,7 +587,7 @@ export default function DashboardPage() {
             onClick={() => handleUpdatePackagingStatus(order.order_id, 1)}
             disabled={printingOrderId === order.order_id}
             style={{ fontFamily: 'Albert Sans', fontWeight: 600, fontSize: '14px', lineHeight: '20px' }}
-            className="h-9 px-4 text-sm bg-[#0d6efd] hover:bg-[#0b5ed7] text-white whitespace-nowrap"
+            className="h-9 px-4 text-sm bg-[#105a9c] hover:bg-[#0d4a82] text-white whitespace-nowrap"
           >
             {printingOrderId === order.order_id ? (
               <Loader2 className="h-4 w-4 animate-spin mr-2" />
@@ -894,11 +894,11 @@ export default function DashboardPage() {
             letterSpacing: '0%'
           }}
         >
-          {getGreeting()}, <span className="text-[#0d6efd]">{user?.username || 'User'}!</span>
+          {getGreeting()}, <span className="text-[#105a9c]">{user?.username || 'User'}!</span>
         </h1>
         <Link href="/orders/new" className="w-full sm:w-auto">
           <Button
-            className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white gap-2 sm:gap-3 w-full sm:w-auto"
+            className="bg-[#105a9c] hover:bg-[#0d4a82] text-white gap-2 sm:gap-3 w-full sm:w-auto"
             style={{
               minWidth: '140px',
               maxWidth: '100%',
@@ -1086,14 +1086,14 @@ export default function DashboardPage() {
           <div className="overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-12 xl:-mx-[108px] px-4 sm:px-6 lg:px-12 xl:px-[108px]">
             <table className="w-full min-w-[800px]">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
-                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Customer Name</th>
-                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Contact</th>
-                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Email</th>
-                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Address</th>
-                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Customer Type</th>
-                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Company</th>
-                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Actions</th>
+                <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
+                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-white whitespace-nowrap">Customer Name</th>
+                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-white whitespace-nowrap">Contact</th>
+                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-white whitespace-nowrap">Email</th>
+                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-white whitespace-nowrap">Address</th>
+                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-white whitespace-nowrap">Customer Type</th>
+                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-white whitespace-nowrap">Company</th>
+                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-white whitespace-nowrap">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -1240,22 +1240,22 @@ export default function DashboardPage() {
           <div className="overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-12 xl:-mx-[108px] px-4 sm:px-6 lg:px-12 xl:px-[108px]">
             <table className="w-full min-w-[800px]">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
+                <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
                   <th className="px-3 sm:px-4 py-3 sm:py-4 w-10">
                     <input
                       type="checkbox"
                       checked={todayOrders.length > 0 && tallySelectedOrders.length === todayOrders.length}
                       onChange={handleTallySelectAll}
-                      className="h-4 w-4 rounded border-gray-300 text-[#0d6efd] focus:ring-[#0d6efd]"
+                      className="h-4 w-4 rounded border-gray-300 text-[#105a9c] focus:ring-[#105a9c]"
                     />
                   </th>
-                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Order ID</th>
-                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Customer Name</th>
-                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Customer Phone</th>
-                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Order Date</th>
-                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Delivery Date</th>
-                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Packaging Status</th>
-                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">Actions</th>
+                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-white whitespace-nowrap">Order ID</th>
+                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-white whitespace-nowrap">Customer Name</th>
+                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-white whitespace-nowrap">Customer Phone</th>
+                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-white whitespace-nowrap">Order Date</th>
+                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-white whitespace-nowrap">Delivery Date</th>
+                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-white whitespace-nowrap">Packaging Status</th>
+                  <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-white whitespace-nowrap">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -1277,7 +1277,7 @@ export default function DashboardPage() {
                           type="checkbox"
                           checked={tallySelectedOrders.includes(order.order_id)}
                           onChange={() => handleTallyToggle(order.order_id)}
-                          className="h-4 w-4 rounded border-gray-300 text-[#0d6efd] focus:ring-[#0d6efd]"
+                          className="h-4 w-4 rounded border-gray-300 text-[#105a9c] focus:ring-[#105a9c]"
                         />
                       </td>
                       <td className="px-3 sm:px-6 py-3 sm:py-4">

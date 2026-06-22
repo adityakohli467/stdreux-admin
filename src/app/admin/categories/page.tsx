@@ -391,7 +391,7 @@ export default function CategoriesPage() {
           </Button>
           <Button
             onClick={() => handleAddCategory(false)}
-            className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white whitespace-nowrap"
+            className="bg-[#105a9c] hover:bg-[#0d4a82] text-white whitespace-nowrap"
             style={{
               fontWeight: 600,
               height: '54px',
@@ -431,7 +431,7 @@ export default function CategoriesPage() {
       {/* Tabs */}
       <div className="flex gap-4 mb-6">
         <button
-          className="px-6 py-2 rounded-full text-sm font-medium transition-colors bg-blue-100 text-[#0d6efd]"
+          className="px-6 py-2 rounded-full text-sm font-medium transition-colors bg-blue-100 text-[#105a9c]"
           style={{ fontWeight: 600 }}
         >
           Categories
@@ -459,7 +459,7 @@ export default function CategoriesPage() {
         <Button
           variant={categoryView === "all" ? "default" : "outline"}
           onClick={() => setCategoryView("all")}
-          className={categoryView === "all" ? "bg-[#0d6efd] text-white" : ""}
+          className={categoryView === "all" ? "bg-[#105a9c] text-white" : ""}
           style={{ fontWeight: 600 }}
         >
           All Categories
@@ -467,7 +467,7 @@ export default function CategoriesPage() {
         <Button
           variant={categoryView === "main" ? "default" : "outline"}
           onClick={() => setCategoryView("main")}
-          className={categoryView === "main" ? "bg-[#0d6efd] text-white" : ""}
+          className={categoryView === "main" ? "bg-[#105a9c] text-white" : ""}
           style={{ fontWeight: 600 }}
         >
           Main Categories Only
@@ -475,7 +475,7 @@ export default function CategoriesPage() {
         <Button
           variant={categoryView === "sub" ? "default" : "outline"}
           onClick={() => setCategoryView("sub")}
-          className={categoryView === "sub" ? "bg-[#0d6efd] text-white" : ""}
+          className={categoryView === "sub" ? "bg-[#105a9c] text-white" : ""}
           style={{ fontWeight: 600 }}
         >
           Subcategories Only
@@ -490,7 +490,7 @@ export default function CategoriesPage() {
             placeholder="Search Order ID, Customer ID, Status etc."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-[488px] h-[54px] border border-gray-200 bg-white rounded-full focus:ring-2 focus:ring-[#0d6efd] focus:border-[#0d6efd] focus:outline-none"
+            className="w-[488px] h-[54px] border border-gray-200 bg-white rounded-full focus:ring-2 focus:ring-[#105a9c] focus:border-[#105a9c] focus:outline-none"
             style={{ fontFamily: 'Albert Sans', paddingLeft: '44px', paddingRight: '12px', paddingTop: '8px', paddingBottom: '8px' }}
           />
         </div>
@@ -505,14 +505,14 @@ export default function CategoriesPage() {
             lineHeight: '20px',
             letterSpacing: '0%',
             textAlign: 'center',
-            color: '#0d6efd',
+            color: '#105a9c',
             backgroundColor: 'transparent',
             padding: 0,
             gap: '8px',
             opacity: 1
           }}
         >
-          <Printer className="h-5 w-5 text-[#0d6efd]" />
+          <Printer className="h-5 w-5 text-[#105a9c]" />
           Print
         </Button>
       </div>
@@ -522,14 +522,14 @@ export default function CategoriesPage() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+              <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
+                <th className="px-6 py-4 text-left text-sm font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Category
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Parent Category
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Actions
                 </th>
               </tr>
@@ -597,7 +597,7 @@ export default function CategoriesPage() {
         <DialogContent className="max-w-md bg-white" style={{ fontFamily: 'Albert Sans' }}>
           <DialogHeader>
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 mx-auto mb-4">
-              <FolderOpen className="h-6 w-6 text-[#0d6efd]" />
+              <FolderOpen className="h-6 w-6 text-[#105a9c]" />
             </div>
             <DialogTitle className="text-center text-xl font-semibold">
               {isSubcategory ? "Add New Subcategory" : "Add New Main Category"}
@@ -623,7 +623,7 @@ export default function CategoriesPage() {
                 <select
                   value={parentCategoryId || ""}
                   onChange={(e) => setParentCategoryId(e.target.value ? parseInt(e.target.value) : null)}
-                  className="w-full h-11 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d6efd]"
+                  className="w-full h-11 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#105a9c]"
                   style={{ fontFamily: 'Albert Sans' }}
                   required
                 >
@@ -646,7 +646,7 @@ export default function CategoriesPage() {
               <button
                 type="button"
                 onClick={() => setGstFree(!gstFree)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${gstFree ? 'bg-[#0d6efd]' : 'bg-gray-300'}`}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${gstFree ? 'bg-[#105a9c]' : 'bg-gray-300'}`}
               >
                 <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${gstFree ? 'translate-x-6' : 'translate-x-1'}`} />
               </button>
@@ -667,7 +667,7 @@ export default function CategoriesPage() {
               <Button
                 onClick={handleSaveCategory}
                 disabled={!categoryName.trim() || createCategoryMutation.isPending || (isSubcategory && !parentCategoryId)}
-                className="flex-1 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white disabled:opacity-50"
+                className="flex-1 bg-[#105a9c] hover:bg-[#0d4a82] text-white disabled:opacity-50"
                 style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
               >
                 {createCategoryMutation.isPending ? "Creating..." : "Create"}
@@ -691,7 +691,7 @@ export default function CategoriesPage() {
         <DialogContent className="max-w-md bg-white" style={{ fontFamily: 'Albert Sans' }}>
           <DialogHeader>
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 mx-auto mb-4">
-              <Edit className="h-6 w-6 text-[#0d6efd]" />
+              <Edit className="h-6 w-6 text-[#105a9c]" />
             </div>
             <DialogTitle className="text-center text-xl font-semibold">
               Edit Category
@@ -716,7 +716,7 @@ export default function CategoriesPage() {
               <select
                 value={parentCategoryId || ""}
                 onChange={(e) => setParentCategoryId(e.target.value ? parseInt(e.target.value) : null)}
-                className="w-full h-11 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d6efd]"
+                className="w-full h-11 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#105a9c]"
                 style={{ fontFamily: 'Albert Sans' }}
               >
                 <option value="">None (Main Category)</option>
@@ -737,7 +737,7 @@ export default function CategoriesPage() {
               <button
                 type="button"
                 onClick={() => setGstFree(!gstFree)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${gstFree ? 'bg-[#0d6efd]' : 'bg-gray-300'}`}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${gstFree ? 'bg-[#105a9c]' : 'bg-gray-300'}`}
               >
                 <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${gstFree ? 'translate-x-6' : 'translate-x-1'}`} />
               </button>
@@ -758,7 +758,7 @@ export default function CategoriesPage() {
               <Button
                 onClick={handleSaveCategory}
                 disabled={!categoryName.trim() || updateCategoryMutation.isPending}
-                className="flex-1 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white disabled:opacity-50"
+                className="flex-1 bg-[#105a9c] hover:bg-[#0d4a82] text-white disabled:opacity-50"
                 style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
               >
                 {updateCategoryMutation.isPending ? "Updating..." : "Update"}
@@ -899,7 +899,7 @@ export default function CategoriesPage() {
               </Button>
               <Button
                 onClick={saveCategoryOrder}
-                className="flex-1 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white"
+                className="flex-1 bg-[#105a9c] hover:bg-[#0d4a82] text-white"
                 style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
               >
                 Save Order

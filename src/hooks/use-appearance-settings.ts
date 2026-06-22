@@ -59,7 +59,7 @@ export function useAppearanceSettings() {
     }
 
     // Apply primary color
-    const primaryColor = settings.primaryColor || "#0d6efd"
+    const primaryColor = settings.primaryColor || "#105a9c"
     if (primaryColor) {
       // Convert hex to HSL for CSS variables
       const hsl = hexToHsl(primaryColor)

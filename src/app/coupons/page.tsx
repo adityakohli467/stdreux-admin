@@ -341,7 +341,7 @@ export default function CouponsPage() {
         </h1>
         <Button 
           onClick={handleAddCoupon}
-          className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white whitespace-nowrap w-full sm:w-auto flex-shrink-0"
+          className="bg-[#105a9c] hover:bg-[#0d4a82] text-white whitespace-nowrap w-full sm:w-auto flex-shrink-0"
           style={{ 
             fontWeight: 600,
             minWidth: 'auto',
@@ -368,7 +368,7 @@ export default function CouponsPage() {
             placeholder="Search coupons..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-[54px] border border-gray-200 bg-white rounded-full focus:ring-2 focus:ring-[#0d6efd] focus:border-[#0d6efd] focus:outline-none"
+            className="w-full h-[54px] border border-gray-200 bg-white rounded-full focus:ring-2 focus:ring-[#105a9c] focus:border-[#105a9c] focus:outline-none"
             style={{ fontFamily: 'Albert Sans', paddingLeft: '44px', paddingRight: '12px', paddingTop: '8px', paddingBottom: '8px' }}
           />
         </div>
@@ -384,14 +384,14 @@ export default function CouponsPage() {
               lineHeight: '20px',
               letterSpacing: '0%',
               textAlign: 'center',
-              color: '#0d6efd',
+              color: '#105a9c',
               backgroundColor: 'transparent',
               padding: 0,
               gap: '8px',
               opacity: 1
             }}
           >
-            <Printer className="h-5 w-5 text-[#0d6efd]" />
+            <Printer className="h-5 w-5 text-[#105a9c]" />
             Print
           </Button>
         </div>
@@ -403,7 +403,7 @@ export default function CouponsPage() {
           onClick={() => setActiveTab("Active")}
           className={`pb-3 text-xs sm:text-sm font-medium transition-colors border-b-2 whitespace-nowrap ${
             activeTab === "Active"
-              ? "border-[#0d6efd] text-[#0d6efd]"
+              ? "border-[#105a9c] text-[#105a9c]"
               : "border-transparent text-gray-600 hover:text-gray-900"
           }`}
           style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
@@ -414,7 +414,7 @@ export default function CouponsPage() {
           onClick={() => setActiveTab("Inactive")}
           className={`pb-3 text-xs sm:text-sm font-medium transition-colors border-b-2 whitespace-nowrap ${
             activeTab === "Inactive"
-              ? "border-[#0d6efd] text-[#0d6efd]"
+              ? "border-[#105a9c] text-[#105a9c]"
               : "border-transparent text-gray-600 hover:text-gray-900"
           }`}
           style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
@@ -429,26 +429,26 @@ export default function CouponsPage() {
           <div className="inline-block min-w-full align-middle">
             <table className="w-full min-w-[400px] sm:min-w-[500px]">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="px-2 sm:px-3 md:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
+                  <th className="px-2 sm:px-3 md:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                     Coupon Code
                   </th>
-                  <th className="px-2 sm:px-3 md:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap hidden md:table-cell" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                  <th className="px-2 sm:px-3 md:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap hidden md:table-cell" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                     Coupon Description
                   </th>
-                  <th className="px-2 sm:px-3 md:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                  <th className="px-2 sm:px-3 md:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                     Discount
                   </th>
-                  <th className="px-2 sm:px-3 md:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap hidden lg:table-cell" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                  <th className="px-2 sm:px-3 md:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap hidden lg:table-cell" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                     Discount Type
                   </th>
-                  <th className="px-2 sm:px-3 md:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                  <th className="px-2 sm:px-3 md:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                     Storefront
                   </th>
-                  <th className="px-2 sm:px-3 md:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                  <th className="px-2 sm:px-3 md:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                     Status
                   </th>
-                  <th className="px-2 sm:px-3 md:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                  <th className="px-2 sm:px-3 md:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                     Actions
                   </th>
                 </tr>
@@ -504,7 +504,7 @@ export default function CouponsPage() {
                         type="checkbox"
                         checked={!!coupon.show_on_storefront}
                         onChange={() => handleToggleStorefront(coupon)}
-                        className="h-5 w-5 rounded border-gray-300 text-[#0d6efd] focus:ring-[#0d6efd] cursor-pointer"
+                        className="h-5 w-5 rounded border-gray-300 text-[#105a9c] focus:ring-[#105a9c] cursor-pointer"
                         title={coupon.show_on_storefront ? "Visible on Storefront" : "Hidden from Storefront"}
                       />
                     </td>
@@ -579,7 +579,7 @@ export default function CouponsPage() {
         <DialogContent className="w-[95vw] sm:w-full max-w-md max-h-[90vh] overflow-y-auto mx-4 sm:mx-auto bg-white" style={{ fontFamily: 'Albert Sans' }}>
           <DialogHeader>
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 mx-auto mb-4">
-              {selectedCoupon ? <Edit2 className="h-6 w-6 text-[#0d6efd]" /> : <Plus className="h-6 w-6 text-[#0d6efd]" />}
+              {selectedCoupon ? <Edit2 className="h-6 w-6 text-[#105a9c]" /> : <Plus className="h-6 w-6 text-[#105a9c]" />}
             </div>
             <DialogTitle className="text-center text-xl font-semibold">
               {selectedCoupon ? "Edit Coupon" : "Add New Coupon"}
@@ -654,7 +654,7 @@ export default function CouponsPage() {
                 id="discountType"
                 value={discountType}
                 onChange={(e) => setDiscountType(e.target.value)}
-                className="w-full h-11 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d6efd]"
+                className="w-full h-11 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#105a9c]"
                 style={{ fontFamily: 'Albert Sans' }}
               >
                 <option value="">Select type</option>
@@ -681,7 +681,7 @@ export default function CouponsPage() {
               <Button
                 onClick={handleSaveCoupon}
                 disabled={!couponCode || !discountAmount || !discountType || createCouponMutation.isPending || updateCouponMutation.isPending}
-                className="flex-1 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white disabled:opacity-50"
+                className="flex-1 bg-[#105a9c] hover:bg-[#0d4a82] text-white disabled:opacity-50"
                 style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
               >
                 {createCouponMutation.isPending || updateCouponMutation.isPending ? "Saving..." : "Submit"}

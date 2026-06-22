@@ -469,7 +469,7 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
 
             <div className="mb-8">
               <h3 className="text-lg font-semibold text-gray-900 mb-4" style={{ fontFamily: 'Albert Sans' }}>
-                Ordering for <span className="text-[#0d6efd]">{data.customer_name || "Guest"}</span>
+                Ordering for <span className="text-[#105a9c]">{data.customer_name || "Guest"}</span>
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div className="flex items-center gap-2"><span className="text-gray-600">📞 Phone:</span> <span className="text-gray-900">{data.phone || 'N/A'}</span></div>
@@ -509,11 +509,11 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
                 <Label className="text-sm font-medium text-gray-700">Delivery Method *</Label>
                 <div className="flex gap-6 mt-2">
                   <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="radio" checked={deliveryMethod === 'delivery'} onChange={() => setDeliveryMethod('delivery')} className="w-4 h-4 text-[#0d6efd]" />
+                    <input type="radio" checked={deliveryMethod === 'delivery'} onChange={() => setDeliveryMethod('delivery')} className="w-4 h-4 text-[#105a9c]" />
                     <span className="text-sm">Delivery</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="radio" checked={deliveryMethod === 'pickup'} onChange={() => setDeliveryMethod('pickup')} className="w-4 h-4 text-[#0d6efd]" />
+                    <input type="radio" checked={deliveryMethod === 'pickup'} onChange={() => setDeliveryMethod('pickup')} className="w-4 h-4 text-[#105a9c]" />
                     <span className="text-sm">Pickup</span>
                   </label>
                 </div>
@@ -576,9 +576,9 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
             <div className="mb-6">
               <div className="flex gap-2 mb-2">
                 <Input placeholder="Coupon Code" value={couponCode} onChange={(e) => setCouponCode(e.target.value)} disabled={!!appliedCoupon} />
-                {!appliedCoupon ? <Button onClick={handleApplyCoupon} className="bg-[#0d6efd] text-white">Apply</Button> : <Button onClick={handleRemoveCoupon} variant="outline">X</Button>}
+                {!appliedCoupon ? <Button onClick={handleApplyCoupon} className="bg-[#105a9c] text-white">Apply</Button> : <Button onClick={handleRemoveCoupon} variant="outline">X</Button>}
               </div>
-              <button onClick={() => setShowCouponList(true)} className="text-sm text-[#0d6efd] hover:underline">Browse Coupons ({activeCoupons.length})</button>
+              <button onClick={() => setShowCouponList(true)} className="text-sm text-[#105a9c] hover:underline">Browse Coupons ({activeCoupons.length})</button>
             </div>
 
             <div className="space-y-2 mb-6 border-t pt-4">
@@ -591,16 +591,16 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
                   <span className="font-medium font-gray-900" style={{ fontFamily: 'Albert Sans' }}>${gst.toFixed(2)}</span>
                 </div>
               )}
-              <div className="flex justify-between text-lg font-bold border-t pt-2 text-[#0d6efd]"><span>Total</span> <span>${total.toFixed(2)}</span></div>
+              <div className="flex justify-between text-lg font-bold border-t pt-2 text-[#105a9c]"><span>Total</span> <span>${total.toFixed(2)}</span></div>
             </div>
 
             <ValidatedTextarea label="Order Comments" value={orderComments} onChange={(val) => setOrderComments(val)} rows={3} className="mb-6" />
 
             <div className="space-y-3">
-              <Button onClick={handleSaveOrder} disabled={isSaving} variant="outline" className="w-full border-[#0d6efd] text-[#0d6efd]">
+              <Button onClick={handleSaveOrder} disabled={isSaving} variant="outline" className="w-full border-[#105a9c] text-[#105a9c]">
                 {isSaving ? "Saving..." : "💾 Save Order"}
               </Button>
-              <Button onClick={handleSendToCustomer} disabled={isSaving} className="w-full bg-[#0d6efd] text-white">
+              <Button onClick={handleSendToCustomer} disabled={isSaving} className="w-full bg-[#105a9c] text-white">
                 {isSaving ? "Processing..." : "Send to Customer"}
               </Button>
             </div>
@@ -615,7 +615,7 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
             <h3 className="text-xl font-bold mb-4">Available Coupons</h3>
             <div className="space-y-2 max-h-60 overflow-y-auto mb-4">
               {activeCoupons.map((c: any) => (
-                <div key={c.coupon_id} className="p-3 border rounded hover:border-[#0d6efd] cursor-pointer" onClick={() => handleSelectCoupon(c.coupon_id)}>
+                <div key={c.coupon_id} className="p-3 border rounded hover:border-[#105a9c] cursor-pointer" onClick={() => handleSelectCoupon(c.coupon_id)}>
                   <div className="flex justify-between font-bold"><span>{c.coupon_code}</span> <span className="text-green-600">{c.type === 'P' ? `${c.coupon_discount}%` : `$${c.coupon_discount}`} OFF</span></div>
                 </div>
               ))}
@@ -644,7 +644,7 @@ export function DeliveryStep({ data, onUpdate, onSave, onBack }: DeliveryStepPro
             />
             <div className="flex gap-4">
               <Button onClick={() => setShowSendModal(false)} disabled={isSaving} variant="outline" className="flex-1">Cancel</Button>
-              <Button onClick={handleConfirmSend} disabled={isSaving} className="flex-1 bg-[#0d6efd] text-white">
+              <Button onClick={handleConfirmSend} disabled={isSaving} className="flex-1 bg-[#105a9c] text-white">
                 {isSaving ? "Sending..." : "Send"}
               </Button>
             </div>

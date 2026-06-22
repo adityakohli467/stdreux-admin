@@ -314,7 +314,7 @@ export default function EditOrderPage() {
           )}
           <button
             onClick={() => router.push('/orders')}
-            className="mt-4 px-4 py-2 bg-[#0d6efd] text-white rounded-lg hover:bg-[#0b5ed7] transition-colors"
+            className="mt-4 px-4 py-2 bg-[#105a9c] text-white rounded-lg hover:bg-[#0d4a82] transition-colors"
             style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
           >
             Go Back to Orders
@@ -329,7 +329,7 @@ export default function EditOrderPage() {
     return (
       <div className="flex items-center justify-center bg-gray-50 min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0d6efd] mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#105a9c] mx-auto mb-4"></div>
           <p className="text-gray-600 mb-2" style={{ fontFamily: 'Albert Sans' }}>
             Loading order data...
           </p>
@@ -341,7 +341,7 @@ export default function EditOrderPage() {
           {error && (
             <button
               onClick={() => refetch()}
-              className="mt-4 px-4 py-2 bg-[#0d6efd] text-white rounded-lg hover:bg-[#0b5ed7] transition-colors"
+              className="mt-4 px-4 py-2 bg-[#105a9c] text-white rounded-lg hover:bg-[#0d4a82] transition-colors"
               style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
             >
               Retry
@@ -377,7 +377,7 @@ export default function EditOrderPage() {
         {currentStep === 1 && (
           <Button
             onClick={() => setShowAddCustomerModal(true)}
-            className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white gap-2 rounded-lg"
+            className="bg-[#105a9c] hover:bg-[#0d4a82] text-white gap-2 rounded-lg"
             style={{ fontWeight: 600 }}
           >
             <span className="text-lg">+</span>
@@ -386,7 +386,7 @@ export default function EditOrderPage() {
         )}
         {currentStep === 2 && (
           <Button
-            className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white gap-2 rounded-lg"
+            className="bg-[#105a9c] hover:bg-[#0d4a82] text-white gap-2 rounded-lg"
             style={{ fontWeight: 600 }}
           >
             <span className="text-lg">+</span>
@@ -402,9 +402,9 @@ export default function EditOrderPage() {
             <div className="flex flex-col items-center">
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${currentStep === step.number
-                    ? "bg-[#0d6efd] text-white"
+                    ? "bg-[#105a9c] text-white"
                     : currentStep > step.number
-                      ? "bg-[#0d6efd] text-white"
+                      ? "bg-[#105a9c] text-white"
                       : "bg-gray-300 text-gray-600"
                   }`}
               >
@@ -415,7 +415,7 @@ export default function EditOrderPage() {
                 )}
               </div>
               <span
-                className={`text-xs mt-2 whitespace-nowrap ${currentStep === step.number ? "text-[#0d6efd] font-semibold" : "text-gray-600"
+                className={`text-xs mt-2 whitespace-nowrap ${currentStep === step.number ? "text-[#105a9c] font-semibold" : "text-gray-600"
                   }`}
                 style={{ fontFamily: 'Albert Sans' }}
               >
@@ -424,7 +424,7 @@ export default function EditOrderPage() {
             </div>
             {index < steps.length - 1 && (
               <div
-                className={`w-24 h-0.5 mx-2 mt-[-20px] ${currentStep > step.number ? "bg-[#0d6efd]" : "bg-gray-300"
+                className={`w-24 h-0.5 mx-2 mt-[-20px] ${currentStep > step.number ? "bg-[#105a9c]" : "bg-gray-300"
                   }`}
               />
             )}

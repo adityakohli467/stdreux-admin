@@ -285,7 +285,7 @@ export default function FeedbacksPage() {
               </Button>
               <Button
                 onClick={handleDownloadReport}
-                className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white gap-2 w-full sm:w-auto"
+                className="bg-[#105a9c] hover:bg-[#0d4a82] text-white gap-2 w-full sm:w-auto"
                 disabled={filteredFeedbacks.length === 0}
                 style={{ fontWeight: 600 }}
               >
@@ -308,7 +308,7 @@ export default function FeedbacksPage() {
               </div>
               <Button
                 type="submit"
-                className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white h-11 w-full sm:w-auto"
+                className="bg-[#105a9c] hover:bg-[#0d4a82] text-white h-11 w-full sm:w-auto"
                 style={{ fontWeight: 600 }}
               >
                 Filter
@@ -335,7 +335,7 @@ export default function FeedbacksPage() {
             placeholder="Search Order ID, Customer ID, Status etc."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full sm:w-[488px] h-[54px] border border-gray-200 bg-white rounded-full focus:ring-2 focus:ring-[#0d6efd] focus:border-[#0d6efd] focus:outline-none"
+            className="w-full sm:w-[488px] h-[54px] border border-gray-200 bg-white rounded-full focus:ring-2 focus:ring-[#105a9c] focus:border-[#105a9c] focus:outline-none"
             style={{ fontFamily: 'Albert Sans', paddingLeft: '44px', paddingRight: '12px', paddingTop: '8px', paddingBottom: '8px' }}
           />
         </div>
@@ -347,29 +347,29 @@ export default function FeedbacksPage() {
           <div className="inline-block min-w-full align-middle">
             <table className="w-full min-w-[1000px]">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
+                  <th className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                     Order
                   </th>
-                  <th className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                  <th className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                     Customer
                   </th>
-                  <th className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap hidden md:table-cell" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                  <th className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap hidden md:table-cell" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                     Company
                   </th>
-                  <th className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap hidden lg:table-cell" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                  <th className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap hidden lg:table-cell" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                     Website Experience
                   </th>
-                  <th className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                  <th className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                     Delivered On Time?
                   </th>
-                  <th className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap hidden xl:table-cell" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                  <th className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap hidden xl:table-cell" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                     Improvement On
                   </th>
-                  <th className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap hidden lg:table-cell" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                  <th className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap hidden lg:table-cell" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                     Suggestions
                   </th>
-                  <th className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                  <th className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                     Action
                   </th>
                 </tr>
@@ -379,7 +379,7 @@ export default function FeedbacksPage() {
                 <tr>
                   <td colSpan={8} className="px-6 py-8 text-center text-gray-500">
                     <div className="flex flex-col items-center gap-2">
-                      <Loader2 className="h-6 w-6 animate-spin text-[#0d6efd]" />
+                      <Loader2 className="h-6 w-6 animate-spin text-[#105a9c]" />
                       <span>Loading feedbacks...</span>
                     </div>
                   </td>
@@ -779,7 +779,7 @@ export default function FeedbacksPage() {
                 })
               }}
               disabled={sendEmailMutation.isPending || !recipientEmail.trim()}
-              className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white"
+              className="bg-[#105a9c] hover:bg-[#0d4a82] text-white"
               style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
             >
               {sendEmailMutation.isPending ? (

@@ -49,7 +49,7 @@ export default function PaymentErrorPage() {
           {orderId && (
             <Link
               href={`/orders/${orderId}`}
-              className="block w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+              className="block w-full bg-[#105a9c] text-white py-2 px-4 rounded-md hover:bg-[#0d4a82] transition-colors"
             >
               Try Payment Again
             </Link>

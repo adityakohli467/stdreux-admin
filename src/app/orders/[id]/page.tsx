@@ -138,7 +138,7 @@ export default function OrderDetailPage() {
     return (
       <div className="flex items-center justify-center bg-gray-50 min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0d6efd] mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#105a9c] mx-auto mb-4"></div>
           <p className="text-gray-600" style={{ fontFamily: 'Albert Sans' }}>Loading order details...</p>
           {orderId && (
             <p className="text-sm text-gray-500 mt-2" style={{ fontFamily: 'Albert Sans' }}>
@@ -165,7 +165,7 @@ export default function OrderDetailPage() {
           )}
           <button
             onClick={() => router.back()}
-            className="mt-4 px-4 py-2 bg-[#0d6efd] text-white rounded-lg hover:bg-[#0b5ed7] transition-colors"
+            className="mt-4 px-4 py-2 bg-[#105a9c] text-white rounded-lg hover:bg-[#0d4a82] transition-colors"
             style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
           >
             Go Back
@@ -190,7 +190,7 @@ export default function OrderDetailPage() {
           )}
           <button
             onClick={() => router.back()}
-            className="mt-4 px-4 py-2 bg-[#0d6efd] text-white rounded-lg hover:bg-[#0b5ed7] transition-colors"
+            className="mt-4 px-4 py-2 bg-[#105a9c] text-white rounded-lg hover:bg-[#0d4a82] transition-colors"
             style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
           >
             Go Back
@@ -393,7 +393,7 @@ export default function OrderDetailPage() {
               Viewing Order Details
             </h1>
             <p className="text-gray-600 mt-1">
-              Order <span className="text-[#0d6efd] font-semibold">#{order.order_id}</span>
+              Order <span className="text-[#105a9c] font-semibold">#{order.order_id}</span>
             </p>
           </div>
         </div>
@@ -420,7 +420,7 @@ export default function OrderDetailPage() {
           </Button>
           {order.payment_status !== 'succeeded' && order.payment_status !== 'paid' && (
             <Button
-              className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white gap-2"
+              className="bg-[#105a9c] hover:bg-[#0d4a82] text-white gap-2"
               style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
               onClick={handleSendPaymentLink}
               disabled={sendingPaymentLink}
@@ -676,12 +676,12 @@ export default function OrderDetailPage() {
 
                   <tr className="border-b border-gray-100">
                     <td colSpan={4} className="px-4 py-3 text-right">
-                      <span className="text-base font-semibold text-[#0d6efd]" style={{ fontFamily: 'Albert Sans' }}>
+                      <span className="text-base font-semibold text-[#105a9c]" style={{ fontFamily: 'Albert Sans' }}>
                         Total
                       </span>
                     </td>
                     <td className="px-4 py-3 text-right">
-                      <span className="text-base font-bold text-[#0d6efd]" style={{ fontFamily: 'Albert Sans' }}>
+                      <span className="text-base font-bold text-[#105a9c]" style={{ fontFamily: 'Albert Sans' }}>
                         ${total.toFixed(2)}
                       </span>
                     </td>

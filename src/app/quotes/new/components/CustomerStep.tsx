@@ -506,7 +506,7 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
                 onFocus={() => setShowCompanyDropdown(true)}
                 placeholder={loadingCompanies ? "Loading..." : "Search company..."}
                 disabled={loadingCompanies}
-                className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d6efd] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#105a9c] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                 style={{ fontFamily: 'Albert Sans' }}
                 autoComplete="off"
               />
@@ -539,7 +539,7 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
               type="button"
               variant="outline"
               onClick={() => setShowAddCompanyModal(true)}
-              className="gap-2 border-gray-300 text-[#0d6efd] hover:text-[#0b5ed7]"
+              className="gap-2 border-gray-300 text-[#105a9c] hover:text-[#0d4a82]"
               style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
             >
               <span className="text-lg">+</span>
@@ -567,7 +567,7 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
                 onFocus={() => setShowCustomerDropdown(true)}
                 placeholder={loadingCustomers ? "Loading..." : "Search customer..."}
                 disabled={loadingCustomers}
-                className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d6efd] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#105a9c] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                 style={{ fontFamily: 'Albert Sans' }}
                 autoComplete="off"
               />
@@ -608,7 +608,7 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
                   onOpenAddCustomerModal();
                 }
               }}
-              className="gap-2 border-gray-300 text-[#0d6efd] hover:text-[#0b5ed7] disabled:opacity-50"
+              className="gap-2 border-gray-300 text-[#105a9c] hover:text-[#0d4a82] disabled:opacity-50"
               style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
             >
               <span className="text-lg">+</span>
@@ -655,7 +655,7 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
             value={selectedLocation}
             onChange={(e) => setSelectedLocation(Number(e.target.value))}
             disabled={loadingLocations}
-            className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d6efd] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+            className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#105a9c] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
             style={{ fontFamily: 'Albert Sans' }}
           >
             <option value={0}>
@@ -674,7 +674,7 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
       <div className="flex justify-end mt-8">
         <Button
           onClick={handleProceed}
-          className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white px-8 py-2 rounded-full"
+          className="bg-[#105a9c] hover:bg-[#0d4a82] text-white px-8 py-2 rounded-full"
           style={{
             fontFamily: 'Albert Sans',
             fontWeight: 600,
@@ -699,7 +699,7 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
         <DialogContent className="max-w-md" style={{ fontFamily: 'Albert Sans' }}>
           <DialogHeader>
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 mx-auto mb-4">
-              <Plus className="h-6 w-6 text-[#0d6efd]" />
+              <Plus className="h-6 w-6 text-[#105a9c]" />
             </div>
             <DialogTitle className="text-center text-xl font-semibold">
               Add Company
@@ -777,7 +777,7 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
               <Button
                 onClick={handleSaveCompany}
                 disabled={createCompanyMutation.isPending}
-                className="flex-1 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white"
+                className="flex-1 bg-[#105a9c] hover:bg-[#0d4a82] text-white"
                 style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
               >
                 {createCompanyMutation.isPending ? (
@@ -809,7 +809,7 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" style={{ fontFamily: 'Albert Sans' }}>
           <DialogHeader>
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 mx-auto mb-4">
-              <Plus className="h-6 w-6 text-[#0d6efd]" />
+              <Plus className="h-6 w-6 text-[#105a9c]" />
             </div>
             <DialogTitle className="text-center text-xl font-semibold">
               Add Customer
@@ -877,7 +877,7 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
                   id="customerType"
                   value={customerType}
                   onChange={(e) => setCustomerType(e.target.value)}
-                  className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d6efd] focus:border-transparent"
+                  className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#105a9c] focus:border-transparent"
                   style={{ fontFamily: 'Albert Sans' }}
                 >
                   <option value="Retail">Retail</option>
@@ -965,7 +965,7 @@ export function CustomerStep({ data, onUpdate, onNext, showAddCustomerModal = fa
               <Button
                 onClick={handleSaveCustomer}
                 disabled={createCustomerMutation.isPending}
-                className="flex-1 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white"
+                className="flex-1 bg-[#105a9c] hover:bg-[#0d4a82] text-white"
                 style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
               >
                 {createCustomerMutation.isPending ? (

@@ -330,7 +330,7 @@ export default function SubscriptionDetailPage() {
               <Button
                 onClick={handleSave}
                 disabled={updateMutation.isPending}
-                className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white gap-2"
+                className="bg-[#105a9c] hover:bg-[#0d4a82] text-white gap-2"
                 style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
               >
                 <Save className="h-4 w-4" />
@@ -361,7 +361,7 @@ export default function SubscriptionDetailPage() {
               <Button
                 onClick={handleSendInvoice}
                 disabled={sendingInvoice}
-                className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white gap-2"
+                className="bg-[#105a9c] hover:bg-[#0d4a82] text-white gap-2"
                 style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
               >
                 <Send className="h-4 w-4" />
@@ -564,7 +564,7 @@ export default function SubscriptionDetailPage() {
                   <select
                     value={standingOrder}
                     onChange={(e) => setStandingOrder(Number(e.target.value))}
-                    className="w-full h-10 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d6efd]"
+                    className="w-full h-10 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#105a9c]"
                     style={{ fontFamily: 'Albert Sans' }}
                   >
                     <option value="0">One-time Order</option>

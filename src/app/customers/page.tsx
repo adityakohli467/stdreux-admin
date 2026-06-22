@@ -622,7 +622,7 @@ function CustomersContent() {
         </h1>
         <Button
           onClick={handleAddCustomer}
-          className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white whitespace-nowrap"
+          className="bg-[#105a9c] hover:bg-[#0d4a82] text-white whitespace-nowrap"
           style={{
             fontWeight: 600,
             width: "196px",
@@ -649,7 +649,7 @@ function CustomersContent() {
             placeholder="Search Order ID, Customer ID, Status etc."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full sm:w-[488px] h-[54px] border border-gray-200 bg-white rounded-full focus:ring-2 focus:ring-[#0d6efd] focus:border-[#0d6efd] focus:outline-none"
+            className="w-full sm:w-[488px] h-[54px] border border-gray-200 bg-white rounded-full focus:ring-2 focus:ring-[#105a9c] focus:border-[#105a9c] focus:outline-none"
             style={{
               fontFamily: "Albert Sans",
               paddingLeft: "44px",
@@ -671,14 +671,14 @@ function CustomersContent() {
               lineHeight: "20px",
               letterSpacing: "0%",
               textAlign: "center",
-              color: "#0d6efd",
+              color: "#105a9c",
               backgroundColor: "transparent",
               padding: 0,
               gap: "8px",
               opacity: 1,
             }}
           >
-            <Printer className="h-5 w-5 text-[#0d6efd]" />
+            <Printer className="h-5 w-5 text-[#105a9c]" />
             Print
           </Button>
         </div>
@@ -691,7 +691,7 @@ function CustomersContent() {
             key={type}
             onClick={() => setSelectedType(type)}
             className={`px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-colors ${selectedType === type
-              ? "bg-[#e7f1ff] text-[#0d6efd] border-2 border-[#0d6efd]"
+              ? "bg-[#e7f1ff] text-[#105a9c] border-2 border-[#105a9c]"
               : "bg-white text-gray-700 border-2 border-gray-200 hover:border-gray-300"
               }`}
             style={{ fontFamily: "Albert Sans", fontWeight: 500 }}
@@ -706,7 +706,7 @@ function CustomersContent() {
         <button
           onClick={() => setActiveTab("Active")}
           className={`pb-3 text-sm font-medium transition-colors border-b-2 ${activeTab === "Active"
-            ? "border-[#0d6efd] text-[#0d6efd]"
+            ? "border-[#105a9c] text-[#105a9c]"
             : "border-transparent text-gray-600 hover:text-gray-900"
             }`}
           style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
@@ -717,7 +717,7 @@ function CustomersContent() {
           <button
             onClick={() => setActiveTab("Pending Approval")}
             className={`pb-3 text-sm font-medium transition-colors border-b-2 relative ${activeTab === "Pending Approval"
-              ? "border-[#0d6efd] text-[#0d6efd]"
+              ? "border-[#105a9c] text-[#105a9c]"
               : "border-transparent text-gray-600 hover:text-gray-900"
               }`}
             style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
@@ -733,7 +733,7 @@ function CustomersContent() {
         <button
           onClick={() => setActiveTab("Archived")}
           className={`pb-3 text-sm font-medium transition-colors border-b-2 ${activeTab === "Archived"
-            ? "border-[#0d6efd] text-[#0d6efd]"
+            ? "border-[#105a9c] text-[#105a9c]"
             : "border-transparent text-gray-600 hover:text-gray-900"
             }`}
           style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
@@ -748,41 +748,41 @@ function CustomersContent() {
           <div className="inline-block min-w-full align-middle">
             <table className="w-full min-w-[800px]">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
+                <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
                   <th
-                    className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap"
+                    className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap"
                     style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
                   >
                     Customer Name
                   </th>
                   <th
-                    className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap"
+                    className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap"
                     style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
                   >
                     Contact
                   </th>
                   <th
-                    className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap hidden lg:table-cell"
+                    className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap hidden lg:table-cell"
                     style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
                   >
                     Address
                   </th>
                   <th
-                    className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap hidden xl:table-cell"
+                    className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap hidden xl:table-cell"
                     style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
                   >
                     Company
                   </th>
                   {isWholesaleTypeSelected && (
                     <th
-                      className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap hidden xl:table-cell"
+                      className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap hidden xl:table-cell"
                       style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
                     >
                       Department
                     </th>
                   )}
                   <th
-                    className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap"
+                    className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap"
                     style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
                   >
                     Actions
@@ -1069,7 +1069,7 @@ function CustomersContent() {
         >
           <DialogHeader>
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 mx-auto mb-4">
-              <Plus className="h-6 w-6 text-[#0d6efd]" />
+              <Plus className="h-6 w-6 text-[#105a9c]" />
             </div>
             <DialogTitle className="text-center text-xl font-semibold">
               Add New Customer
@@ -1410,7 +1410,7 @@ function CustomersContent() {
               <Button
                 onClick={handleSaveCustomer}
                 disabled={!customerType || createCustomerMutation.isPending}
-                className="flex-1 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white disabled:opacity-50"
+                className="flex-1 bg-[#105a9c] hover:bg-[#0d4a82] text-white disabled:opacity-50"
                 style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
               >
                 {createCustomerMutation.isPending ? "Saving..." : "Save"}
@@ -1443,7 +1443,7 @@ function CustomersContent() {
         >
           <DialogHeader>
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 mx-auto mb-4">
-              <Edit className="h-6 w-6 text-[#0d6efd]" />
+              <Edit className="h-6 w-6 text-[#105a9c]" />
             </div>
             <DialogTitle className="text-center text-xl font-semibold">
               Edit Customer
@@ -1767,7 +1767,7 @@ function CustomersContent() {
               <Button
                 onClick={handleSaveCustomer}
                 disabled={updateCustomerMutation.isPending}
-                className="flex-1 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white"
+                className="flex-1 bg-[#105a9c] hover:bg-[#0d4a82] text-white"
                 style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
               >
                 {updateCustomerMutation.isPending ? "Saving..." : "Save"}
@@ -1912,7 +1912,7 @@ function CustomersContent() {
                             setMappingCompany(false);
                           }
                         }}
-                        className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white text-xs"
+                        className="bg-[#105a9c] hover:bg-[#0d4a82] text-white text-xs"
                       >
                         Map to this
                       </Button>

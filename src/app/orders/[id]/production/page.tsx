@@ -162,7 +162,7 @@ export default function ProductionFormPage() {
               Viewing Production Form
             </h1>
             <p style={{ fontFamily: 'Albert Sans' }} className="text-gray-600 mt-1">
-              Order <span className="text-[#0d6efd]">#{order.order_id}</span>
+              Order <span className="text-[#105a9c]">#{order.order_id}</span>
             </p>
           </div>
         </div>
@@ -182,7 +182,7 @@ export default function ProductionFormPage() {
               onClick={handleSendPaymentLink}
               disabled={sendingPaymentLink}
               style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
-              className="gap-2 bg-[#0d6efd] hover:bg-[#0b5ed7]"
+              className="gap-2 bg-[#105a9c] hover:bg-[#0d4a82]"
             >
               <Mail className="h-4 w-4" />
               {sendingPaymentLink ? 'Sending...' : 'Send Payment Link'}
@@ -331,7 +331,7 @@ export default function ProductionFormPage() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
+                <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
                   <th 
                     className="px-4 py-3 text-left cursor-pointer hover:bg-gray-100"
                     style={{ 
@@ -557,7 +557,7 @@ export default function ProductionFormPage() {
               fontSize: '14px',
               lineHeight: '20px'
             }}
-            className="bg-[#0d6efd] hover:bg-[#0b5ed7] h-8 px-3"
+            className="bg-[#105a9c] hover:bg-[#0d4a82] h-8 px-3"
           >
             {order.order_products?.length || 0}
           </Button>

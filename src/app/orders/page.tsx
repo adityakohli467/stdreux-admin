@@ -664,7 +664,7 @@ export default function OrdersPage() {
         </h1>
         <Link href="/orders/new" className="w-full sm:w-auto">
           <Button
-            className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white whitespace-nowrap w-full sm:w-auto"
+            className="bg-[#105a9c] hover:bg-[#0d4a82] text-white whitespace-nowrap w-full sm:w-auto"
             style={{
               fontWeight: 600,
               minWidth: '196px',
@@ -694,7 +694,7 @@ export default function OrdersPage() {
             className={`px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${selectedTab === tab.key
               ? tab.key === 'wholesale'
                 ? "bg-purple-100 text-purple-700 border-2 border-purple-500"
-                : "bg-[#e7f1ff] text-[#0d6efd] border-2 border-[#0d6efd]"
+                : "bg-[#e7f1ff] text-[#105a9c] border-2 border-[#105a9c]"
               : "bg-white text-gray-700 border-2 border-gray-200 hover:border-gray-300"
               }`}
             style={{ fontFamily: 'Albert Sans', fontWeight: 500 }}
@@ -719,7 +719,7 @@ export default function OrdersPage() {
               placeholder="Search Order ID, Customer ID, Status etc."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full md:w-[300px] h-[54px] border border-gray-200 bg-white rounded-full focus:ring-2 focus:ring-[#0d6efd] focus:border-[#0d6efd] focus:outline-none"
+              className="w-full md:w-[300px] h-[54px] border border-gray-200 bg-white rounded-full focus:ring-2 focus:ring-[#105a9c] focus:border-[#105a9c] focus:outline-none"
               style={{ fontFamily: 'Albert Sans', paddingLeft: '44px', paddingRight: '12px', paddingTop: '8px', paddingBottom: '8px' }}
             />
           </div>
@@ -792,7 +792,7 @@ export default function OrdersPage() {
                         setShowDatePicker(false)
                         queryClient.invalidateQueries({ queryKey: ['orders'] })
                       }}
-                      className="flex-1 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white hover:text-white"
+                      className="flex-1 bg-[#105a9c] hover:bg-[#0d4a82] text-white hover:text-white"
                       style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
                     >
                       Apply
@@ -867,7 +867,7 @@ export default function OrdersPage() {
           <div className="flex items-center justify-center min-w-fit">
             <Button
               onClick={handleClearFilters}
-              className="text-[#0d6efd] hover:text-[#0b5ed7] bg-transparent border-0 shadow-none p-0 h-auto whitespace-nowrap"
+              className="text-[#105a9c] hover:text-[#0d4a82] bg-transparent border-0 shadow-none p-0 h-auto whitespace-nowrap"
               style={{
                 fontFamily: 'Albert Sans',
                 fontWeight: 600,
@@ -891,14 +891,14 @@ export default function OrdersPage() {
             fontSize: '16px',
             lineHeight: '20px',
             letterSpacing: '0%',
-            color: '#0d6efd',
+            color: '#105a9c',
             backgroundColor: 'transparent',
             padding: 0,
             gap: '8px',
             opacity: 1
           }}
         >
-          <Printer className="h-5 w-5 text-[#0d6efd]" />
+          <Printer className="h-5 w-5 text-[#105a9c]" />
           Print
         </Button>
       </div>
@@ -908,7 +908,7 @@ export default function OrdersPage() {
         <button
           onClick={() => setSelectedLocation(null)}
           className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${selectedLocation === null
-            ? "border-[#0d6efd] text-[#0d6efd]"
+            ? "border-[#105a9c] text-[#105a9c]"
             : "border-transparent text-gray-600 hover:text-gray-900"
             }`}
           style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
@@ -921,7 +921,7 @@ export default function OrdersPage() {
             key={location.location_id}
             onClick={() => setSelectedLocation(location.location_id)}
             className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${selectedLocation === location.location_id
-              ? "border-[#0d6efd] text-[#0d6efd]"
+              ? "border-[#105a9c] text-[#105a9c]"
               : "border-transparent text-gray-600 hover:text-gray-900"
               }`}
             style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
@@ -938,7 +938,7 @@ export default function OrdersPage() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-200">
+              <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
                 <th className="px-4 py-3 text-left">
                   <Checkbox
                     checked={orders.length > 0 && selectedOrders.length === orders.length}
@@ -1582,7 +1582,7 @@ export default function OrdersPage() {
             <Button
               onClick={handleImageUpload}
               disabled={!selectedImageFile}
-              className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white"
+              className="bg-[#105a9c] hover:bg-[#0d4a82] text-white"
               style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
             >
               Upload
@@ -1631,7 +1631,7 @@ export default function OrdersPage() {
             <Button
               onClick={handleSendEmailConfirm}
               disabled={emailMutation.isPending || !emailAddress}
-              className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white"
+              className="bg-[#105a9c] hover:bg-[#0d4a82] text-white"
               style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
             >
               {emailMutation.isPending ? "Sending..." : "Send"}
@@ -1675,7 +1675,7 @@ export default function OrdersPage() {
             <Button
               onClick={handleMarkAsPaid}
               disabled={markingPaid}
-              className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white"
+              className="bg-[#105a9c] hover:bg-[#0d4a82] text-white"
               style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
             >
               {markingPaid ? "Marking..." : "Mark as Paid"}

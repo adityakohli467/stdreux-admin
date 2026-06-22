@@ -403,7 +403,7 @@ export default function WholesaleCustomersPage() {
             setFormData(prev => ({ ...prev, customer_type: activeCustomerType }))
             setShowAddModal(true)
           }}
-          className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white whitespace-nowrap"
+          className="bg-[#105a9c] hover:bg-[#0d4a82] text-white whitespace-nowrap"
           style={{ 
             fontWeight: 600,
             width: '196px',
@@ -492,7 +492,7 @@ export default function WholesaleCustomersPage() {
             placeholder="Search Order ID, Customer ID, Status etc."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-[488px] h-[54px] border border-gray-200 bg-white rounded-full focus:ring-2 focus:ring-[#0d6efd] focus:border-[#0d6efd] focus:outline-none"
+            className="w-[488px] h-[54px] border border-gray-200 bg-white rounded-full focus:ring-2 focus:ring-[#105a9c] focus:border-[#105a9c] focus:outline-none"
             style={{ fontFamily: 'Albert Sans', paddingLeft: '44px', paddingRight: '12px', paddingTop: '8px', paddingBottom: '8px' }}
           />
         </div>
@@ -516,14 +516,14 @@ export default function WholesaleCustomersPage() {
               lineHeight: '20px',
               letterSpacing: '0%',
               textAlign: 'center',
-              color: '#0d6efd',
+              color: '#105a9c',
               backgroundColor: 'transparent',
               padding: 0,
               gap: '8px',
               opacity: 1
             }}
           >
-            <Printer className="h-5 w-5 text-[#0d6efd]" />
+            <Printer className="h-5 w-5 text-[#105a9c]" />
             Print
           </Button>
         </div>
@@ -534,26 +534,26 @@ export default function WholesaleCustomersPage() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+              <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
+                <th className="px-6 py-4 text-left text-sm font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Customer Name
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Contact
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Email
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Address
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Company
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Status
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Actions
                 </th>
               </tr>
@@ -563,7 +563,7 @@ export default function WholesaleCustomersPage() {
                 <tr>
                   <td colSpan={7} className="px-6 py-12 text-center">
                     <div className="flex items-center justify-center gap-2">
-                      <Loader2 className="h-5 w-5 animate-spin text-[#0d6efd]" />
+                      <Loader2 className="h-5 w-5 animate-spin text-[#105a9c]" />
                       <span className="text-sm text-gray-600" style={{ fontFamily: 'Albert Sans' }}>
                         Loading customers...
                       </span>
@@ -950,7 +950,7 @@ export default function WholesaleCustomersPage() {
               </Button>
               <Button
                 onClick={handleSave}
-                className="flex-1 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white"
+                className="flex-1 bg-[#105a9c] hover:bg-[#0d4a82] text-white"
                 disabled={createMutation.isPending}
               >
                 {createMutation.isPending ? (
@@ -1185,7 +1185,7 @@ export default function WholesaleCustomersPage() {
               </Button>
               <Button
                 onClick={handleUpdate}
-                className="flex-1 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white"
+                className="flex-1 bg-[#105a9c] hover:bg-[#0d4a82] text-white"
                 disabled={updateMutation.isPending}
               >
                 {updateMutation.isPending ? (

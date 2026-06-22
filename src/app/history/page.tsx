@@ -398,7 +398,7 @@ export default function HistoryPage() {
                 <tr>
                   <td colSpan={8} className="p-8 text-center">
                     <div className="flex flex-col items-center gap-2">
-                      <Loader2 className="h-6 w-6 animate-spin text-[#0d6efd]" />
+                      <Loader2 className="h-6 w-6 animate-spin text-[#105a9c]" />
                       <span>Loading history...</span>
                     </div>
                   </td>

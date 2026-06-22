@@ -21,7 +21,7 @@ export default function NotFound() {
         <div className="flex gap-4 justify-center">
           <Link href="/dashboard">
             <Button
-              className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white"
+              className="bg-[#105a9c] hover:bg-[#0d4a82] text-white"
               style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
             >
               Go to Dashboard

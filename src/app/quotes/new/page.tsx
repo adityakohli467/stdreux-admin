@@ -240,7 +240,7 @@ export default function NewQuotePage() {
         </div>
         {currentStep === 2 && (
           <Button
-            className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white gap-2 rounded-lg"
+            className="bg-[#105a9c] hover:bg-[#0d4a82] text-white gap-2 rounded-lg"
             style={{ fontWeight: 600 }}
             onClick={() => {
               // Save current step + quote data so we can restore after returning
@@ -263,9 +263,9 @@ export default function NewQuotePage() {
             <div className="flex flex-col items-center">
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${currentStep === step.number
-                  ? "bg-[#0d6efd] text-white"
+                  ? "bg-[#105a9c] text-white"
                   : currentStep > step.number
-                    ? "bg-[#0d6efd] text-white"
+                    ? "bg-[#105a9c] text-white"
                     : "bg-gray-300 text-gray-600"
                   }`}
               >
@@ -276,7 +276,7 @@ export default function NewQuotePage() {
                 )}
               </div>
               <span
-                className={`text-xs mt-2 whitespace-nowrap ${currentStep === step.number ? "text-[#0d6efd] font-semibold" : "text-gray-600"
+                className={`text-xs mt-2 whitespace-nowrap ${currentStep === step.number ? "text-[#105a9c] font-semibold" : "text-gray-600"
                   }`}
                 style={{ fontFamily: 'Albert Sans' }}
               >
@@ -285,7 +285,7 @@ export default function NewQuotePage() {
             </div>
             {index < steps.length - 1 && (
               <div
-                className={`w-24 h-0.5 mx-2 mt-[-20px] ${currentStep > step.number ? "bg-[#0d6efd]" : "bg-gray-300"
+                className={`w-24 h-0.5 mx-2 mt-[-20px] ${currentStep > step.number ? "bg-[#105a9c]" : "bg-gray-300"
                   }`}
               />
             )}

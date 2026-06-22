@@ -350,22 +350,22 @@ export function OrderDetailModal({
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="bg-gray-50 border-b border-gray-200">
+                        <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
                           <th
                             style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
-                            className="text-left px-4 py-3 text-sm text-gray-700"
+                            className="text-left px-4 py-3 text-sm text-white"
                           >
                             No.
                           </th>
                           <th
                             style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
-                            className="text-left px-4 py-3 text-sm text-gray-700"
+                            className="text-left px-4 py-3 text-sm text-white"
                           >
                             Product Name
                           </th>
                           <th
                             style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
-                            className="text-center px-4 py-3 text-sm text-gray-700"
+                            className="text-center px-4 py-3 text-sm text-white"
                           >
                             Quantity
                           </th>
@@ -553,7 +553,7 @@ export function OrderDetailModal({
                 disabled={savingComment}
                 size="sm"
                 style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
+                className="bg-[#105a9c] hover:bg-[#0d4a82] text-white"
               >
                 {savingComment ? (
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />

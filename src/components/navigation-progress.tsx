@@ -24,7 +24,7 @@ export function NavigationProgress() {
   return (
     <div className="fixed top-0 left-0 right-0 z-[9999] h-0.5 bg-transparent">
       <div 
-        className="h-full bg-[#0d6efd] animate-pulse"
+        className="h-full bg-[#105a9c] animate-pulse"
         style={{
           width: '100%',
           animation: 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',

@@ -1060,7 +1060,7 @@ function ProductsPageInner() {
 
           <Button
             onClick={handleAddProduct}
-            className="bg-[#0d6efd] hover:bg-[#0b5ed7] text-white whitespace-nowrap"
+            className="bg-[#105a9c] hover:bg-[#0d4a82] text-white whitespace-nowrap"
             style={{
               fontWeight: 600,
               minWidth: "196px",
@@ -1101,7 +1101,7 @@ function ProductsPageInner() {
             </button>
           </Link>
           <button
-            className="px-6 py-2 rounded-full text-sm font-medium transition-colors bg-blue-100 text-[#0d6efd]"
+            className="px-6 py-2 rounded-full text-sm font-medium transition-colors bg-blue-100 text-[#105a9c]"
             style={{ fontWeight: 600 }}
           >
             Products
@@ -1115,7 +1115,7 @@ function ProductsPageInner() {
               setActiveTab("active");
             }}
             className={`px-4 md:px-6 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${activeTab === "active"
-              ? "bg-blue-100 text-[#0d6efd]"
+              ? "bg-blue-100 text-[#105a9c]"
               : "bg-white border border-gray-300 text-gray-600 hover:bg-gray-50"
               }`}
             style={{ fontWeight: 600 }}
@@ -1127,7 +1127,7 @@ function ProductsPageInner() {
               setActiveTab("inactive");
             }}
             className={`px-4 md:px-6 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${activeTab === "inactive"
-              ? "bg-blue-100 text-[#0d6efd]"
+              ? "bg-blue-100 text-[#105a9c]"
               : "bg-white border border-gray-300 text-gray-600 hover:bg-gray-50"
               }`}
             style={{ fontWeight: 600 }}
@@ -1139,7 +1139,7 @@ function ProductsPageInner() {
               setActiveTab("featured_1");
             }}
             className={`px-4 md:px-6 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${activeTab === "featured_1"
-              ? "bg-blue-100 text-[#0d6efd]"
+              ? "bg-blue-100 text-[#105a9c]"
               : "bg-white border border-gray-300 text-gray-600 hover:bg-gray-50"
               }`}
             style={{ fontWeight: 600 }}
@@ -1151,7 +1151,7 @@ function ProductsPageInner() {
               setActiveTab("featured_2");
             }}
             className={`px-4 md:px-6 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${activeTab === "featured_2"
-              ? "bg-blue-100 text-[#0d6efd]"
+              ? "bg-blue-100 text-[#105a9c]"
               : "bg-white border border-gray-300 text-gray-600 hover:bg-gray-50"
               }`}
             style={{ fontWeight: 600 }}
@@ -1169,7 +1169,7 @@ function ProductsPageInner() {
             placeholder="Search Order ID, Customer ID, Status etc."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full sm:w-[488px] h-[54px] border border-gray-200 bg-white rounded-full focus:ring-2 focus:ring-[#0d6efd] focus:border-[#0d6efd] focus:outline-none"
+            className="w-full sm:w-[488px] h-[54px] border border-gray-200 bg-white rounded-full focus:ring-2 focus:ring-[#105a9c] focus:border-[#105a9c] focus:outline-none"
             style={{
               fontFamily: "Albert Sans",
               paddingLeft: "44px",
@@ -1190,14 +1190,14 @@ function ProductsPageInner() {
             lineHeight: "20px",
             letterSpacing: "0%",
             textAlign: "center",
-            color: "#0d6efd",
+            color: "#105a9c",
             backgroundColor: "transparent",
             padding: 0,
             gap: "8px",
             opacity: 1,
           }}
         >
-          <Printer className="h-5 w-5 text-[#0d6efd]" />
+          <Printer className="h-5 w-5 text-[#105a9c]" />
           Print
         </Button>
       </div>
@@ -1207,78 +1207,78 @@ function ProductsPageInner() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-200">
+              <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
                 <th
-                  className="px-4 py-3 text-left text-sm font-semibold text-gray-700"
+                  className="px-4 py-3 text-left text-sm font-semibold text-white"
                   style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
                   rowSpan={2}
                 >
                   Product Name
                 </th>
                 <th
-                  className="px-4 py-3 text-left text-sm font-semibold text-gray-700"
+                  className="px-4 py-3 text-left text-sm font-semibold text-white"
                   style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
                   rowSpan={2}
                 >
                   Categories
                 </th>
                 <th
-                  className="px-4 py-3 text-left text-sm font-semibold text-gray-700"
+                  className="px-4 py-3 text-left text-sm font-semibold text-white"
                   style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
                   rowSpan={2}
                 >
                   Subcategory
                 </th>
                 <th
-                  className="px-4 py-3 text-left text-sm font-semibold text-gray-700"
+                  className="px-4 py-3 text-left text-sm font-semibold text-white"
                   style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
                   rowSpan={2}
                 >
                   Option Name
                 </th>
                 <th
-                  className="px-4 py-3 text-left text-sm font-semibold text-gray-700"
+                  className="px-4 py-3 text-left text-sm font-semibold text-white"
                   style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
                   rowSpan={2}
                 >
                   Options
                 </th>
                 <th
-                  className="px-4 py-3 text-center text-sm font-semibold text-gray-700 border-b border-gray-200"
+                  className="px-4 py-3 text-center text-sm font-semibold text-white border-b border-[#0d4a82]"
                   style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
                   colSpan={4}
                 >
                   Price
                 </th>
                 <th
-                  className="px-4 py-3 text-left text-sm font-semibold text-gray-700"
+                  className="px-4 py-3 text-left text-sm font-semibold text-white"
                   style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
                   rowSpan={2}
                 >
                   Actions
                 </th>
               </tr>
-              <tr className="bg-gray-50">
+              <tr className="bg-[#105a9c]">
                 <th
-                  className="px-3 py-2 text-left text-xs font-semibold text-gray-600"
+                  className="px-3 py-2 text-left text-xs font-semibold text-white"
                   style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
                 >
                   Retail
                 </th>
                 <th
-                  className="px-3 py-2 text-left text-xs font-semibold text-gray-600"
+                  className="px-3 py-2 text-left text-xs font-semibold text-white"
                   style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
                 >
                   Wholesale 
                 </th>
                 <th
-                  className="px-3 py-2 text-left text-xs font-semibold text-gray-600"
+                  className="px-3 py-2 text-left text-xs font-semibold text-white"
                   style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
                 >
                   Wholesale Essential
                 </th>
                 <th
-                  className="px-3 py-2 text-left text-xs font-semibold text-gray-600"
+                  className="px-3 py-2 text-left text-xs font-semibold text-white"
                   style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
                 >
                   Subscriber
@@ -1559,7 +1559,7 @@ function ProductsPageInner() {
         >
           <DialogHeader>
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 mx-auto mb-4">
-              <Plus className="h-6 w-6 text-[#0d6efd]" />
+              <Plus className="h-6 w-6 text-[#105a9c]" />
             </div>
             <DialogTitle className="text-center text-xl font-semibold">
               {selectedProduct ? "Edit Product" : "Add New Product"}
@@ -1873,7 +1873,7 @@ function ProductsPageInner() {
                           e.target.value as "all" | "retailers" | "wholesalers",
                         )
                       }
-                      className="w-4 h-4 text-[#0d6efd] focus:ring-[#0d6efd]"
+                      className="w-4 h-4 text-[#105a9c] focus:ring-[#105a9c]"
                     />
                     <span className="text-sm text-gray-700">All Customers</span>
                     {customerTypeVisibility === "all" && (
@@ -1895,7 +1895,7 @@ function ProductsPageInner() {
                           e.target.value as "all" | "retailers" | "wholesalers",
                         )
                       }
-                      className="w-4 h-4 text-[#0d6efd] focus:ring-[#0d6efd]"
+                      className="w-4 h-4 text-[#105a9c] focus:ring-[#105a9c]"
                     />
                     <span className="text-sm text-gray-700">
                       Only Retailers
@@ -1919,7 +1919,7 @@ function ProductsPageInner() {
                           e.target.value as "all" | "retailers" | "wholesalers",
                         )
                       }
-                      className="w-4 h-4 text-[#0d6efd] focus:ring-[#0d6efd]"
+                      className="w-4 h-4 text-[#105a9c] focus:ring-[#105a9c]"
                     />
                     <span className="text-sm text-gray-700">
                       Only Wholesalers
@@ -1996,7 +1996,7 @@ function ProductsPageInner() {
               <select
                 value={roastLevel}
                 onChange={(e) => setRoastLevel(e.target.value)}
-                className="w-full h-11 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d6efd]"
+                className="w-full h-11 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#105a9c]"
                 style={{ fontFamily: "Albert Sans" }}
               >
                 <option value="">
@@ -2277,7 +2277,7 @@ function ProductsPageInner() {
                     e.target.value ? parseInt(e.target.value) : null,
                   )
                 }
-                className="w-full h-11 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d6efd]"
+                className="w-full h-11 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#105a9c]"
                 style={{ fontFamily: "Albert Sans" }}
                 disabled={selectedCategories.length === 0}
               >
@@ -2532,7 +2532,7 @@ function ProductsPageInner() {
                   createProductMutation.isPending ||
                   updateProductMutation.isPending
                 }
-                className="flex-1 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white disabled:opacity-50"
+                className="flex-1 bg-[#105a9c] hover:bg-[#0d4a82] text-white disabled:opacity-50"
                 style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
               >
                 {createProductMutation.isPending ||

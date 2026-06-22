@@ -578,7 +578,7 @@ export default function PaymentsPage() {
                   </div>
                   <Button 
                     size="sm" 
-                    className="bg-blue-600 hover:bg-blue-700 h-9"
+                    className="bg-[#105a9c] hover:bg-[#0d4a82] h-9"
                     onClick={() => handleSyncStatus(selectedPayment.payment_transaction_id, selectedPayment.order_id)}
                   >
                     <RefreshCw className="w-4 h-4 mr-2" />

@@ -110,7 +110,7 @@ export default function NotificationsPage() {
       <Card className="overflow-hidden border-none shadow-[0px_4px_15px_rgba(0,0,0,0.05)] bg-white rounded-xl">
         {isLoading ? (
           <div className="p-12 flex flex-col items-center justify-center gap-4">
-            <Loader2 className="w-8 h-8 animate-spin text-[#0d6efd]" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#105a9c]" />
             <p className="text-gray-500 font-medium">Loading your notifications...</p>
           </div>
         ) : error ? (
@@ -139,7 +139,7 @@ export default function NotificationsPage() {
                 )}
               >
                 {!notification.read_status && (
-                  <div className="absolute top-0 left-0 w-1 h-full bg-[#0d6efd]" />
+                  <div className="absolute top-0 left-0 w-1 h-full bg-[#105a9c]" />
                 )}
                 
                 <div className="flex-1 min-w-0">
@@ -155,7 +155,7 @@ export default function NotificationsPage() {
                       {formatTime(notification.created_at)}
                     </Badge>
                     {!notification.read_status && (
-                      <Badge className="bg-[#0d6efd] text-white hover:bg-[#0b5ed7]">New</Badge>
+                      <Badge className="bg-[#105a9c] text-white hover:bg-[#0d4a82]">New</Badge>
                     )}
                   </div>
                   <p className="text-[#424242] text-[15px] leading-relaxed mb-3">
@@ -166,7 +166,7 @@ export default function NotificationsPage() {
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      className="h-8 text-[#0d6efd] hover:text-[#0b5ed7] hover:bg-blue-50 p-0 px-2 font-medium flex items-center gap-1"
+                      className="h-8 text-[#105a9c] hover:text-[#0d4a82] hover:bg-blue-50 p-0 px-2 font-medium flex items-center gap-1"
                     >
                       View Details
                       <ExternalLink className="w-3 h-3" />

@@ -377,7 +377,7 @@ export default function RolesPage() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b bg-gray-50">
+              <tr className="border-b bg-[#105a9c]">
                 <th className="p-4 text-left font-semibold">Role Name</th>
                 <th className="p-4 text-left font-semibold">Description</th>
                 <th className="p-4 text-left font-semibold">Users</th>

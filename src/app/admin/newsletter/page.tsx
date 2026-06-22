@@ -158,7 +158,7 @@ export default function NewsletterPage() {
                         placeholder="Search by email..."
                         value={search}
                         onChange={handleSearchChange}
-                        className="w-full h-[48px] border border-gray-200 bg-white rounded-md focus:ring-2 focus:ring-[#0d6efd] focus:border-[#0d6efd] focus:outline-none"
+                        className="w-full h-[48px] border border-gray-200 bg-white rounded-md focus:ring-2 focus:ring-[#105a9c] focus:border-[#105a9c] focus:outline-none"
                         style={{ fontFamily: 'Albert Sans', paddingLeft: '44px' }}
                     />
                 </div>
@@ -182,13 +182,13 @@ export default function NewsletterPage() {
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
-                            <tr className="bg-gray-50 border-b border-gray-200">
-                                <th className="px-6 py-4 text-sm font-semibold text-gray-700 whitespace-nowrap">ID</th>
-                                <th className="px-6 py-4 text-sm font-semibold text-gray-700 whitespace-nowrap">Email</th>
-                                <th className="px-6 py-4 text-sm font-semibold text-gray-700 whitespace-nowrap">Status</th>
-                                <th className="px-6 py-4 text-sm font-semibold text-gray-700 whitespace-nowrap">Source</th>
-                                <th className="px-6 py-4 text-sm font-semibold text-gray-700 whitespace-nowrap">Subscribed At</th>
-                                <th className="px-6 py-4 text-sm font-semibold text-gray-700 whitespace-nowrap text-right">Actions</th>
+                            <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
+                                <th className="px-6 py-4 text-sm font-semibold text-white whitespace-nowrap">ID</th>
+                                <th className="px-6 py-4 text-sm font-semibold text-white whitespace-nowrap">Email</th>
+                                <th className="px-6 py-4 text-sm font-semibold text-white whitespace-nowrap">Status</th>
+                                <th className="px-6 py-4 text-sm font-semibold text-white whitespace-nowrap">Source</th>
+                                <th className="px-6 py-4 text-sm font-semibold text-white whitespace-nowrap">Subscribed At</th>
+                                <th className="px-6 py-4 text-sm font-semibold text-white whitespace-nowrap text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
