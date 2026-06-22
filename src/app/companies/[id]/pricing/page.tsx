@@ -231,25 +231,28 @@ export default function CompanyPricingPage() {
   // -------------------------------------------------------------------------
   // PDF download
   // -------------------------------------------------------------------------
-  // Load an image url into a data URL so it can be embedded in the PDF
+  // Load an image url into a data URL so it can be embedded in the PDF.
+  // Uses fetch + FileReader (avoids canvas tainting / alpha issues).
   const loadImage = (url: string): Promise<{ dataUrl: string; width: number; height: number }> =>
     new Promise((resolve, reject) => {
-      const img = new window.Image()
-      img.crossOrigin = "anonymous"
-      img.onload = () => {
-        const canvas = document.createElement("canvas")
-        canvas.width = img.naturalWidth
-        canvas.height = img.naturalHeight
-        const ctx = canvas.getContext("2d")
-        if (!ctx) {
-          reject(new Error("Canvas not supported"))
-          return
-        }
-        ctx.drawImage(img, 0, 0)
-        resolve({ dataUrl: canvas.toDataURL("image/png"), width: img.naturalWidth, height: img.naturalHeight })
-      }
-      img.onerror = () => reject(new Error("Failed to load logo"))
-      img.src = url
+      fetch(url)
+        .then((res) => {
+          if (!res.ok) throw new Error(`Logo not found (${res.status})`)
+          return res.blob()
+        })
+        .then((blob) => {
+          const reader = new FileReader()
+          reader.onload = () => {
+            const dataUrl = reader.result as string
+            const img = new window.Image()
+            img.onload = () => resolve({ dataUrl, width: img.naturalWidth, height: img.naturalHeight })
+            img.onerror = () => reject(new Error("Logo decode failed"))
+            img.src = dataUrl
+          }
+          reader.onerror = () => reject(new Error("Logo read failed"))
+          reader.readAsDataURL(blob)
+        })
+        .catch(reject)
     })
 
   const handleDownloadPDF = async () => {
@@ -260,39 +263,43 @@ export default function CompanyPricingPage() {
       const rightX = pageWidth - marginX
 
       // --- Company header -------------------------------------------------
-      // Logo (top-left)
-      let logoBottom = 36
-      const logoH = 38
+      // Logo (top-center)
+      let headerY = 20
+      const logoH = 42
       try {
         const logo = await loadImage("/assets/logo.png")
         const logoW = (logo.width / logo.height) * logoH
-        doc.addImage(logo.dataUrl, "PNG", marginX, 24, logoW, logoH)
-      } catch {
-        // logo failed to load - continue without it
+        const logoX = (pageWidth - logoW) / 2
+        doc.addImage(logo.dataUrl, "PNG", logoX, headerY, logoW, logoH)
+        headerY += logoH + 14
+      } catch (err) {
+        console.error("Logo load failed:", err)
+        headerY += 8
       }
 
-      // Company name + ABN (left, next to / under logo)
+      // Company name + ABN (left)
       doc.setTextColor(0)
       doc.setFontSize(13)
       doc.setFont("helvetica", "bold")
-      doc.text("St Dreux Coffee Roasters", marginX + 130, 38)
+      doc.text("St Dreux Coffee Roasters", marginX, headerY)
       doc.setFontSize(9)
       doc.setFont("helvetica", "normal")
       doc.setTextColor(110)
-      doc.text("ABN: 20 655 809 546", marginX + 130, 53)
+      doc.text("ABN: 20 655 809 546", marginX, headerY + 14)
 
       // Phone + email (right)
       doc.setTextColor(0)
       doc.setFontSize(9)
       doc.setFont("helvetica", "normal")
-      doc.text("Ph: 0246117229", rightX, 38, { align: "right" })
-      doc.text("info@stdreux.com.au", rightX, 53, { align: "right" })
+      doc.text("Ph: 0246117229", rightX, headerY, { align: "right" })
+      doc.text("info@stdreux.com.au", rightX, headerY + 14, { align: "right" })
 
       // Divider line
+      const dividerY = headerY + 26
       doc.setDrawColor(16, 90, 156)
       doc.setLineWidth(1)
-      doc.line(marginX, 70, rightX, 70)
-      logoBottom = 70
+      doc.line(marginX, dividerY, rightX, dividerY)
+      const logoBottom = dividerY
 
       // Title
       doc.setTextColor(0)
