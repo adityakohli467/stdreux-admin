@@ -231,20 +231,79 @@ export default function CompanyPricingPage() {
   // -------------------------------------------------------------------------
   // PDF download
   // -------------------------------------------------------------------------
-  const handleDownloadPDF = () => {
+  // Load an image url into a data URL so it can be embedded in the PDF
+  const loadImage = (url: string): Promise<{ dataUrl: string; width: number; height: number }> =>
+    new Promise((resolve, reject) => {
+      const img = new window.Image()
+      img.crossOrigin = "anonymous"
+      img.onload = () => {
+        const canvas = document.createElement("canvas")
+        canvas.width = img.naturalWidth
+        canvas.height = img.naturalHeight
+        const ctx = canvas.getContext("2d")
+        if (!ctx) {
+          reject(new Error("Canvas not supported"))
+          return
+        }
+        ctx.drawImage(img, 0, 0)
+        resolve({ dataUrl: canvas.toDataURL("image/png"), width: img.naturalWidth, height: img.naturalHeight })
+      }
+      img.onerror = () => reject(new Error("Failed to load logo"))
+      img.src = url
+    })
+
+  const handleDownloadPDF = async () => {
     try {
       const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "a4" })
       const marginX = 32
+      const pageWidth = doc.internal.pageSize.getWidth()
+      const rightX = pageWidth - marginX
+
+      // --- Company header -------------------------------------------------
+      // Logo (top-left)
+      let logoBottom = 36
+      const logoH = 38
+      try {
+        const logo = await loadImage("/assets/logo.png")
+        const logoW = (logo.width / logo.height) * logoH
+        doc.addImage(logo.dataUrl, "PNG", marginX, 24, logoW, logoH)
+      } catch {
+        // logo failed to load - continue without it
+      }
+
+      // Company name + ABN (left, next to / under logo)
+      doc.setTextColor(0)
+      doc.setFontSize(13)
+      doc.setFont("helvetica", "bold")
+      doc.text("St Dreux Coffee Roasters", marginX + 130, 38)
+      doc.setFontSize(9)
+      doc.setFont("helvetica", "normal")
+      doc.setTextColor(110)
+      doc.text("ABN: 20 655 809 546", marginX + 130, 53)
+
+      // Phone + email (right)
+      doc.setTextColor(0)
+      doc.setFontSize(9)
+      doc.setFont("helvetica", "normal")
+      doc.text("Ph: 0246117229", rightX, 38, { align: "right" })
+      doc.text("info@stdreux.com.au", rightX, 53, { align: "right" })
+
+      // Divider line
+      doc.setDrawColor(16, 90, 156)
+      doc.setLineWidth(1)
+      doc.line(marginX, 70, rightX, 70)
+      logoBottom = 70
 
       // Title
-      doc.setFontSize(16)
+      doc.setTextColor(0)
+      doc.setFontSize(15)
       doc.setFont("helvetica", "bold")
-      doc.text(companyName, marginX, 40)
+      doc.text(companyName, marginX, logoBottom + 26)
       doc.setFontSize(10)
       doc.setFont("helvetica", "normal")
       doc.setTextColor(110)
-      doc.text("Company Product Pricing", marginX, 58)
-      doc.text(`Generated: ${new Date().toLocaleDateString()}`, marginX, 72)
+      doc.text("Company Product Pricing", marginX, logoBottom + 42)
+      doc.text(`Generated: ${new Date().toLocaleDateString()}`, rightX, logoBottom + 42, { align: "right" })
       doc.setTextColor(0)
 
       const body = rows.map((row) => {
@@ -264,7 +323,7 @@ export default function CompanyPricingPage() {
       })
 
       autoTable(doc, {
-        startY: 88,
+        startY: logoBottom + 56,
         head: [[
           "No",
           "Category",
