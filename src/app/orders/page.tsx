@@ -660,7 +660,7 @@ export default function OrdersPage() {
           lineHeight: '1.2',
           letterSpacing: '0%'
         }}>
-          {selectedTab === 'past' ? 'Past Orders' : selectedTab === 'future' ? 'Future Orders' : selectedTab === 'reminder' ? 'Reminder Orders' : selectedTab === 'late' ? 'Late Orders' : 'Wholesale Orders'}
+          {selectedTab === 'past' ? 'Completed Orders' : selectedTab === 'future' ? 'Future Orders' : selectedTab === 'reminder' ? 'Reminder Orders' : selectedTab === 'late' ? 'Late Orders' : 'Wholesale Orders'}
         </h1>
         <Link href="/orders/new" className="w-full sm:w-auto">
           <Button
@@ -938,7 +938,7 @@ export default function OrdersPage() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
+              <tr className="bg-[#105a9c] border-b border-[#0d4a82] text-white">
                 <th className="px-4 py-3 text-left">
                   <Checkbox
                     checked={orders.length > 0 && selectedOrders.length === orders.length}
@@ -947,7 +947,7 @@ export default function OrdersPage() {
                   />
                 </th>
                 <th
-                  className="px-4 py-3 text-left cursor-pointer hover:bg-gray-100"
+                  className="px-4 py-3 text-left cursor-pointer hover:bg-[#0d4a82]"
                   onClick={() => {
                     if (sortField === 'order_id') {
                       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
@@ -971,7 +971,7 @@ export default function OrdersPage() {
                   </div>
                 </th>
                 <th
-                  className="px-4 py-3 text-left cursor-pointer hover:bg-gray-100"
+                  className="px-4 py-3 text-left cursor-pointer hover:bg-[#0d4a82]"
                   onClick={() => {
                     if (sortField === 'customer_name') {
                       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
@@ -995,7 +995,7 @@ export default function OrdersPage() {
                   </div>
                 </th>
                 <th
-                  className="px-4 py-3 text-left cursor-pointer hover:bg-gray-100"
+                  className="px-4 py-3 text-left cursor-pointer hover:bg-[#0d4a82]"
                   onClick={() => {
                     if (sortField === 'company') {
                       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
@@ -1019,7 +1019,7 @@ export default function OrdersPage() {
                   </div>
                 </th>
                 <th
-                  className="px-4 py-3 text-left cursor-pointer hover:bg-gray-100"
+                  className="px-4 py-3 text-left cursor-pointer hover:bg-[#0d4a82]"
                   onClick={() => {
                     if (sortField === 'date_added') {
                       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
@@ -1044,7 +1044,7 @@ export default function OrdersPage() {
                 </th>
 
                 <th
-                  className="px-4 py-3 text-left cursor-pointer hover:bg-gray-100"
+                  className="px-4 py-3 text-left cursor-pointer hover:bg-[#0d4a82]"
                   onClick={() => {
                     if (sortField === 'order_total') {
                       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')

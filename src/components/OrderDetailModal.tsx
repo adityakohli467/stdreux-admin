@@ -350,7 +350,7 @@ export function OrderDetailModal({
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
+                        <tr className="bg-[#105a9c] border-b border-[#0d4a82] text-white">
                           <th
                             style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
                             className="text-left px-4 py-3 text-sm text-white"

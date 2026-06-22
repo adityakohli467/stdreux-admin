@@ -1086,7 +1086,7 @@ export default function DashboardPage() {
           <div className="overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-12 xl:-mx-[108px] px-4 sm:px-6 lg:px-12 xl:px-[108px]">
             <table className="w-full min-w-[800px]">
               <thead>
-                <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
+                <tr className="bg-[#105a9c] border-b border-[#0d4a82] text-white">
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-white whitespace-nowrap">Customer Name</th>
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-white whitespace-nowrap">Contact</th>
                   <th style={{ fontFamily: 'Albert Sans', fontWeight: 600 }} className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-white whitespace-nowrap">Email</th>
@@ -1240,7 +1240,7 @@ export default function DashboardPage() {
           <div className="overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-12 xl:-mx-[108px] px-4 sm:px-6 lg:px-12 xl:px-[108px]">
             <table className="w-full min-w-[800px]">
               <thead>
-                <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
+                <tr className="bg-[#105a9c] border-b border-[#0d4a82] text-white">
                   <th className="px-3 sm:px-4 py-3 sm:py-4 w-10">
                     <input
                       type="checkbox"

@@ -464,7 +464,7 @@ export default function WholesaleOrdersPage() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
+              <tr className="bg-[#105a9c] border-b border-[#0d4a82] text-white">
                 <th className="px-6 py-4 text-left">
                   <Checkbox
                     checked={orders.length > 0 && selectedOrders.length === orders.length}

@@ -591,7 +591,7 @@ export default function QuotesPage() {
         <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
           <table className="w-full min-w-[600px] sm:min-w-[700px]">
             <thead>
-              <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
+              <tr className="bg-[#105a9c] border-b border-[#0d4a82] text-white">
                 <th className="px-4 py-3 text-left">
                   <Checkbox
                     checked={selectedQuotes.length === quotes.length && quotes.length > 0}

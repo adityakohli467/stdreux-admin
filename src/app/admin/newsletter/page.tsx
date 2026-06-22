@@ -182,7 +182,7 @@ export default function NewsletterPage() {
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
-                            <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
+                            <tr className="bg-[#105a9c] border-b border-[#0d4a82] text-white">
                                 <th className="px-6 py-4 text-sm font-semibold text-white whitespace-nowrap">ID</th>
                                 <th className="px-6 py-4 text-sm font-semibold text-white whitespace-nowrap">Email</th>
                                 <th className="px-6 py-4 text-sm font-semibold text-white whitespace-nowrap">Status</th>

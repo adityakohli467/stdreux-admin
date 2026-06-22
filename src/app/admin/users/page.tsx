@@ -442,7 +442,7 @@ export default function UsersPage() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
+              <tr className="bg-[#105a9c] border-b border-[#0d4a82] text-white">
                 <th className="px-6 py-4 text-left text-sm font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   First Name
                 </th>

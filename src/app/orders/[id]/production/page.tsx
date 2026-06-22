@@ -331,9 +331,9 @@ export default function ProductionFormPage() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
+                <tr className="bg-[#105a9c] border-b border-[#0d4a82] text-white">
                   <th 
-                    className="px-4 py-3 text-left cursor-pointer hover:bg-gray-100"
+                    className="px-4 py-3 text-left cursor-pointer hover:bg-[#0d4a82]"
                     style={{ 
                       fontFamily: 'Albert Sans', 
                       fontWeight: 600,
@@ -349,7 +349,7 @@ export default function ProductionFormPage() {
                     </div>
                   </th>
                   <th 
-                    className="px-4 py-3 text-left cursor-pointer hover:bg-gray-100"
+                    className="px-4 py-3 text-left cursor-pointer hover:bg-[#0d4a82]"
                     style={{ 
                       fontFamily: 'Albert Sans', 
                       fontWeight: 600,
@@ -365,7 +365,7 @@ export default function ProductionFormPage() {
                     </div>
                   </th>
                   <th 
-                    className="px-4 py-3 text-left cursor-pointer hover:bg-gray-100"
+                    className="px-4 py-3 text-left cursor-pointer hover:bg-[#0d4a82]"
                     style={{ 
                       fontFamily: 'Albert Sans', 
                       fontWeight: 600,
@@ -381,7 +381,7 @@ export default function ProductionFormPage() {
                     </div>
                   </th>
                   <th 
-                    className="px-4 py-3 text-left cursor-pointer hover:bg-gray-100"
+                    className="px-4 py-3 text-left cursor-pointer hover:bg-[#0d4a82]"
                     style={{ 
                       fontFamily: 'Albert Sans', 
                       fontWeight: 600,

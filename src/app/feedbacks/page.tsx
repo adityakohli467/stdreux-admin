@@ -347,7 +347,7 @@ export default function FeedbacksPage() {
           <div className="inline-block min-w-full align-middle">
             <table className="w-full min-w-[1000px]">
               <thead>
-                <tr className="bg-[#105a9c] border-b border-[#0d4a82]">
+                <tr className="bg-[#105a9c] border-b border-[#0d4a82] text-white">
                   <th className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                     Order
                   </th>
