@@ -231,8 +231,9 @@ export default function CompanyPricingPage() {
   // -------------------------------------------------------------------------
   // PDF download
   // -------------------------------------------------------------------------
-  // Load an image url into a data URL so it can be embedded in the PDF.
-  // Uses fetch + FileReader (avoids canvas tainting / alpha issues).
+  // Load an image url and rasterize it to a PNG data URL so it can be embedded
+  // in the PDF. jsPDF cannot decode SVG, so we always draw onto a canvas and
+  // export a PNG (this also handles PNG/JPEG transparently).
   const loadImage = (url: string): Promise<{ dataUrl: string; width: number; height: number }> =>
     new Promise((resolve, reject) => {
       fetch(url)
@@ -243,11 +244,24 @@ export default function CompanyPricingPage() {
         .then((blob) => {
           const reader = new FileReader()
           reader.onload = () => {
-            const dataUrl = reader.result as string
+            const src = reader.result as string
             const img = new window.Image()
-            img.onload = () => resolve({ dataUrl, width: img.naturalWidth, height: img.naturalHeight })
+            img.onload = () => {
+              // Use the SVG's intrinsic size (fallback to a sensible default),
+              // then scale up for a crisp raster in the PDF.
+              const baseW = img.naturalWidth || 88
+              const baseH = img.naturalHeight || 24
+              const scale = 8
+              const canvas = document.createElement("canvas")
+              canvas.width = baseW * scale
+              canvas.height = baseH * scale
+              const ctx = canvas.getContext("2d")
+              if (!ctx) return reject(new Error("Canvas not supported"))
+              ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+              resolve({ dataUrl: canvas.toDataURL("image/png"), width: baseW, height: baseH })
+            }
             img.onerror = () => reject(new Error("Logo decode failed"))
-            img.src = dataUrl
+            img.src = src
           }
           reader.onerror = () => reject(new Error("Logo read failed"))
           reader.readAsDataURL(blob)
@@ -267,7 +281,7 @@ export default function CompanyPricingPage() {
       let headerY = 20
       const logoH = 42
       try {
-        const logo = await loadImage("/assets/logo.png")
+        const logo = await loadImage("/assets/logo-stdreux.svg")
         const logoW = (logo.width / logo.height) * logoH
         const logoX = (pageWidth - logoW) / 2
         doc.addImage(logo.dataUrl, "PNG", logoX, headerY, logoW, logoH)
