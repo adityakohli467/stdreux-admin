@@ -1068,7 +1068,7 @@ export function ProductsStep({ data, onUpdate, onNext, onBack }: ProductsStepPro
                                   }
                                   return (
                                     <div key={key} className="flex items-center justify-between">
-                                      <label className="flex items-center gap-2 cursor-pointer" onClick={() => setSelectedOptions({ ...selectedOptions, [key]: !selectedOptions[key] })}>
+                                      <label className="flex items-center gap-2 cursor-pointer">
                                         <Checkbox
                                           checked={selectedOptions[key] || false}
                                           onCheckedChange={(checked) =>
