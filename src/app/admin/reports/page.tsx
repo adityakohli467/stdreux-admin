@@ -22,6 +22,9 @@ interface Report {
   department_name: string
   location_name: string
   order_status: number
+  is_completed?: number | string
+  packaging_status?: number
+  payment_status?: number | string | null
   subtotal: number
   delivery_fee: number
   discount: number
@@ -184,6 +187,7 @@ export default function ReportsPage() {
         "Department",
         "Location",
         "Status",
+        "Payment Status",
         "Subtotal",
         "Delivery Fee",
         "Discount",
@@ -199,7 +203,8 @@ export default function ReportsPage() {
         `"${(report.company_name || "").replace(/"/g, '""')}"`,
         `"${(report.department_name || "").replace(/"/g, '""')}"`,
         `"${(report.location_name || "").replace(/"/g, '""')}"`,
-        getStatusBadge(report.order_status).label,
+        getStatusBadge(report).label,
+        isReportPaid(report) ? "Paid" : "Unpaid",
         report.subtotal.toFixed(2),
         report.delivery_fee.toFixed(2),
         report.discount.toFixed(2),
@@ -238,19 +243,40 @@ export default function ReportsPage() {
     printTableData("Reports")
   }
 
-  const getStatusBadge = (status: number) => {
+  // Order status badge - mirrors the Orders list page logic exactly
+  const getStatusBadge = (report: Report) => {
+    // A completed order takes precedence (matches Orders list)
+    if (String(report.is_completed) === "1") {
+      return { label: "Completed", class: "bg-green-50 text-green-700" }
+    }
+
+    // Packaging status overrides the raw order status
+    const packagingStatus = report.packaging_status || 0
+    if (packagingStatus === 1) return { label: "Printed", class: "bg-orange-50 text-orange-700" }
+    if (packagingStatus === 2) return { label: "Packed", class: "bg-yellow-50 text-yellow-700" }
+    if (packagingStatus === 3) return { label: "Delivered", class: "bg-green-50 text-green-700" }
+
     const statusMap: { [key: number]: { label: string; class: string } } = {
-      0: { label: "Cancelled", class: "bg-gray-100 text-gray-600" },
-      1: { label: "New", class: "bg-blue-50 text-blue-700" },
-      2: { label: "Paid", class: "bg-blue-50 text-blue-700" },
-      3: { label: "Completed", class: "bg-green-50 text-green-700" },
+      0: { label: "Cancelled", class: "bg-red-50 text-red-700" },
+      1: { label: "Pending", class: "bg-blue-50 text-blue-700" },
+      2: { label: "Pending", class: "bg-blue-50 text-blue-700" },
+      3: { label: "Pending", class: "bg-blue-50 text-blue-700" },
       4: { label: "Awaiting Approval", class: "bg-yellow-50 text-yellow-700" },
-      5: { label: "Processing", class: "bg-purple-50 text-purple-700" },
-      6: { label: "Production", class: "bg-indigo-50 text-indigo-700" },
-      7: { label: "Approved", class: "bg-green-50 text-green-700" },
+      5: { label: "Completed", class: "bg-green-50 text-green-700" },
+      7: { label: "Approved", class: "bg-purple-50 text-purple-700" },
       8: { label: "Rejected", class: "bg-red-50 text-red-700" },
     }
-    return statusMap[status] || { label: "Unknown", class: "bg-gray-100 text-gray-600" }
+    return statusMap[report.order_status] || { label: "Pending", class: "bg-blue-50 text-blue-700" }
+  }
+
+  // Payment status (Paid / Unpaid) - mirrors the Orders list page logic exactly
+  const isReportPaid = (report: Report) => {
+    const ps = report.payment_status
+    if (ps !== undefined && ps !== null && String(ps) !== "") {
+      const v = String(ps).toLowerCase()
+      return v === "1" || Number(ps) === 1 || v === "paid" || v === "true" || v === "succeeded"
+    }
+    return report.order_status === 2 || report.order_status === 3 || report.order_status === 5
   }
 
   return (
@@ -464,6 +490,9 @@ export default function ReportsPage() {
                   Status
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                  Payment Status
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Subtotal
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
@@ -481,15 +510,16 @@ export default function ReportsPage() {
             <tbody>
               {isLoading ? (
                 <tr>
-                  <td colSpan={11} className="text-center py-8 text-gray-500">Loading reports...</td>
+                  <td colSpan={12} className="text-center py-8 text-gray-500">Loading reports...</td>
                 </tr>
               ) : reports.length === 0 ? (
                 <tr>
-                  <td colSpan={11} className="text-center py-8 text-gray-500">No reports found.</td>
+                  <td colSpan={12} className="text-center py-8 text-gray-500">No reports found.</td>
                 </tr>
               ) : (
                 reports.map((report: Report, index: number) => {
-                  const statusInfo = getStatusBadge(report.order_status)
+                  const statusInfo = getStatusBadge(report)
+                  const paid = isReportPaid(report)
                   return (
                     <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                       <td className="px-4 py-3">
@@ -525,6 +555,11 @@ export default function ReportsPage() {
                       <td className="px-4 py-3">
                         <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${statusInfo.class}`}>
                           {statusInfo.label}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${paid ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
+                          {paid ? 'Paid' : 'Unpaid'}
                         </span>
                       </td>
                       <td className="px-4 py-3">
