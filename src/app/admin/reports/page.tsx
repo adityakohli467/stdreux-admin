@@ -208,7 +208,7 @@ export default function ReportsPage() {
         report.subtotal.toFixed(2),
         report.delivery_fee.toFixed(2),
         report.discount.toFixed(2),
-        (report.total - report.gst).toFixed(2) // Total excluding GST
+        report.total.toFixed(2) // Stored order total (GST-inclusive, matches Orders list)
       ])
 
       // Generate CSV Content
@@ -579,7 +579,7 @@ export default function ReportsPage() {
                       </td>
                       <td className="px-4 py-3">
                         <span className="text-xs text-gray-900 font-semibold" style={{ fontFamily: 'Albert Sans' }}>
-                          ${(report.total - report.gst).toFixed(2)}
+                          ${report.total.toFixed(2)}
                         </span>
                       </td>
                     </tr>
