@@ -37,12 +37,16 @@ export default function ReportsPage() {
   const [orderDateFrom, setOrderDateFrom] = useState<Date | null>(null)
   const [orderDateTo, setOrderDateTo] = useState<Date | null>(null)
   const [selectedStatus, setSelectedStatus] = useState("")
+  const [selectedCompany, setSelectedCompany] = useState("")
+  const [selectedPaymentStatus, setSelectedPaymentStatus] = useState("")
 
   // Applied filters (for API call)
   const [appliedFilters, setAppliedFilters] = useState({
     order_date_from: "",
     order_date_to: "",
     status: "",
+    company: "",
+    payment_status: "",
     search: ""
   })
 
@@ -58,6 +62,8 @@ export default function ReportsPage() {
       if (appliedFilters.order_date_from) params.append("order_date_from", appliedFilters.order_date_from)
       if (appliedFilters.order_date_to) params.append("order_date_to", appliedFilters.order_date_to)
       if (appliedFilters.status) params.append("status", appliedFilters.status)
+      if (appliedFilters.company) params.append("company", appliedFilters.company)
+      if (appliedFilters.payment_status) params.append("payment_status", appliedFilters.payment_status)
       if (appliedFilters.search) params.append("search", appliedFilters.search)
       params.append("limit", itemsPerPage.toString())
       params.append("offset", "0")
@@ -97,11 +103,23 @@ export default function ReportsPage() {
   const totalCount = reportsData?.count || 0
   const totalPages = Math.ceil(totalCount / itemsPerPage)
 
+  // Fetch companies for the Company filter dropdown
+  const { data: companiesData } = useQuery({
+    queryKey: ["reports-companies"],
+    queryFn: async () => {
+      const response = await api.get("/admin/companies", { params: { limit: 1000 } })
+      return response.data.companies || []
+    },
+  })
+  const companies = companiesData || []
+
   const handleApplyFilters = () => {
     setAppliedFilters({
       order_date_from: orderDateFrom ? format(orderDateFrom as Date, "yyyy-MM-dd") : "",
       order_date_to: orderDateTo ? format(orderDateTo as Date, "yyyy-MM-dd") : "",
       status: selectedStatus,
+      company: selectedCompany,
+      payment_status: selectedPaymentStatus,
       search: searchQuery
     })
     setCurrentPage(1)
@@ -111,11 +129,15 @@ export default function ReportsPage() {
     setOrderDateFrom(null)
     setOrderDateTo(null)
     setSelectedStatus("")
+    setSelectedCompany("")
+    setSelectedPaymentStatus("")
     setSearchQuery("")
     setAppliedFilters({
       order_date_from: "",
       order_date_to: "",
       status: "",
+      company: "",
+      payment_status: "",
       search: ""
     })
     setCurrentPage(1)
@@ -127,6 +149,8 @@ export default function ReportsPage() {
       if (appliedFilters.order_date_from) params.append("order_date_from", appliedFilters.order_date_from)
       if (appliedFilters.order_date_to) params.append("order_date_to", appliedFilters.order_date_to)
       if (appliedFilters.status) params.append("status", appliedFilters.status)
+      if (appliedFilters.company) params.append("company", appliedFilters.company)
+      if (appliedFilters.payment_status) params.append("payment_status", appliedFilters.payment_status)
       if (appliedFilters.search) params.append("search", appliedFilters.search)
       params.append("limit", "10000") // Fetch all records
 
@@ -279,22 +303,51 @@ export default function ReportsPage() {
 
 
 
-          {/* Select Statuses */}
-          <div className="flex items-center gap-2 border border-gray-300 rounded-lg px-4 py-2.5 bg-white">
+          {/* Status (Completed / Not Completed / All) */}
+          <div className="flex flex-col border border-gray-300 rounded-lg px-4 py-2 bg-white">
+            <span className="text-xs text-gray-600 mb-1">Status</span>
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
               className="flex-1 text-sm bg-transparent border-none p-0 focus:outline-none"
               style={{ fontFamily: 'Albert Sans' }}
             >
-              <option value="">Select Statuses</option>
-              <option value="7">Approved</option>
-              <option value="90">All minus paid</option>
-              <option value="91">All minus cancelled</option>
-              <option value="8">Rejected</option>
-              <option value="0">Cancelled</option>
-              <option value="2">Paid</option>
-              <option value="4">Waiting for Approval</option>
+              <option value="">All</option>
+              <option value="completed">Completed</option>
+              <option value="not_completed">Not Completed</option>
+            </select>
+          </div>
+
+          {/* Company filter */}
+          <div className="flex flex-col border border-gray-300 rounded-lg px-4 py-2 bg-white">
+            <span className="text-xs text-gray-600 mb-1">Company</span>
+            <select
+              value={selectedCompany}
+              onChange={(e) => setSelectedCompany(e.target.value)}
+              className="flex-1 text-sm bg-transparent border-none p-0 focus:outline-none"
+              style={{ fontFamily: 'Albert Sans' }}
+            >
+              <option value="">All Companies</option>
+              {companies.map((c: any) => (
+                <option key={c.company_id} value={c.company_name}>
+                  {c.company_name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Payment Status filter (separate from the status dropdown) */}
+          <div className="flex flex-col border border-gray-300 rounded-lg px-4 py-2 bg-white">
+            <span className="text-xs text-gray-600 mb-1">Payment Status</span>
+            <select
+              value={selectedPaymentStatus}
+              onChange={(e) => setSelectedPaymentStatus(e.target.value)}
+              className="flex-1 text-sm bg-transparent border-none p-0 focus:outline-none"
+              style={{ fontFamily: 'Albert Sans' }}
+            >
+              <option value="">All</option>
+              <option value="paid">Paid</option>
+              <option value="unpaid">Unpaid</option>
             </select>
           </div>
         </div>
