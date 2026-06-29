@@ -86,6 +86,8 @@ interface Product {
   show_in_checkout?: boolean;
   featured_1?: boolean;
   featured_2?: boolean;
+  priority_access?: boolean;
+  priority_access_expiry?: string | null;
   show_in_store?: boolean;
   roast_level?: string | null;
   show_specifications?: boolean;
@@ -174,6 +176,8 @@ function ProductsPageInner() {
   const [showInCheckout, setShowInCheckout] = useState(false);
   const [featured1, setFeatured1] = useState(false);
   const [featured2, setFeatured2] = useState(false);
+  const [priorityAccess, setPriorityAccess] = useState(false);
+  const [priorityAccessExpiry, setPriorityAccessExpiry] = useState("");
   const [showInStore, setShowInStore] = useState(true);
   const [addToSubscription, setAddToSubscription] = useState(false);
   const [activeTab, setActiveTab] = useState<"active" | "inactive" | "featured_1" | "featured_2">("active");
@@ -445,6 +449,12 @@ function ProductsPageInner() {
     setShowInCheckout(product.show_in_checkout || false);
     setFeatured1(product.featured_1 || false);
     setFeatured2(product.featured_2 || false);
+    setPriorityAccess(product.priority_access || false);
+    setPriorityAccessExpiry(
+      product.priority_access_expiry
+        ? product.priority_access_expiry.split("T")[0]
+        : "",
+    );
     setShowInStore(
       product.show_in_store !== undefined ? product.show_in_store : true,
     );
@@ -602,6 +612,9 @@ function ProductsPageInner() {
       show_in_checkout: showInCheckout ? 1 : 0,
       featured_1: featured1 ? 1 : 0,
       featured_2: featured2 ? 1 : 0,
+      priority_access: priorityAccess ? 1 : 0,
+      priority_access_expiry:
+        priorityAccess && priorityAccessExpiry ? priorityAccessExpiry : null,
       show_in_store: showInStore ? 1 : 0,
       add_to_subscription: addToSubscription ? 1 : 0,
       options: selectedOptions.map((opt) => ({
@@ -1021,6 +1034,8 @@ function ProductsPageInner() {
     setShowInCheckout(false);
     setFeatured1(false);
     setFeatured2(false);
+    setPriorityAccess(false);
+    setPriorityAccessExpiry("");
     setShowInStore(true); // Reset to true
     setAddToSubscription(false);
     setSelectedProduct(null);
@@ -2472,6 +2487,44 @@ function ProductsPageInner() {
                     Featured 2 (Homepage Second Option)
                   </span>
                 </label>
+                <div className="col-span-2 border border-gray-200 rounded p-3 space-y-2">
+                  <label className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 rounded">
+                    <input
+                      type="checkbox"
+                      checked={priorityAccess}
+                      onChange={(e) => setPriorityAccess(e.target.checked)}
+                      className="rounded border-gray-300"
+                    />
+                    <span
+                      className="text-sm text-gray-700"
+                      style={{ fontFamily: "Albert Sans" }}
+                    >
+                      Priority Access (VIP customers only)
+                    </span>
+                  </label>
+                  {priorityAccess && (
+                    <div className="pl-6">
+                      <label
+                        className="block text-xs text-gray-600 mb-1"
+                        style={{ fontFamily: "Albert Sans" }}
+                      >
+                        Date of Expiry
+                      </label>
+                      <input
+                        type="date"
+                        value={priorityAccessExpiry}
+                        onChange={(e) =>
+                          setPriorityAccessExpiry(e.target.value)
+                        }
+                        className="border border-gray-300 rounded px-3 py-2 text-sm"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Only VIP customers can see this product until this date.
+                        After the expiry date, it becomes visible to everyone.
+                      </p>
+                    </div>
+                  )}
+                </div>
                 <label className="flex items-center gap-2 cursor-pointer p-2 hover:bg-gray-50 rounded">
                   <input
                     type="checkbox"

@@ -76,6 +76,7 @@ interface Customer {
   created_from?: string;
   approved?: boolean;
   pay_later?: boolean;
+  vip?: boolean;
   company_name?: string;
   department_name?: string;
   has_similar_company?: boolean;
@@ -159,6 +160,7 @@ function CustomersContent() {
   const [estimatedOpeningDate, setEstimatedOpeningDate] = useState("");
   const [discountPercentage, setDiscountPercentage] = useState<string>("");
   const [payLater, setPayLater] = useState(false);
+  const [vip, setVip] = useState(false);
 
   // Validation errors
   const [errors, setErrors] = useState<{
@@ -421,6 +423,7 @@ function CustomersContent() {
     setEstimatedOpeningDate(customer.estimated_opening_date || "");
     setDiscountPercentage(customer.discount_percentage?.toString() || "");
     setPayLater(customer.pay_later || false);
+    setVip(customer.vip || false);
     setShowEditModal(true);
   };
 
@@ -528,6 +531,7 @@ function CustomersContent() {
         ? Number(discountPercentage)
         : null,
       pay_later: payLater,
+      vip: vip,
       status: 1,
       archived: false,
       ...getWholesaleFields(),
@@ -594,6 +598,7 @@ function CustomersContent() {
     setEstimatedOpeningDate("");
     setDiscountPercentage("");
     setPayLater(false);
+    setVip(false);
     setErrors({});
   };
 
@@ -1380,6 +1385,16 @@ function CustomersContent() {
                     />
                     <Label htmlFor="pay-later">Enable Pay Later</Label>
                   </div>
+
+                  {/* VIP Toggle */}
+                  <div className="flex items-center space-x-2 pt-2">
+                    <Switch
+                      id="vip"
+                      checked={vip}
+                      onCheckedChange={setVip}
+                    />
+                    <Label htmlFor="vip">VIP</Label>
+                  </div>
                 </div>
               </>
             )}
@@ -1746,6 +1761,16 @@ function CustomersContent() {
                     onCheckedChange={setPayLater}
                   />
                   <Label htmlFor="edit-pay-later">Enable Pay Later</Label>
+                </div>
+
+                {/* VIP Toggle - Edit Mode */}
+                <div className="flex items-center space-x-2 pt-2">
+                  <Switch
+                    id="edit-vip"
+                    checked={vip}
+                    onCheckedChange={setVip}
+                  />
+                  <Label htmlFor="edit-vip">VIP</Label>
                 </div>
               </div>
             </div>

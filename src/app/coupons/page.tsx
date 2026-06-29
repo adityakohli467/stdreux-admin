@@ -24,6 +24,23 @@ interface Coupon {
   type: string
   status: number
   show_on_storefront: boolean
+  customer_types?: string | string[] | null
+}
+
+const CUSTOMER_TYPE_OPTIONS = [
+  { value: "retail", label: "Retail" },
+  { value: "vip", label: "VIP" },
+  { value: "wholesale", label: "Wholesale" },
+]
+
+// Normalize the stored customer_types value (comma string or array) into an array.
+const parseCustomerTypes = (value: string | string[] | null | undefined): string[] => {
+  if (!value) return []
+  const arr = Array.isArray(value) ? value : value.split(",")
+  const allowed = CUSTOMER_TYPE_OPTIONS.map((o) => o.value)
+  return arr
+    .map((s) => String(s).trim().toLowerCase())
+    .filter((s) => allowed.includes(s))
 }
 
 export default function CouponsPage() {
@@ -46,6 +63,7 @@ export default function CouponsPage() {
   const [discountAmount, setDiscountAmount] = useState("")
   const [discountType, setDiscountType] = useState("")
   const [showOnStorefront, setShowOnStorefront] = useState(false)
+  const [customerTypes, setCustomerTypes] = useState<string[]>([])
   
   // Validation errors state
   const [formErrors, setFormErrors] = useState<{
@@ -197,6 +215,7 @@ export default function CouponsPage() {
     setDiscountAmount(coupon.coupon_discount.toString())
     setDiscountType(coupon.type)
     setShowOnStorefront(!!coupon.show_on_storefront)
+    setCustomerTypes(parseCustomerTypes(coupon.customer_types))
     setShowEditModal(true)
   }
 
@@ -250,6 +269,7 @@ export default function CouponsPage() {
       type: discountType,
       status: 1,
       show_on_storefront: showOnStorefront,
+      customer_types: customerTypes,
     }
 
     if (selectedCoupon) {
@@ -313,6 +333,7 @@ export default function CouponsPage() {
     setDiscountAmount("")
     setDiscountType("")
     setShowOnStorefront(false)
+    setCustomerTypes([])
   }
 
   const getDiscountDisplay = (coupon: Coupon) => {
@@ -661,6 +682,47 @@ export default function CouponsPage() {
                 <option value="P">Percentage Discount</option>
                 <option value="F">Fixed Discount</option>
               </select>
+            </div>
+
+            {/* Customer Type (multi-select) */}
+            <div className="space-y-2">
+              <Label className="text-sm font-medium text-gray-700">
+                Customer Type
+              </Label>
+              <p className="text-xs text-gray-500">
+                Select which customer types can use this coupon. Leave all
+                unchecked to make it available to everyone.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {CUSTOMER_TYPE_OPTIONS.map((option) => {
+                  const checked = customerTypes.includes(option.value)
+                  return (
+                    <label
+                      key={option.value}
+                      className={`flex items-center gap-2 cursor-pointer rounded-md border px-3 py-2 text-sm ${
+                        checked
+                          ? "border-[#105a9c] bg-blue-50 text-[#105a9c]"
+                          : "border-gray-300 bg-white text-gray-700"
+                      }`}
+                      style={{ fontFamily: "Albert Sans" }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={(e) => {
+                          setCustomerTypes((prev) =>
+                            e.target.checked
+                              ? [...prev, option.value]
+                              : prev.filter((v) => v !== option.value),
+                          )
+                        }}
+                        className="rounded border-gray-300"
+                      />
+                      {option.label}
+                    </label>
+                  )
+                })}
+              </div>
             </div>
 
             {/* Action Buttons */}
