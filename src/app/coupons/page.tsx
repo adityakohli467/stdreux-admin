@@ -25,12 +25,20 @@ interface Coupon {
   status: number
   show_on_storefront: boolean
   customer_types?: string | string[] | null
+  expiry_date?: string | null
+  recurrence?: string | null
+  categories?: string | string[] | null
 }
 
 const CUSTOMER_TYPE_OPTIONS = [
   { value: "retail", label: "Retail" },
   { value: "vip", label: "VIP" },
   { value: "wholesale", label: "Wholesale" },
+]
+
+const RECURRENCE_OPTIONS = [
+  { value: "once", label: "Only once" },
+  { value: "multiple", label: "Multiple times" },
 ]
 
 // Normalize the stored customer_types value (comma string or array) into an array.
@@ -41,6 +49,21 @@ const parseCustomerTypes = (value: string | string[] | null | undefined): string
   return arr
     .map((s) => String(s).trim().toLowerCase())
     .filter((s) => allowed.includes(s))
+}
+
+// Normalize the stored categories value (comma string or array) into an array of ids.
+const parseCategories = (value: string | string[] | null | undefined): string[] => {
+  if (!value) return []
+  const arr = Array.isArray(value) ? value : value.split(",")
+  return arr.map((s) => String(s).trim()).filter((s) => s.length > 0)
+}
+
+// Convert a stored date value into the yyyy-MM-dd format expected by <input type="date">.
+const formatDateForInput = (value: string | null | undefined): string => {
+  if (!value) return ""
+  const str = String(value)
+  // Already in yyyy-MM-dd or ISO form; take the date portion.
+  return str.slice(0, 10)
 }
 
 export default function CouponsPage() {
@@ -64,6 +87,9 @@ export default function CouponsPage() {
   const [discountType, setDiscountType] = useState("")
   const [showOnStorefront, setShowOnStorefront] = useState(false)
   const [customerTypes, setCustomerTypes] = useState<string[]>([])
+  const [expiryDate, setExpiryDate] = useState("")
+  const [recurrence, setRecurrence] = useState("multiple")
+  const [categories, setCategories] = useState<string[]>([])
   
   // Validation errors state
   const [formErrors, setFormErrors] = useState<{
@@ -81,6 +107,16 @@ export default function CouponsPage() {
         status: activeTab === "Active" ? "1" : "0",
       }
       const response = await couponsAPI.list(params)
+      return response.data
+    },
+    retry: 1,
+  })
+
+  // Fetch categories for the "Category applicable" multi-select
+  const { data: categoriesData } = useQuery({
+    queryKey: ["coupon-categories-all"],
+    queryFn: async () => {
+      const response = await api.get("/admin/categories?limit=1000")
       return response.data
     },
     retry: 1,
@@ -198,6 +234,8 @@ export default function CouponsPage() {
 
   const coupons = couponsData?.coupons || []
 
+  const categoryOptions = categoriesData?.categories || []
+
   // Filter coupons by search query
   const filteredCoupons = coupons.filter((coupon: Coupon) =>
     coupon.coupon_code.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -216,6 +254,9 @@ export default function CouponsPage() {
     setDiscountType(coupon.type)
     setShowOnStorefront(!!coupon.show_on_storefront)
     setCustomerTypes(parseCustomerTypes(coupon.customer_types))
+    setExpiryDate(formatDateForInput(coupon.expiry_date))
+    setRecurrence(coupon.recurrence === "once" ? "once" : "multiple")
+    setCategories(parseCategories(coupon.categories))
     setShowEditModal(true)
   }
 
@@ -270,6 +311,9 @@ export default function CouponsPage() {
       status: 1,
       show_on_storefront: showOnStorefront,
       customer_types: customerTypes,
+      expiry_date: expiryDate.trim() || null,
+      recurrence: recurrence,
+      categories: categories,
     }
 
     if (selectedCoupon) {
@@ -334,6 +378,9 @@ export default function CouponsPage() {
     setDiscountType("")
     setShowOnStorefront(false)
     setCustomerTypes([])
+    setExpiryDate("")
+    setRecurrence("multiple")
+    setCategories([])
   }
 
   const getDiscountDisplay = (coupon: Coupon) => {
@@ -719,6 +766,86 @@ export default function CouponsPage() {
                         className="rounded border-gray-300"
                       />
                       {option.label}
+                    </label>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Expiry Date */}
+            <div className="space-y-2">
+              <Label htmlFor="expiryDate" className="text-sm font-medium text-gray-700">
+                Expiry Date
+              </Label>
+              <p className="text-xs text-gray-500">
+                Leave blank for no expiry.
+              </p>
+              <Input
+                id="expiryDate"
+                type="date"
+                value={expiryDate}
+                onChange={(e) => setExpiryDate(e.target.value)}
+                className="h-11 border-gray-300 bg-white"
+                style={{ fontFamily: "Albert Sans" }}
+              />
+            </div>
+
+            {/* Recurrence */}
+            <div className="space-y-2">
+              <Label htmlFor="recurrence" className="text-sm font-medium text-gray-700">
+                Recurrence
+              </Label>
+              <select
+                id="recurrence"
+                value={recurrence}
+                onChange={(e) => setRecurrence(e.target.value)}
+                className="w-full h-11 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#105a9c]"
+                style={{ fontFamily: "Albert Sans" }}
+              >
+                {RECURRENCE_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Category applicable (multi-select) */}
+            <div className="space-y-2">
+              <Label className="text-sm font-medium text-gray-700">
+                Category Applicable
+              </Label>
+              <p className="text-xs text-gray-500">
+                Select which categories this coupon applies to. Leave all
+                unchecked to make it available for all categories.
+              </p>
+              <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto">
+                {categoryOptions.map((category: { category_id: number; category_name: string }) => {
+                  const value = String(category.category_id)
+                  const checked = categories.includes(value)
+                  return (
+                    <label
+                      key={value}
+                      className={`flex items-center gap-2 cursor-pointer rounded-md border px-3 py-2 text-sm ${
+                        checked
+                          ? "border-[#105a9c] bg-blue-50 text-[#105a9c]"
+                          : "border-gray-300 bg-white text-gray-700"
+                      }`}
+                      style={{ fontFamily: "Albert Sans" }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={(e) => {
+                          setCategories((prev) =>
+                            e.target.checked
+                              ? [...prev, value]
+                              : prev.filter((v) => v !== value),
+                          )
+                        }}
+                        className="rounded border-gray-300"
+                      />
+                      {category.category_name}
                     </label>
                   )
                 })}
