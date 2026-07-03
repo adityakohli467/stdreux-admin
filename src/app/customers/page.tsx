@@ -786,6 +786,14 @@ function CustomersContent() {
                       Department
                     </th>
                   )}
+                  {selectedType === "Retail" && (
+                    <th
+                      className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap"
+                      style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
+                    >
+                      VIP
+                    </th>
+                  )}
                   <th
                     className="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-white whitespace-nowrap"
                     style={{ fontFamily: "Albert Sans", fontWeight: 600 }}
@@ -798,7 +806,7 @@ function CustomersContent() {
                 {isLoading ? (
                   <tr>
                     <td
-                      colSpan={isWholesaleTypeSelected ? 6 : 5}
+                      colSpan={5 + (isWholesaleTypeSelected ? 1 : 0) + (selectedType === "Retail" ? 1 : 0)}
                       className="px-4 py-8 text-center text-gray-500"
                     >
                       Loading customers...
@@ -807,7 +815,7 @@ function CustomersContent() {
                 ) : customers.length === 0 ? (
                   <tr>
                     <td
-                      colSpan={isWholesaleTypeSelected ? 6 : 5}
+                      colSpan={5 + (isWholesaleTypeSelected ? 1 : 0) + (selectedType === "Retail" ? 1 : 0)}
                       className="px-4 py-8 text-center text-gray-500"
                     >
                       No customers found
@@ -915,6 +923,21 @@ function CustomersContent() {
                             }}
                           >
                             {customer.department_name || customer.department?.department_name || "-"}
+                          </span>
+                        </td>
+                      )}
+                      {selectedType === "Retail" && (
+                        <td className="px-3 sm:px-4 py-3 sm:py-4">
+                          <span
+                            className={`text-xs sm:text-sm ${customer.vip ? "text-green-700 font-semibold" : "text-gray-500"}`}
+                            style={{
+                              fontFamily: "Albert Sans",
+                              fontStyle: "normal",
+                              lineHeight: "20px",
+                              letterSpacing: "0%",
+                            }}
+                          >
+                            {customer.vip ? "Yes" : "-"}
                           </span>
                         </td>
                       )}
