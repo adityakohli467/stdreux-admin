@@ -116,26 +116,37 @@ export function printTableData(pageTitle: string = "Table Data") {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    font-size: 12px;
+    font-size: 11px;
     font-family: 'Albert Sans', Arial, sans-serif;
+    table-layout: fixed;
   `
   
   // Style table headers and cells
   const style = document.createElement('style')
   style.id = 'print-table-styles'
   style.textContent = `
+    #print-container-temp table {
+      table-layout: fixed;
+      width: 100%;
+    }
     #print-container-temp th {
       background-color: #f8f9fa !important;
       font-weight: 600;
-      padding: 12px 8px;
+      padding: 8px 6px;
       text-align: left;
       border: 1px solid #dee2e6;
       color: #212529;
+      white-space: normal !important;
+      word-break: break-word;
+      overflow-wrap: anywhere;
     }
     #print-container-temp td {
-      padding: 10px 8px;
+      padding: 8px 6px;
       border: 1px solid #dee2e6;
       color: #495057;
+      white-space: normal !important;
+      word-break: break-word;
+      overflow-wrap: anywhere;
     }
     #print-container-temp tr:nth-child(even) {
       background-color: #f8f9fa;
@@ -153,7 +164,7 @@ export function printTableData(pageTitle: string = "Table Data") {
       }
       @page {
         margin: 1cm;
-        size: auto;
+        size: landscape;
       }
     }
   `
