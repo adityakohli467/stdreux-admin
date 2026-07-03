@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useQuery } from "@tanstack/react-query"
 import api from "@/lib/api"
 import { Card } from "@/components/ui/card"
@@ -56,6 +56,18 @@ export default function ReportsPage() {
   // Pagination
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10000 // Fetch all records (effectively disabling pagination)
+
+  // Live search: debounce the search box so results filter as the user types
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAppliedFilters((prev) => {
+        if (prev.search === searchQuery) return prev
+        return { ...prev, search: searchQuery }
+      })
+      setCurrentPage(1)
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [searchQuery])
 
   // Fetch reports
   const { data: reportsData, isLoading } = useQuery({
