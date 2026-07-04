@@ -69,6 +69,7 @@ interface OrderDetails {
   coupon_code?: string
   coupon_type?: string
   coupon_id?: number
+  coupon_categories?: string[]
   gst?: number
   calculated_total?: number
   order_total?: number
@@ -649,6 +650,11 @@ export default function OrderDetailPage() {
                           {order.coupon_id && !order.coupon_code && (
                             <span className="text-xs text-gray-500 mt-1" style={{ fontFamily: 'Albert Sans' }}>
                               🎟️ Coupon Applied (Deleted)
+                            </span>
+                          )}
+                          {order.coupon_categories && order.coupon_categories.length > 0 && (
+                            <span className="text-xs text-gray-500 mt-1" style={{ fontFamily: 'Albert Sans' }}>
+                              Applies to {order.coupon_categories.join(', ')} only
                             </span>
                           )}
                         </div>
