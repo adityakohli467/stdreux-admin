@@ -16,8 +16,8 @@ export const metadata: Metadata = {
   title: "St. Dreux Coffee - Admin Portal",
   description: "Admin portal for St. Dreux Coffee management system",
   icons: {
-    icon: "/assets/logo.png",
-    apple: "/assets/logo.png",
+    icon: "/assets/favicon.png",
+    apple: "/assets/favicon.png",
   },
 }
 
