@@ -68,6 +68,8 @@ export default function CompanyPricingPage() {
   const [localDiscounts, setLocalDiscounts] = useState<Record<string, number>>({})
   const [searchQuery, setSearchQuery] = useState("")
   const [isSaving, setIsSaving] = useState(false)
+  // Products (by product_id) that should be excluded from the downloaded PDF.
+  const [excludedProducts, setExcludedProducts] = useState<Set<number>>(new Set())
 
   // Company details (for the heading)
   const { data: companyData } = useQuery({
@@ -228,6 +230,40 @@ export default function CompanyPricingPage() {
   const calcTotal = (retail: number, discount: number) =>
     discount > 0 ? retail * (1 - discount / 100) : retail
 
+  // Toggle whether a product is included in the downloaded PDF.
+  const toggleProductExcluded = (productId: number) => {
+    setExcludedProducts((prev) => {
+      const next = new Set(prev)
+      if (next.has(productId)) next.delete(productId)
+      else next.add(productId)
+      return next
+    })
+  }
+
+  // Distinct product ids currently shown (respects search filter).
+  const visibleProductIds = useMemo(
+    () => Array.from(new Set(rows.map((r) => r.product_id))),
+    [rows]
+  )
+  const includedCount = visibleProductIds.filter((id) => !excludedProducts.has(id)).length
+  const allIncluded = includedCount === visibleProductIds.length && visibleProductIds.length > 0
+
+  // Include/exclude every visible product at once.
+  const toggleAllProducts = () => {
+    setExcludedProducts((prev) => {
+      if (allIncluded) {
+        // Exclude all currently visible products
+        const next = new Set(prev)
+        visibleProductIds.forEach((id) => next.add(id))
+        return next
+      }
+      // Include all currently visible products
+      const next = new Set(prev)
+      visibleProductIds.forEach((id) => next.delete(id))
+      return next
+    })
+  }
+
   // -------------------------------------------------------------------------
   // PDF download
   // -------------------------------------------------------------------------
@@ -327,11 +363,28 @@ export default function CompanyPricingPage() {
       doc.text(`Generated: ${new Date().toLocaleDateString()}`, rightX, logoBottom + 42, { align: "right" })
       doc.setTextColor(0)
 
-      const body = rows.map((row) => {
+      const exportRows = rows.filter((row) => !excludedProducts.has(row.product_id))
+
+      if (exportRows.length === 0) {
+        toast.error("All products are excluded. Select at least one product to download.")
+        return
+      }
+
+      // Renumber sequentially so excluded products don't leave gaps in the "No" column.
+      const numberMap = new Map<number, number>()
+      let seq = 0
+      exportRows.forEach((row) => {
+        if (!numberMap.has(row.product_id)) {
+          seq += 1
+          numberMap.set(row.product_id, seq)
+        }
+      })
+
+      const body = exportRows.map((row) => {
         const discount = getDiscount(row.key)
         const total = calcTotal(row.retail_price, discount)
         return [
-          String(row.no),
+          String(numberMap.get(row.product_id)),
           row.category,
           row.subcategory,
           row.product_code,
@@ -403,11 +456,11 @@ export default function CompanyPricingPage() {
               onClick={handleDownloadPDF}
               variant="outline"
               className="border-gray-300"
-              disabled={isLoading || rows.length === 0}
+              disabled={isLoading || rows.length === 0 || includedCount === 0}
               style={{ fontWeight: 600 }}
             >
               <Download className="h-4 w-4 mr-2" />
-              Download PDF
+              Download PDF{rows.length > 0 ? ` (${includedCount})` : ""}
             </Button>
             <Button
               onClick={handleSave}
@@ -452,6 +505,11 @@ export default function CompanyPricingPage() {
                 Total: <span className="font-semibold">{discountsData?.products?.length || 0}</span> products
               </span>
             )}
+            {rows.length > 0 && (
+              <span className="ml-2 text-gray-400">
+                · <span className="font-semibold text-[#105a9c]">{includedCount}</span> selected for PDF
+              </span>
+            )}
           </div>
         </div>
 
@@ -481,6 +539,18 @@ export default function CompanyPricingPage() {
               <table className="w-full border-collapse text-sm">
                 <thead>
                   <tr className="bg-[#105a9c] text-white">
+                    <th className="px-3 py-3 text-center font-semibold border border-[#1a6fbe] w-16">
+                      <div className="flex flex-col items-center gap-1">
+                        <input
+                          type="checkbox"
+                          checked={allIncluded}
+                          onChange={toggleAllProducts}
+                          className="h-4 w-4 cursor-pointer accent-white"
+                          title="Include/exclude all products in PDF"
+                        />
+                        <span className="text-[10px] font-medium leading-none">PDF</span>
+                      </div>
+                    </th>
                     <th className="px-3 py-3 text-left font-semibold border border-[#1a6fbe] w-12">No</th>
                     <th className="px-3 py-3 text-left font-semibold border border-[#1a6fbe]">Category</th>
                     <th className="px-3 py-3 text-left font-semibold border border-[#1a6fbe]">Sub category</th>
@@ -496,10 +566,23 @@ export default function CompanyPricingPage() {
                   {rows.map((row) => {
                     const discount = getDiscount(row.key)
                     const total = calcTotal(row.retail_price, discount)
+                    const isExcluded = excludedProducts.has(row.product_id)
                     return (
-                      <tr key={row.key} className="hover:bg-gray-50">
+                      <tr key={row.key} className={`hover:bg-gray-50 ${isExcluded ? "opacity-50" : ""}`}>
                         {row.isFirstOfProduct && (
                           <>
+                            <td
+                              rowSpan={row.rowSpan}
+                              className="px-3 py-3 text-center border border-gray-200 align-top"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={!isExcluded}
+                                onChange={() => toggleProductExcluded(row.product_id)}
+                                className="h-4 w-4 cursor-pointer accent-[#105a9c]"
+                                title={isExcluded ? "Include in PDF" : "Exclude from PDF"}
+                              />
+                            </td>
                             <td
                               rowSpan={row.rowSpan}
                               className="px-3 py-3 text-gray-700 border border-gray-200 align-top"
