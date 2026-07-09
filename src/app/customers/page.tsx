@@ -108,6 +108,7 @@ const customerTypes = [
   "Subscriber",
   "Full Service Wholesale",
   "Partial Service Wholesale",
+  "VIP",
 ];
 
 function CustomersContent() {
@@ -129,9 +130,9 @@ function CustomersContent() {
   const [isClosingModal, setIsClosingModal] = useState(false);
   const [discounts, setDiscounts] = useState<Record<string, number>>({});
 
-  // Reset active tab to "Active" if switching to Retail (which has no pending approvals)
+  // Reset active tab to "Active" if switching to a type with no pending approvals (Retail / VIP)
   useEffect(() => {
-    if (selectedType === "Retail" && activeTab === "Pending Approval") {
+    if ((selectedType === "Retail" || selectedType === "VIP") && activeTab === "Pending Approval") {
       setActiveTab("Active");
     }
   }, [selectedType, activeTab]);
@@ -193,7 +194,9 @@ function CustomersContent() {
           archived: (activeTab === "Archived").toString(),
           limit: "100",
         });
-        if (selectedType && selectedType.trim() !== "") {
+        if (selectedType === "VIP") {
+          params.append("vip", "true");
+        } else if (selectedType && selectedType.trim() !== "") {
           params.append("customer_type", selectedType);
         }
         if (searchQuery) params.append("search", searchQuery);
@@ -209,10 +212,14 @@ function CustomersContent() {
     queryKey: ["customers-count", selectedType, "active"],
     queryFn: async () => {
       const params = new URLSearchParams({
-        customer_type: selectedType,
         archived: "false",
         limit: "0",
       });
+      if (selectedType === "VIP") {
+        params.append("vip", "true");
+      } else {
+        params.append("customer_type", selectedType);
+      }
       const response = await api.get(`/admin/customers?${params}`);
       return response.data;
     },
@@ -223,10 +230,14 @@ function CustomersContent() {
     queryKey: ["customers-count", selectedType, "archived"],
     queryFn: async () => {
       const params = new URLSearchParams({
-        customer_type: selectedType,
         archived: "true",
         limit: "0",
       });
+      if (selectedType === "VIP") {
+        params.append("vip", "true");
+      } else {
+        params.append("customer_type", selectedType);
+      }
       const response = await api.get(`/admin/customers?${params}`);
       return response.data;
     },
@@ -718,7 +729,7 @@ function CustomersContent() {
         >
           Active ({activeCountData?.count || 0})
         </button>
-        {selectedType !== "Retail" && (
+        {selectedType !== "Retail" && selectedType !== "VIP" && (
           <button
             onClick={() => setActiveTab("Pending Approval")}
             className={`pb-3 text-sm font-medium transition-colors border-b-2 relative ${activeTab === "Pending Approval"

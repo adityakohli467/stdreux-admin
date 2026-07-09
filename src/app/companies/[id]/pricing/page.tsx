@@ -545,9 +545,9 @@ export default function CompanyPricingPage() {
                               min="0"
                               max="100"
                               step="0.01"
-                              value={discount}
+                              value={discount ? String(discount) : ""}
                               onChange={(e) => handleDiscountChange(row.key, e.target.value)}
-                              className="w-20 text-right h-9"
+                              className="w-20 text-right h-9 no-spinner"
                               placeholder="0"
                             />
                             <span className="text-gray-500">%</span>
