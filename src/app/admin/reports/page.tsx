@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
-import { Search, FileDown, FileText, Printer, Calendar as CalendarIcon, Filter } from "lucide-react"
+import { Search, FileDown, FileText, Printer, Calendar as CalendarIcon, Filter, Package, X } from "lucide-react"
 import { format } from "date-fns"
 import { toast } from "sonner"
 import { printTableData } from "@/lib/print-utils"
@@ -31,10 +31,31 @@ interface Report {
   gst: number
   total: number
   standing_order: number
+  products?: ReportProduct[]
+}
+
+interface ReportProductOption {
+  option_name: string
+  option_value: string
+  option_quantity: number
+  option_price: number
+}
+
+interface ReportProduct {
+  order_product_id: number
+  product_id: number
+  product_name: string
+  quantity: number
+  price: number
+  total: number
+  options: ReportProductOption[]
 }
 
 export default function ReportsPage() {
   const [searchQuery, setSearchQuery] = useState("")
+
+  // Products modal state
+  const [productsModalReport, setProductsModalReport] = useState<Report | null>(null)
 
   // Filter state
   const [orderDateFrom, setOrderDateFrom] = useState<Date | null>(null)
@@ -200,6 +221,7 @@ export default function ReportsPage() {
         "Location",
         "Status",
         "Payment Status",
+        "Products",
         "Subtotal",
         "Delivery Fee",
         "Discount",
@@ -217,6 +239,7 @@ export default function ReportsPage() {
         `"${(report.location_name || "").replace(/"/g, '""')}"`,
         getStatusBadge(report).label,
         isReportPaid(report) ? "Paid" : "Unpaid",
+        `"${formatProductsText(report).replace(/"/g, '""')}"`,
         report.subtotal.toFixed(2),
         report.delivery_fee.toFixed(2),
         report.discount.toFixed(2),
@@ -253,6 +276,21 @@ export default function ReportsPage() {
 
   const handlePrint = () => {
     printTableData("Reports")
+  }
+
+  // Flatten an order's products into a single readable string for CSV/Excel export
+  const formatProductsText = (report: Report) => {
+    const products = report.products || []
+    if (products.length === 0) return ""
+    return products
+      .map((p) => {
+        const opts = (p.options || [])
+          .map((o) => `${o.option_name}: ${o.option_value}`)
+          .join(", ")
+        const base = `${p.product_name} x ${p.quantity}`
+        return opts ? `${base} (${opts})` : base
+      })
+      .join(" | ")
   }
 
   // Order status badge - mirrors the Orders list page logic exactly
@@ -517,16 +555,19 @@ export default function ReportsPage() {
                 <th className="px-4 py-3 text-left text-xs font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
                   Total
                 </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-white" style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}>
+                  Products
+                </th>
               </tr>
             </thead>
             <tbody>
               {isLoading ? (
                 <tr>
-                  <td colSpan={12} className="text-center py-8 text-gray-500">Loading reports...</td>
+                  <td colSpan={13} className="text-center py-8 text-gray-500">Loading reports...</td>
                 </tr>
               ) : reports.length === 0 ? (
                 <tr>
-                  <td colSpan={12} className="text-center py-8 text-gray-500">No reports found.</td>
+                  <td colSpan={13} className="text-center py-8 text-gray-500">No reports found.</td>
                 </tr>
               ) : (
                 reports.map((report: Report, index: number) => {
@@ -594,6 +635,17 @@ export default function ReportsPage() {
                           ${report.total.toFixed(2)}
                         </span>
                       </td>
+                      <td className="px-4 py-3">
+                        <button
+                          onClick={() => setProductsModalReport(report)}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-[#105a9c]/10 text-[#105a9c] hover:bg-[#105a9c]/20 transition-colors whitespace-nowrap"
+                          style={{ fontFamily: 'Albert Sans', fontWeight: 600 }}
+                        >
+                          <Package className="h-3.5 w-3.5" />
+                          View Products
+                          {report.products && report.products.length > 0 ? ` (${report.products.length})` : ""}
+                        </button>
+                      </td>
                     </tr>
                   )
                 })
@@ -610,6 +662,66 @@ export default function ReportsPage() {
           Showing {reports.length} of {totalCount} Entries
         </p>
       </div>
+
+      {/* Products Modal */}
+      {productsModalReport && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+          onClick={() => setProductsModalReport(null)}
+        >
+          <div
+            className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+            style={{ fontFamily: 'Albert Sans' }}
+          >
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Products for Order #{productsModalReport.order_id}
+                </h2>
+                <p className="text-xs text-gray-500">{productsModalReport.customer_name}</p>
+              </div>
+              <button
+                onClick={() => setProductsModalReport(null)}
+                className="p-1.5 rounded-full hover:bg-gray-100 text-gray-500"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="overflow-y-auto p-6">
+              {(productsModalReport.products || []).length === 0 ? (
+                <p className="text-sm text-gray-500 text-center py-6">No products found for this order.</p>
+              ) : (
+                <div className="space-y-3">
+                  {(productsModalReport.products || []).map((p) => (
+                    <div key={p.order_product_id} className="border border-gray-200 rounded-lg p-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">{p.product_name}</p>
+                          <p className="text-xs text-gray-500 mt-0.5">Qty: {p.quantity}</p>
+                        </div>
+                        <span className="text-sm font-semibold text-gray-900 whitespace-nowrap">
+                          ${Number(p.total).toFixed(2)}
+                        </span>
+                      </div>
+                      {p.options && p.options.length > 0 && (
+                        <ul className="mt-2 pl-3 border-l-2 border-gray-100 space-y-1">
+                          {p.options.map((o, i) => (
+                            <li key={i} className="text-xs text-gray-600">
+                              {o.option_name}: {o.option_value}
+                              {o.option_quantity ? ` × ${o.option_quantity}` : ""}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
