@@ -21,6 +21,8 @@ interface PricingOption {
   option_value_name: string
   option_base_price?: number
   option_price: number
+  wholesale_price?: number | null
+  wholesale_essential_price?: number | null
   option_price_prefix: string
   discount_percentage: number
 }
@@ -33,6 +35,8 @@ interface PricingProduct {
   subcategory_name?: string | null
   category_sort_order?: number
   product_price?: number
+  wholesale_price?: number | null
+  wholesale_essential_price?: number | null
   discount_percentage?: number
   has_options?: boolean
   options?: PricingOption[]
@@ -50,10 +54,19 @@ interface FlatRow {
   product_code: string
   product_name: string
   product_option: string
-  retail_price: number
+  wholesale_price: number | null
+  wholesale_essential_price: number | null
   rowSpan: number // how many option rows belong to this product (for merged cells)
   isFirstOfProduct: boolean
 }
+
+// Company discounts apply to wholesale customers only, so only wholesale tier prices are shown.
+const toPrice = (value: unknown): number | null => {
+  const n = parseFloat(String(value ?? ""))
+  return !isNaN(n) && n > 0 ? n : null
+}
+
+const formatPrice = (value: number | null) => (value !== null ? `$${value.toFixed(2)}` : "-")
 
 // ---------------------------------------------------------------------------
 // Page
@@ -155,7 +168,8 @@ export default function CompanyPricingPage() {
             product_code: code,
             product_name: product.product_name,
             product_option: option.option_value_name,
-            retail_price: option.option_base_price ?? option.option_price ?? 0,
+            wholesale_price: toPrice(option.wholesale_price),
+            wholesale_essential_price: toPrice(option.wholesale_essential_price),
             rowSpan: opts.length,
             isFirstOfProduct: idx === 0,
           })
@@ -172,7 +186,8 @@ export default function CompanyPricingPage() {
           product_code: code,
           product_name: product.product_name,
           product_option: "-",
-          retail_price: product.product_price || 0,
+          wholesale_price: toPrice(product.wholesale_price),
+          wholesale_essential_price: toPrice(product.wholesale_essential_price),
           rowSpan: 1,
           isFirstOfProduct: true,
         })
@@ -227,8 +242,8 @@ export default function CompanyPricingPage() {
   }
 
   const getDiscount = (key: string) => localDiscounts[key] ?? 0
-  const calcTotal = (retail: number, discount: number) =>
-    discount > 0 ? retail * (1 - discount / 100) : retail
+  const calcTotal = (price: number | null, discount: number) =>
+    price === null ? null : discount > 0 ? price * (1 - discount / 100) : price
 
   // Toggle whether a product is included in the downloaded PDF.
   const toggleProductExcluded = (productId: number) => {
@@ -382,7 +397,6 @@ export default function CompanyPricingPage() {
 
       const body = exportRows.map((row) => {
         const discount = getDiscount(row.key)
-        const total = calcTotal(row.retail_price, discount)
         return [
           String(numberMap.get(row.product_id)),
           row.category,
@@ -390,9 +404,11 @@ export default function CompanyPricingPage() {
           row.product_code,
           row.product_name,
           row.product_option,
-          `$${row.retail_price.toFixed(2)}`,
+          formatPrice(row.wholesale_price),
+          formatPrice(row.wholesale_essential_price),
           discount > 0 ? `${discount}%` : "-",
-          `$${total.toFixed(2)}`,
+          formatPrice(calcTotal(row.wholesale_price, discount)),
+          formatPrice(calcTotal(row.wholesale_essential_price, discount)),
         ]
       })
 
@@ -405,9 +421,11 @@ export default function CompanyPricingPage() {
           "Product code",
           "Product Name",
           "Product Option",
-          "Retail Price",
+          "Wholesale",
+          "Wholesale Essential",
           "Discount %",
-          "Total",
+          "Wholesale Total",
+          "Wholesale Essential Total",
         ]],
         body,
         margin: { left: marginX, right: marginX },
@@ -416,8 +434,10 @@ export default function CompanyPricingPage() {
         columnStyles: {
           0: { halign: "center", cellWidth: 30 },
           6: { halign: "right" },
-          7: { halign: "center" },
-          8: { halign: "right" },
+          7: { halign: "right" },
+          8: { halign: "center" },
+          9: { halign: "right" },
+          10: { halign: "right" },
         },
         alternateRowStyles: { fillColor: [247, 249, 248] },
       })
@@ -557,15 +577,19 @@ export default function CompanyPricingPage() {
                     <th className="px-3 py-3 text-left font-semibold border border-[#1a6fbe]">Product code</th>
                     <th className="px-3 py-3 text-left font-semibold border border-[#1a6fbe]">Product Name</th>
                     <th className="px-3 py-3 text-left font-semibold border border-[#1a6fbe]">Product Option</th>
-                    <th className="px-3 py-3 text-right font-semibold border border-[#1a6fbe]">Retail Price</th>
+                    <th className="px-3 py-3 text-right font-semibold border border-[#1a6fbe]">Wholesale</th>
+                    <th className="px-3 py-3 text-right font-semibold border border-[#1a6fbe]">Wholesale Essential</th>
                     <th className="px-3 py-3 text-center font-semibold border border-[#1a6fbe]">Discount %</th>
-                    <th className="px-3 py-3 text-right font-semibold border border-[#1a6fbe]">Total</th>
+                    <th className="px-3 py-3 text-right font-semibold border border-[#1a6fbe]">Wholesale Total</th>
+                    <th className="px-3 py-3 text-right font-semibold border border-[#1a6fbe]">Wholesale Essential Total</th>
                   </tr>
                 </thead>
                 <tbody>
                   {rows.map((row) => {
                     const discount = getDiscount(row.key)
-                    const total = calcTotal(row.retail_price, discount)
+                    const wholesaleTotal = calcTotal(row.wholesale_price, discount)
+                    const essentialTotal = calcTotal(row.wholesale_essential_price, discount)
+                    const totalClass = discount > 0 ? "font-semibold text-[#105a9c]" : "text-gray-900"
                     const isExcluded = excludedProducts.has(row.product_id)
                     return (
                       <tr key={row.key} className={`hover:bg-gray-50 ${isExcluded ? "opacity-50" : ""}`}>
@@ -619,7 +643,10 @@ export default function CompanyPricingPage() {
                           {row.product_option}
                         </td>
                         <td className="px-3 py-3 text-right text-gray-900 border border-gray-200 whitespace-nowrap">
-                          ${row.retail_price.toFixed(2)}
+                          {formatPrice(row.wholesale_price)}
+                        </td>
+                        <td className="px-3 py-3 text-right text-gray-900 border border-gray-200 whitespace-nowrap">
+                          {formatPrice(row.wholesale_essential_price)}
                         </td>
                         <td className="px-3 py-2 text-center border border-gray-200">
                           <div className="flex items-center justify-center gap-1">
@@ -637,11 +664,14 @@ export default function CompanyPricingPage() {
                           </div>
                         </td>
                         <td className="px-3 py-3 text-right border border-gray-200 whitespace-nowrap">
-                          {discount > 0 ? (
-                            <span className="font-semibold text-[#105a9c]">${total.toFixed(2)}</span>
-                          ) : (
-                            <span className="text-gray-900">${total.toFixed(2)}</span>
-                          )}
+                          <span className={wholesaleTotal !== null ? totalClass : "text-gray-900"}>
+                            {formatPrice(wholesaleTotal)}
+                          </span>
+                        </td>
+                        <td className="px-3 py-3 text-right border border-gray-200 whitespace-nowrap">
+                          <span className={essentialTotal !== null ? totalClass : "text-gray-900"}>
+                            {formatPrice(essentialTotal)}
+                          </span>
                         </td>
                       </tr>
                     )
